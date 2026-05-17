@@ -41,12 +41,12 @@ make_clip () {
     "$TMP/${OUT_NAME}.mp4" 2>&1 | tail -1
 }
 
-# Cut beats: total 7.89s (matches cloned-voice scene-01 duration)
-make_clip s01_a "$LF/01-walk-park-leash.mp4" 0    2.2   # wide est. shot — rusty dachshund + Дима
-make_clip s01_b "$LF/dual2-action.mp4"        1    1.3   # rough collie + pomeranian playing
-make_clip s01_c "$LF/dual4-action.mp4"        2    1.3   # white pomeranian on green leash
-make_clip s01_d "$LF/dual7-action.mp4"        1    1.3   # two dogs playing on path
-make_clip s01_e "$LF/dual6-action.mp4"        3    1.79  # dachshund running on pink track
+# Cut beats: total 9.20s (matches v6 scene-01 duration)
+make_clip s01_a "$LF/01-walk-park-leash.mp4" 0    2.6   # wide est. shot — rusty dachshund + Дима
+make_clip s01_b "$LF/dual2-action.mp4"        1    1.5   # rough collie + pomeranian playing
+make_clip s01_c "$LF/dual4-action.mp4"        2    1.5   # white pomeranian on green leash
+make_clip s01_d "$LF/dual7-action.mp4"        1    1.5   # two dogs playing on path
+make_clip s01_e "$LF/dual6-action.mp4"        3    2.1   # dachshund running on pink track
 
 # Concat silent video parts
 cd "$TMP"
@@ -61,15 +61,15 @@ cd "$TMP"
 echo "  -> $(stat -c %s scene-01.mp4) bytes"
 
 # Scenes 2-7 — screencasts (durations match v4 cloned-voice VO)
-build_simple 02 "$SC/scene-02.webm" 2 "$AU/scene-02.mp3" 14.39
-build_simple 03 "$SC/scene-03.webm" 0 "$AU/scene-03.mp3" 20.43
-build_simple 04 "$SC/scene-04.webm" 4 "$AU/scene-04.mp3" 9.51
-build_simple 05 "$SC/scene-05.webm" 3 "$AU/scene-05.mp3" 12.62
-build_simple 06 "$SC/scene-06.webm" 3 "$AU/scene-06.mp3" 12.56
-build_simple 07 "$SC/scene-07.webm" 2 "$AU/scene-07.mp3" 17.16
+build_simple 02 "$SC/scene-02.webm" 2 "$AU/scene-02.mp3" 12.43
+build_simple 03 "$SC/scene-03.webm" 0 "$AU/scene-03.mp3" 18.57
+build_simple 04 "$SC/scene-04.webm" 4 "$AU/scene-04.mp3" 11.28
+build_simple 05 "$SC/scene-05.webm" 3 "$AU/scene-05.mp3" 13.40
+build_simple 06 "$SC/scene-06.webm" 3 "$AU/scene-06.mp3" 13.14
+build_simple 07 "$SC/scene-07.webm" 2 "$AU/scene-07.mp3" 18.65
 
 # Scene 8 — selfie finale
-build_simple 08 "$LF/02-selfie-finale-face.mp4" 0 "$AU/scene-08.mp3" 5.33
+build_simple 08 "$LF/02-selfie-finale-face.mp4" 0 "$AU/scene-08.mp3" 7.42
 
 # Concat all
 cd "$TMP"
