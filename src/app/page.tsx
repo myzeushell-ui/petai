@@ -41,6 +41,7 @@ const plans = [
       "Heat cycle tracker",
       "Health Score (basic)",
       "AI chat (5 questions/day)",
+      "AI name generator",
     ],
   },
   {
@@ -59,6 +60,7 @@ const plans = [
       "Voice analysis (smart collar)",
       "Detailed health score + trends",
       "Export vet reports",
+      "AI name generator",
     ],
   },
   {

@@ -6,6 +6,7 @@ import { useThemeMode } from "@/contexts/ThemeContext";
 import { useVariant } from "@/contexts/VariantContext";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { PetSwitcher } from "@/components/pet/PetSwitcher";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -16,18 +17,28 @@ export function Header({ onMenuClick }: HeaderProps) {
   const { colors } = useVariant();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+    <header className={cn("sticky top-0 z-30 backdrop-blur-sm", colors.headerStyle)}>
       <div className="flex h-16 items-center gap-4 px-4 lg:px-6">
-        <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuClick}>
-          <Menu className="h-5 w-5" />
-        </Button>
+        {/* Menu button — only Emerald has sidebar so only it needs hamburger on mobile */}
+        {colors.layout === "sidebar" && (
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuClick}>
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
 
-        <Link href="/" className="flex items-center gap-2 lg:hidden">
+        <Link href="/" className={cn("flex items-center gap-2", colors.layout === "sidebar" ? "lg:hidden" : "")}>
           <div className={cn("flex h-8 w-8 items-center justify-center rounded-xl", colors.logoBg)}>
             <span className="text-lg">🐾</span>
           </div>
           <span className="text-lg font-bold text-gray-900 dark:text-white">PetAI</span>
         </Link>
+
+        {/* Ocean: show pet switcher in header */}
+        {colors.layout === "topnav" && (
+          <div className="hidden lg:block ml-4 w-48">
+            <PetSwitcher />
+          </div>
+        )}
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <Button variant="ghost" size="icon" className="text-gray-500 dark:text-gray-400" onClick={toggle}>

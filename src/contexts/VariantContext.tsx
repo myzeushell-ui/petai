@@ -9,6 +9,8 @@ export interface VariantColors {
   name: string;
   emoji: string;
   description: string;
+  layout: "sidebar" | "topnav" | "dock";
+  defaultDark: boolean;
   // Logo & brand
   logoBg: string;
   avatarGradient: string;
@@ -39,6 +41,11 @@ export interface VariantColors {
   popularBadge: string;
   scoreColor: string;
   focusRing: string;
+  // Layout-specific
+  shellBg: string;
+  cardStyle: string;
+  headerStyle: string;
+  animationType: "fade" | "slide" | "scale";
 }
 
 export const variants: Record<VariantId, VariantColors> = {
@@ -46,7 +53,9 @@ export const variants: Record<VariantId, VariantColors> = {
     id: "emerald",
     name: "Emerald",
     emoji: "🌿",
-    description: "Clean & medical",
+    description: "Classic sidebar layout",
+    layout: "sidebar",
+    defaultDark: false,
     logoBg: "bg-green-500",
     avatarGradient: "from-green-400 to-blue-500",
     activeBg: "bg-green-50 dark:bg-green-950/40",
@@ -71,12 +80,18 @@ export const variants: Record<VariantId, VariantColors> = {
     popularBadge: "bg-green-500",
     scoreColor: "text-green-600",
     focusRing: "focus:ring-green-100 focus:border-green-400",
+    shellBg: "bg-gray-50 dark:bg-[#0a0a0f]",
+    cardStyle: "rounded-2xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm",
+    headerStyle: "border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm",
+    animationType: "fade",
   },
   ocean: {
     id: "ocean",
     name: "Ocean",
     emoji: "🌊",
-    description: "Modern & techy",
+    description: "Top tabs, modern SaaS",
+    layout: "topnav",
+    defaultDark: false,
     logoBg: "bg-indigo-500",
     avatarGradient: "from-indigo-400 to-cyan-500",
     activeBg: "bg-indigo-50 dark:bg-indigo-950/40",
@@ -101,20 +116,26 @@ export const variants: Record<VariantId, VariantColors> = {
     popularBadge: "bg-indigo-500",
     scoreColor: "text-indigo-600",
     focusRing: "focus:ring-indigo-100 focus:border-indigo-400",
+    shellBg: "bg-white dark:bg-[#0a0a0f]",
+    cardStyle: "rounded-xl border border-indigo-100 dark:border-indigo-900/40 bg-white dark:bg-gray-900 shadow-md hover:shadow-indigo-100 dark:hover:shadow-indigo-950/20",
+    headerStyle: "border-b-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-gray-900",
+    animationType: "slide",
   },
   sunset: {
     id: "sunset",
     name: "Sunset",
     emoji: "🌅",
-    description: "Warm & premium",
-    logoBg: "bg-amber-500",
+    description: "Floating dock, premium",
+    layout: "dock",
+    defaultDark: true,
+    logoBg: "bg-gradient-to-br from-amber-400 to-orange-500",
     avatarGradient: "from-amber-400 to-rose-500",
     activeBg: "bg-amber-50 dark:bg-amber-950/40",
     activeText: "text-amber-700 dark:text-amber-400",
-    activeIcon: "text-amber-600 dark:text-amber-400",
-    inactiveIcon: "text-gray-400",
+    activeIcon: "text-amber-500 dark:text-amber-400",
+    inactiveIcon: "text-gray-500 dark:text-gray-500",
     navLine: "bg-amber-500",
-    btnPrimary: "bg-amber-500 hover:bg-amber-600 text-white",
+    btnPrimary: "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white",
     btnGhost: "hover:bg-amber-50 dark:hover:bg-amber-950/30",
     heroGradient: "from-amber-50 via-white to-white",
     ctaGradient: "from-amber-500 to-orange-600",
@@ -122,15 +143,19 @@ export const variants: Record<VariantId, VariantColors> = {
     badgeBg: "bg-amber-50",
     badgeText: "text-amber-700",
     badgeDot: "bg-amber-500",
-    pillActive: "bg-amber-500 text-white shadow-sm",
+    pillActive: "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-200",
     shadow: "shadow-amber-200",
     accent50: "bg-amber-50",
     accent100: "bg-amber-100",
     accentText: "text-amber-600",
     accentTextDark: "text-amber-700",
-    popularBadge: "bg-amber-500",
+    popularBadge: "bg-gradient-to-r from-amber-500 to-orange-500",
     scoreColor: "text-amber-600",
     focusRing: "focus:ring-amber-100 focus:border-amber-400",
+    shellBg: "bg-gray-50 dark:bg-[#0d0d12]",
+    cardStyle: "rounded-3xl border border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-lg shadow-xl dark:shadow-amber-950/10",
+    headerStyle: "bg-transparent dark:bg-transparent",
+    animationType: "scale",
   },
 };
 
