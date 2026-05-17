@@ -27,7 +27,7 @@ function FoodCard({ food, index }: { food: FoodItem; index: number }) {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm">{food.name}</h4>
-                  <p className="text-xs text-gray-500">{food.brand} · {food.type === "dry" ? "Сухой" : food.type === "wet" ? "Влажный" : food.type === "raw" ? "Натуральный" : "Добавка"}</p>
+                  <p className="text-xs text-gray-500">{food.brand} · {food.type === "dry" ? "Dry" : food.type === "wet" ? "Wet" : food.type === "raw" ? "Raw" : "Supplement"}</p>
                 </div>
                 <div className="flex items-center gap-1 text-xs text-yellow-600">
                   <Star className="h-3.5 w-3.5 fill-yellow-400" />
@@ -37,17 +37,17 @@ function FoodCard({ food, index }: { food: FoodItem; index: number }) {
 
               <div className="mt-2 space-y-1.5">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-12 text-gray-400">Белок</span>
+                  <span className="w-12 text-gray-400">Protein</span>
                   <Progress value={food.proteinPercent} max={50} className="h-1.5 flex-1" indicatorClassName="bg-red-400" />
                   <span className="w-8 text-right font-medium text-gray-700 dark:text-gray-300">{food.proteinPercent}%</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-12 text-gray-400">Жиры</span>
+                  <span className="w-12 text-gray-400">Fat</span>
                   <Progress value={food.fatPercent} max={30} className="h-1.5 flex-1" indicatorClassName="bg-yellow-400" />
                   <span className="w-8 text-right font-medium text-gray-700 dark:text-gray-300">{food.fatPercent}%</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-12 text-gray-400">Клетч.</span>
+                  <span className="w-12 text-gray-400">Fiber</span>
                   <Progress value={food.fiberPercent} max={10} className="h-1.5 flex-1" indicatorClassName="bg-green-400" />
                   <span className="w-8 text-right font-medium text-gray-700 dark:text-gray-300">{food.fiberPercent}%</span>
                 </div>
@@ -92,10 +92,10 @@ export default function NutritionPage() {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Utensils className="h-6 w-6 text-orange-500" />
-          Питание
+          Nutrition
         </h1>
         <p className="text-sm text-gray-500">
-          Сбалансированный рацион для {activePet.name} — {activePet.breed}, {activePet.age}{activePet.age === 1 ? " год" : " лет"}, {activePet.weight} кг
+          Balanced diet for {activePet.name} — {activePet.breed}, {activePet.age}{activePet.age === 1 ? "y" : "y"}, {activePet.weight} kg
         </p>
       </motion.div>
 
@@ -107,7 +107,7 @@ export default function NutritionPage() {
             tab === "plan" ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
           }`}
         >
-          <Apple className="h-3.5 w-3.5" /> План питания
+          <Apple className="h-3.5 w-3.5" /> Diet plan
         </button>
         <button
           onClick={() => setTab("food")}
@@ -115,7 +115,7 @@ export default function NutritionPage() {
             tab === "food" ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
           }`}
         >
-          <ShoppingCart className="h-3.5 w-3.5" /> Рекомендации кормов
+          <ShoppingCart className="h-3.5 w-3.5" /> Food recommendations
         </button>
       </div>
 
@@ -125,32 +125,32 @@ export default function NutritionPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
-                📊 Суточная норма
+                📊 Daily target
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl bg-orange-50 dark:bg-orange-950/30 p-3 text-center">
                   <p className="text-2xl font-bold text-orange-600">{plan.dailyCalories.split("-")[0]}</p>
-                  <p className="text-[10px] text-orange-500 mt-0.5">ккал/день (мин)</p>
+                  <p className="text-[10px] text-orange-500 mt-0.5">kcal/day (min)</p>
                 </div>
                 <div className="rounded-xl bg-green-50 dark:bg-green-950/30 p-3 text-center">
                   <p className="text-2xl font-bold text-green-600">{plan.meals}</p>
-                  <p className="text-[10px] text-green-500 mt-0.5">приёмов пищи</p>
+                  <p className="text-[10px] text-green-500 mt-0.5">meals/day</p>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-gray-500">Белок</span>
+                  <span className="text-gray-500">Protein</span>
                   <span className="font-semibold text-gray-900 dark:text-white">{plan.protein}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-gray-500">Жиры</span>
+                  <span className="text-gray-500">Fat</span>
                   <span className="font-semibold text-gray-900 dark:text-white">{plan.fat}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-gray-500">Клетчатка</span>
+                  <span className="text-gray-500">Fiber</span>
                   <span className="font-semibold text-gray-900 dark:text-white">{plan.fiber}</span>
                 </div>
               </div>
@@ -161,7 +161,7 @@ export default function NutritionPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
-                ✅ Рекомендации
+                ✅ Recommendations
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -189,7 +189,7 @@ export default function NutritionPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <AlertTriangle className="h-4 w-4 text-red-500" />
-                Запрещённые продукты
+                Avoid these foods
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -206,9 +206,9 @@ export default function NutritionPage() {
       {tab === "plan" && !plan && (
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-gray-400 text-sm">Нет плана питания для данного профиля. Обратитесь к диетологу.</p>
+            <p className="text-gray-400 text-sm">No nutrition plan matches this profile. Talk to a nutritionist.</p>
             <Button variant="default" size="sm" className="mt-3">
-              Консультация диетолога
+              Book a nutritionist
             </Button>
           </CardContent>
         </Card>
@@ -216,7 +216,7 @@ export default function NutritionPage() {
 
       {tab === "food" && (
         <div className="space-y-3">
-          <p className="text-xs text-gray-400">{foods.length} кормов подходят для {activePet.breed}</p>
+          <p className="text-xs text-gray-400">{foods.length} foods match {activePet.breed}</p>
           {foods.map((food, i) => (
             <FoodCard key={food.id} food={food} index={i} />
           ))}

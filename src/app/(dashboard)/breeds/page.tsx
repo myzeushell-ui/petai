@@ -8,9 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { allBreeds, type Breed } from "@/data/breeds";
 
-const sizeLabels: Record<string, string> = { small: "Маленький", medium: "Средний", large: "Крупный", giant: "Гигант" };
-const activityLabels: Record<string, string> = { low: "Низкая", medium: "Средняя", high: "Высокая", very_high: "Очень высокая" };
-const groomingLabels: Record<string, string> = { low: "Минимальный", medium: "Умеренный", high: "Тщательный" };
+const sizeLabels: Record<string, string> = { small: "Small", medium: "Medium", large: "Large", giant: "Giant" };
+const activityLabels: Record<string, string> = { low: "Low", medium: "Medium", high: "High", very_high: "Very high" };
+const groomingLabels: Record<string, string> = { low: "Minimal", medium: "Moderate", high: "Demanding" };
 
 function BreedCard({ breed, index }: { breed: Breed; index: number }) {
   const [expanded, setExpanded] = useState(false);
@@ -32,10 +32,10 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">{breed.name}</h3>
                   <Badge variant={breed.species === "dog" ? "success" : "info"} className="text-[10px]">
-                    {breed.species === "dog" ? "Собака" : "Кошка"}
+                    {breed.species === "dog" ? "Dog" : "Cat"}
                   </Badge>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{breed.nameRu} · {breed.origin}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{breed.origin}</p>
                 <div className="mt-2 flex flex-wrap gap-1">
                   {breed.traits.slice(0, 3).map((t) => (
                     <span key={t} className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-0.5 text-[10px] text-gray-600 dark:text-gray-300">{t}</span>
@@ -58,19 +58,19 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
                 <div className="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4 space-y-3">
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Размер</p>
+                      <p className="text-gray-400">Size</p>
                       <p className="font-medium text-gray-900 dark:text-white">{sizeLabels[breed.size]}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Вес</p>
+                      <p className="text-gray-400">Weight</p>
                       <p className="font-medium text-gray-900 dark:text-white">{breed.weight}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Продолжительность</p>
+                      <p className="text-gray-400">Lifespan</p>
                       <p className="font-medium text-gray-900 dark:text-white">{breed.lifespan}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Активность</p>
+                      <p className="text-gray-400">Activity</p>
                       <p className="font-medium text-gray-900 dark:text-white">{activityLabels[breed.activity]}</p>
                     </div>
                   </div>
@@ -78,17 +78,17 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
                   <div className="flex flex-wrap gap-2">
                     {breed.goodWithKids && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/40 px-2 py-0.5 text-[10px] text-green-700 dark:text-green-400">
-                        <Baby className="h-3 w-3" /> Дети
+                        <Baby className="h-3 w-3" /> Kids
                       </span>
                     )}
                     {breed.goodWithPets && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 text-[10px] text-blue-700 dark:text-blue-400">
-                        <Heart className="h-3 w-3" /> Другие питомцы
+                        <Heart className="h-3 w-3" /> Other pets
                       </span>
                     )}
                     {breed.apartment && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 text-[10px] text-purple-700 dark:text-purple-400">
-                        <Home className="h-3 w-3" /> Квартира
+                        <Home className="h-3 w-3" /> Apartment
                       </span>
                     )}
                     <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 text-[10px] text-orange-700 dark:text-orange-400">
@@ -101,7 +101,7 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
 
                   {breed.healthIssues.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">Риски здоровья</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">Health risks</p>
                       <div className="flex flex-wrap gap-1">
                         {breed.healthIssues.map((h) => (
                           <Badge key={h} variant="warning" className="text-[10px]">{h}</Badge>
@@ -153,9 +153,9 @@ export default function BreedsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              🐾 Породы
+              🐾 Breeds
             </h1>
-            <p className="text-sm text-gray-500">{allBreeds.length} пород — подберите идеальную</p>
+            <p className="text-sm text-gray-500">{allBreeds.length} breeds — find your perfect match</p>
           </div>
         </div>
       </motion.div>
@@ -167,7 +167,7 @@ export default function BreedsPage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Поиск по названию, характеру..."
+            placeholder="Search by name or trait..."
             className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-900/30"
           />
           {search && (
@@ -201,7 +201,7 @@ export default function BreedsPage() {
           >
             <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 space-y-3">
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-2">Вид</p>
+                <p className="text-xs font-medium text-gray-500 mb-2">Species</p>
                 <div className="flex gap-2">
                   {(["all", "dog", "cat"] as SpeciesFilter[]).map((s) => (
                     <button
@@ -211,13 +211,13 @@ export default function BreedsPage() {
                         species === s ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      {s === "all" ? "Все" : s === "dog" ? <><Dog className="h-3.5 w-3.5" /> Собаки</> : <><Cat className="h-3.5 w-3.5" /> Кошки</>}
+                      {s === "all" ? "All" : s === "dog" ? <><Dog className="h-3.5 w-3.5" /> Dogs</> : <><Cat className="h-3.5 w-3.5" /> Cats</>}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-2">Размер</p>
+                <p className="text-xs font-medium text-gray-500 mb-2">Size</p>
                 <div className="flex flex-wrap gap-2">
                   {(["all", "small", "medium", "large", "giant"] as SizeFilter[]).map((s) => (
                     <button
@@ -227,7 +227,7 @@ export default function BreedsPage() {
                         size === s ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      {s === "all" ? "Любой" : sizeLabels[s]}
+                      {s === "all" ? "Any" : sizeLabels[s]}
                     </button>
                   ))}
                 </div>
@@ -239,7 +239,7 @@ export default function BreedsPage() {
 
       {/* Species quick tabs */}
       <div className="flex items-center gap-3 text-sm">
-        <span className="text-gray-400 font-medium">{filtered.length} {filtered.length === 1 ? "порода" : "пород"}</span>
+        <span className="text-gray-400 font-medium">{filtered.length} {filtered.length === 1 ? "breed" : "breeds"}</span>
       </div>
 
       {/* Breed list */}
@@ -249,7 +249,7 @@ export default function BreedsPage() {
         ))}
         {filtered.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-gray-400 text-sm">Ничего не найдено. Попробуйте другой запрос.</p>
+            <p className="text-gray-400 text-sm">No matches. Try a different query.</p>
           </div>
         )}
       </div>

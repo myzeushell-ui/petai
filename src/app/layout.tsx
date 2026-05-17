@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "PetAI — AI Health OS for Pets",
   description:
     "Track your pet's health, get AI-powered insights, analyze lab results, and never miss a reminder. PetAI is the intelligent health operating system for your pets.",
-  keywords: ["pet health", "AI vet", "pet care", "health tracking", "lab results", "ветеринар", "здоровье питомца"],
+  keywords: ["pet health", "AI vet", "pet care", "health tracking", "lab results"],
   manifest: "/manifest.json",
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>",

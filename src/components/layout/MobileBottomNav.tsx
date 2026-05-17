@@ -6,11 +6,11 @@ import { motion } from "framer-motion";
 import { LayoutDashboard, Bot, PawPrint, ShoppingCart, Stethoscope } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard",     label: "Главная",   Icon: LayoutDashboard },
-  { href: "/assistant",     label: "AI",         Icon: Bot             },
-  { href: "/breeds",        label: "Породы",     Icon: PawPrint        },
-  { href: "/marketplace",   label: "Маркет",     Icon: ShoppingCart    },
-  { href: "/consultations", label: "Врачи",      Icon: Stethoscope     },
+  { href: "/dashboard",     label: "Home",      Icon: LayoutDashboard },
+  { href: "/assistant",     label: "AI",        Icon: Bot             },
+  { href: "/breeds",        label: "Breeds",    Icon: PawPrint        },
+  { href: "/marketplace",   label: "Market",    Icon: ShoppingCart    },
+  { href: "/consultations", label: "Vets",      Icon: Stethoscope     },
 ];
 
 export function MobileBottomNav() {

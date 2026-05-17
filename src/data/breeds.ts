@@ -23,294 +23,294 @@ export interface Breed {
 export const dogBreeds: Breed[] = [
   {
     id: "golden-retriever", name: "Golden Retriever", nameRu: "Золотистый ретривер",
-    species: "dog", group: "Sporting", size: "large", weight: "25-34 kg", lifespan: "10-12 лет",
+    species: "dog", group: "Sporting", size: "large", weight: "25-34 kg", lifespan: "10-12 years",
     activity: "high", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Дисплазия тазобедренного сустава", "Рак", "Болезни сердца"],
-    traits: ["Дружелюбный", "Умный", "Преданный", "Терпеливый"],
-    origin: "Великобритания", emoji: "🐕"
+    healthIssues: ["Hip dysplasia", "Cancer", "Heart disease"],
+    traits: ["Friendly", "Smart", "Loyal", "Patient"],
+    origin: "United Kingdom", emoji: "🐕"
   },
   {
     id: "labrador", name: "Labrador Retriever", nameRu: "Лабрадор-ретривер",
-    species: "dog", group: "Sporting", size: "large", weight: "25-36 kg", lifespan: "10-12 лет",
+    species: "dog", group: "Sporting", size: "large", weight: "25-36 kg", lifespan: "10-12 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Дисплазия", "Ожирение", "Болезни глаз"],
-    traits: ["Дружелюбный", "Активный", "Послушный", "Обожает воду"],
-    origin: "Канада", emoji: "🦮"
+    healthIssues: ["Hip dysplasia", "Obesity", "Eye disease"],
+    traits: ["Friendly", "Active", "Obedient", "Loves water"],
+    origin: "Canada", emoji: "🦮"
   },
   {
     id: "german-shepherd", name: "German Shepherd", nameRu: "Немецкая овчарка",
-    species: "dog", group: "Herding", size: "large", weight: "22-40 kg", lifespan: "9-13 лет",
+    species: "dog", group: "Herding", size: "large", weight: "22-40 kg", lifespan: "9-13 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "high",
-    healthIssues: ["Дисплазия", "Дегенеративная миелопатия", "Вздутие"],
-    traits: ["Умный", "Верный", "Бесстрашный", "Рабочий"],
-    origin: "Германия", emoji: "🐕‍🦺"
+    healthIssues: ["Hip dysplasia", "Degenerative myelopathy", "Bloat"],
+    traits: ["Smart", "Loyal", "Fearless", "Working"],
+    origin: "Germany", emoji: "🐕‍🦺"
   },
   {
     id: "french-bulldog", name: "French Bulldog", nameRu: "Французский бульдог",
-    species: "dog", group: "Non-Sporting", size: "small", weight: "8-14 kg", lifespan: "10-12 лет",
+    species: "dog", group: "Non-Sporting", size: "small", weight: "8-14 kg", lifespan: "10-12 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Брахицефалия", "Проблемы с позвоночником", "Аллергии"],
-    traits: ["Игривый", "Адаптивный", "Компаньон", "Упрямый"],
-    origin: "Франция", emoji: "🐶"
+    healthIssues: ["Brachycephaly", "Spinal issues", "Allergies"],
+    traits: ["Playful", "Adaptable", "Companion", "Stubborn"],
+    origin: "France", emoji: "🐶"
   },
   {
     id: "poodle", name: "Poodle", nameRu: "Пудель",
-    species: "dog", group: "Non-Sporting", size: "medium", weight: "20-32 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Non-Sporting", size: "medium", weight: "20-32 kg", lifespan: "12-15 years",
     activity: "high", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Болезнь Аддисона", "Вздутие", "Дисплазия"],
-    traits: ["Очень умный", "Элегантный", "Гипоаллергенный", "Обучаемый"],
-    origin: "Германия/Франция", emoji: "🐩"
+    healthIssues: ["Addison's disease", "Bloat", "Hip dysplasia"],
+    traits: ["Very smart", "Elegant", "Hypoallergenic", "Trainable"],
+    origin: "Germany / France", emoji: "🐩"
   },
   {
     id: "husky", name: "Siberian Husky", nameRu: "Сибирский хаски",
-    species: "dog", group: "Working", size: "medium", weight: "16-27 kg", lifespan: "12-14 лет",
+    species: "dog", group: "Working", size: "medium", weight: "16-27 kg", lifespan: "12-14 years",
     activity: "very_high", grooming: "high", trainability: "hard",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "high",
-    healthIssues: ["Болезни глаз", "Дисплазия", "Гипотиреоз"],
-    traits: ["Независимый", "Дружелюбный", "Энергичный", "Воет вместо лая"],
-    origin: "Россия", emoji: "🐺"
+    healthIssues: ["Eye disease", "Hip dysplasia", "Hypothyroidism"],
+    traits: ["Independent", "Friendly", "Energetic", "Howls instead of barking"],
+    origin: "Russia", emoji: "🐺"
   },
   {
     id: "corgi", name: "Pembroke Welsh Corgi", nameRu: "Вельш-корги пемброк",
-    species: "dog", group: "Herding", size: "small", weight: "10-14 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Herding", size: "small", weight: "10-14 kg", lifespan: "12-15 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Дисплазия", "Болезни глаз", "Проблемы с позвоночником"],
-    traits: ["Весёлый", "Умный", "Пастуший инстинкт", "Любит внимание"],
-    origin: "Уэльс", emoji: "🐕"
+    healthIssues: ["Hip dysplasia", "Eye disease", "Spinal issues"],
+    traits: ["Cheerful", "Smart", "Herding instinct", "Loves attention"],
+    origin: "Wales", emoji: "🐕"
   },
   {
     id: "doberman", name: "Doberman Pinscher", nameRu: "Доберман",
-    species: "dog", group: "Working", size: "large", weight: "27-45 kg", lifespan: "10-12 лет",
+    species: "dog", group: "Working", size: "large", weight: "27-45 kg", lifespan: "10-12 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "low",
-    healthIssues: ["Кардиомиопатия", "Болезнь фон Виллебранда", "Вздутие"],
-    traits: ["Верный", "Бесстрашный", "Умный", "Элегантный"],
-    origin: "Германия", emoji: "🐕"
+    healthIssues: ["Cardiomyopathy", "von Willebrand disease", "Bloat"],
+    traits: ["Loyal", "Fearless", "Smart", "Elegant"],
+    origin: "Germany", emoji: "🐕"
   },
   {
     id: "beagle", name: "Beagle", nameRu: "Бигль",
-    species: "dog", group: "Hound", size: "small", weight: "9-11 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Hound", size: "small", weight: "9-11 kg", lifespan: "12-15 years",
     activity: "high", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Эпилепсия", "Гипотиреоз", "Болезни глаз"],
-    traits: ["Любопытный", "Весёлый", "Упрямый", "Отличный нюх"],
-    origin: "Великобритания", emoji: "🐕"
+    healthIssues: ["Epilepsy", "Hypothyroidism", "Eye disease"],
+    traits: ["Curious", "Cheerful", "Stubborn", "Great nose"],
+    origin: "United Kingdom", emoji: "🐕"
   },
   {
     id: "yorkshire-terrier", name: "Yorkshire Terrier", nameRu: "Йоркширский терьер",
-    species: "dog", group: "Toy", size: "small", weight: "2-3 kg", lifespan: "13-16 лет",
+    species: "dog", group: "Toy", size: "small", weight: "2-3 kg", lifespan: "13-16 years",
     activity: "medium", grooming: "high", trainability: "moderate",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "low",
-    healthIssues: ["Болезни зубов", "Гипогликемия", "Коллапс трахеи"],
-    traits: ["Смелый", "Энергичный", "Ласковый", "Маленький защитник"],
-    origin: "Великобритания", emoji: "🐕"
+    healthIssues: ["Dental disease", "Hypoglycemia", "Tracheal collapse"],
+    traits: ["Brave", "Energetic", "Affectionate", "Tiny guardian"],
+    origin: "United Kingdom", emoji: "🐕"
   },
   {
     id: "dachshund", name: "Dachshund", nameRu: "Такса",
-    species: "dog", group: "Hound", size: "small", weight: "7-15 kg", lifespan: "12-16 лет",
+    species: "dog", group: "Hound", size: "small", weight: "7-15 kg", lifespan: "12-16 years",
     activity: "medium", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: false, apartment: true, shedding: "medium",
-    healthIssues: ["Болезни позвоночника", "Ожирение", "Эпилепсия"],
-    traits: ["Храбрый", "Упрямый", "Охотничий инстинкт", "Привязчивый"],
-    origin: "Германия", emoji: "🐕"
+    healthIssues: ["Spinal disorders", "Obesity", "Epilepsy"],
+    traits: ["Courageous", "Stubborn", "Hunting instinct", "Affectionate"],
+    origin: "Germany", emoji: "🐕"
   },
   {
     id: "shiba-inu", name: "Shiba Inu", nameRu: "Сиба-ину",
-    species: "dog", group: "Non-Sporting", size: "small", weight: "8-11 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Non-Sporting", size: "small", weight: "8-11 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "medium", trainability: "hard",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "high",
-    healthIssues: ["Аллергии", "Дисплазия", "Болезни глаз"],
-    traits: ["Независимый", "Чистоплотный", "Упрямый", "Лисья внешность"],
-    origin: "Япония", emoji: "🐕"
+    healthIssues: ["Allergies", "Hip dysplasia", "Eye disease"],
+    traits: ["Independent", "Tidy", "Stubborn", "Fox-like look"],
+    origin: "Japan", emoji: "🐕"
   },
   {
     id: "boxer", name: "Boxer", nameRu: "Боксёр",
-    species: "dog", group: "Working", size: "large", weight: "25-32 kg", lifespan: "10-12 лет",
+    species: "dog", group: "Working", size: "large", weight: "25-32 kg", lifespan: "10-12 years",
     activity: "high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "medium",
-    healthIssues: ["Рак", "Кардиомиопатия", "Дисплазия"],
-    traits: ["Игривый", "Энергичный", "Верный", "Защитник"],
-    origin: "Германия", emoji: "🐕"
+    healthIssues: ["Cancer", "Cardiomyopathy", "Hip dysplasia"],
+    traits: ["Playful", "Energetic", "Loyal", "Guardian"],
+    origin: "Germany", emoji: "🐕"
   },
   {
     id: "akita", name: "Akita", nameRu: "Акита-ину",
-    species: "dog", group: "Working", size: "large", weight: "32-45 kg", lifespan: "10-13 лет",
+    species: "dog", group: "Working", size: "large", weight: "32-45 kg", lifespan: "10-13 years",
     activity: "medium", grooming: "high", trainability: "hard",
     goodWithKids: false, goodWithPets: false, apartment: false, shedding: "high",
-    healthIssues: ["Дисплазия", "Аутоиммунные болезни", "Вздутие"],
-    traits: ["Верный", "Независимый", "Тихий", "Достоинство"],
-    origin: "Япония", emoji: "🐕"
+    healthIssues: ["Hip dysplasia", "Autoimmune disease", "Bloat"],
+    traits: ["Loyal", "Independent", "Quiet", "Dignified"],
+    origin: "Japan", emoji: "🐕"
   },
   {
     id: "samoyed", name: "Samoyed", nameRu: "Самоед",
-    species: "dog", group: "Working", size: "medium", weight: "16-30 kg", lifespan: "12-14 лет",
+    species: "dog", group: "Working", size: "medium", weight: "16-30 kg", lifespan: "12-14 years",
     activity: "high", grooming: "high", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "high",
-    healthIssues: ["Дисплазия", "Глаукома", "Диабет"],
-    traits: ["Улыбчивый", "Дружелюбный", "Пушистый", "Не пахнет"],
-    origin: "Россия", emoji: "🐕"
+    healthIssues: ["Hip dysplasia", "Glaucoma", "Diabetes"],
+    traits: ["Smiling", "Friendly", "Fluffy", "No odor"],
+    origin: "Russia", emoji: "🐕"
   },
   {
     id: "border-collie", name: "Border Collie", nameRu: "Бордер-колли",
-    species: "dog", group: "Herding", size: "medium", weight: "14-20 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Herding", size: "medium", weight: "14-20 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "medium",
-    healthIssues: ["Эпилепсия", "Дисплазия", "Аномалия глаз колли"],
-    traits: ["Самый умный", "Трудоголик", "Быстрый", "Нужна работа"],
-    origin: "Великобритания", emoji: "🐕‍🦺"
+    healthIssues: ["Epilepsy", "Hip dysplasia", "Collie eye anomaly"],
+    traits: ["Smartest", "Workaholic", "Fast", "Needs a job"],
+    origin: "United Kingdom", emoji: "🐕‍🦺"
   },
   {
     id: "rottweiler", name: "Rottweiler", nameRu: "Ротвейлер",
-    species: "dog", group: "Working", size: "large", weight: "35-60 kg", lifespan: "8-10 лет",
+    species: "dog", group: "Working", size: "large", weight: "35-60 kg", lifespan: "8-10 years",
     activity: "medium", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "medium",
-    healthIssues: ["Дисплазия", "Рак", "Болезни сердца"],
-    traits: ["Уверенный", "Спокойный", "Верный", "Защитник"],
-    origin: "Германия", emoji: "🐕"
+    healthIssues: ["Hip dysplasia", "Cancer", "Heart disease"],
+    traits: ["Confident", "Calm", "Loyal", "Guardian"],
+    origin: "Germany", emoji: "🐕"
   },
   {
     id: "cavalier", name: "Cavalier King Charles Spaniel", nameRu: "Кавалер-кинг-чарльз-спаниель",
-    species: "dog", group: "Toy", size: "small", weight: "5-8 kg", lifespan: "9-14 лет",
+    species: "dog", group: "Toy", size: "small", weight: "5-8 kg", lifespan: "9-14 years",
     activity: "medium", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Болезни сердца", "Сирингомиелия", "Болезни глаз"],
-    traits: ["Ласковый", "Тихий", "Компаньон", "Адаптивный"],
-    origin: "Великобритания", emoji: "🐕"
+    healthIssues: ["Heart disease", "Syringomyelia", "Eye disease"],
+    traits: ["Affectionate", "Quiet", "Companion", "Adaptable"],
+    origin: "United Kingdom", emoji: "🐕"
   },
   {
     id: "australian-shepherd", name: "Australian Shepherd", nameRu: "Австралийская овчарка",
-    species: "dog", group: "Herding", size: "medium", weight: "18-29 kg", lifespan: "12-15 лет",
+    species: "dog", group: "Herding", size: "medium", weight: "18-29 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "high",
-    healthIssues: ["Эпилепсия", "Дисплазия", "Проблемы со зрением"],
-    traits: ["Умный", "Энергичный", "Пастуший", "Красивый окрас"],
-    origin: "США", emoji: "🐕"
+    healthIssues: ["Epilepsy", "Hip dysplasia", "Vision problems"],
+    traits: ["Smart", "Energetic", "Herding", "Beautiful coat"],
+    origin: "USA", emoji: "🐕"
   },
   {
     id: "chihuahua", name: "Chihuahua", nameRu: "Чихуахуа",
-    species: "dog", group: "Toy", size: "small", weight: "1.5-3 kg", lifespan: "14-16 лет",
+    species: "dog", group: "Toy", size: "small", weight: "1.5-3 kg", lifespan: "14-16 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "low",
-    healthIssues: ["Болезни зубов", "Гидроцефалия", "Проблемы с сердцем"],
-    traits: ["Дерзкий", "Преданный одному", "Компактный", "Долгожитель"],
-    origin: "Мексика", emoji: "🐕"
+    healthIssues: ["Dental disease", "Hydrocephalus", "Heart problems"],
+    traits: ["Sassy", "Devoted to one", "Compact", "Long-lived"],
+    origin: "Mexico", emoji: "🐕"
   },
 ];
 
 export const catBreeds: Breed[] = [
   {
     id: "british-shorthair", name: "British Shorthair", nameRu: "Британская короткошёрстная",
-    species: "cat", group: "Shorthair", size: "medium", weight: "4-8 kg", lifespan: "12-20 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "4-8 kg", lifespan: "12-20 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Кардиомиопатия", "Поликистоз почек", "Ожирение"],
-    traits: ["Спокойный", "Независимый", "Плюшевый", "Не любит ручки"],
-    origin: "Великобритания", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "Polycystic kidney disease", "Obesity"],
+    traits: ["Calm", "Independent", "Plush", "Dislikes being held"],
+    origin: "United Kingdom", emoji: "🐱"
   },
   {
     id: "maine-coon", name: "Maine Coon", nameRu: "Мейн-кун",
-    species: "cat", group: "Longhair", size: "giant", weight: "5-12 kg", lifespan: "12-15 лет",
+    species: "cat", group: "Longhair", size: "giant", weight: "5-12 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Кардиомиопатия", "Дисплазия тазобедренного", "Поликистоз"],
-    traits: ["Дружелюбный гигант", "Собако-кот", "Разговорчивый", "Любит воду"],
-    origin: "США", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "Hip dysplasia", "Polycystic disease"],
+    traits: ["Friendly giant", "Dog-like cat", "Talkative", "Loves water"],
+    origin: "USA", emoji: "🐱"
   },
   {
     id: "scottish-fold", name: "Scottish Fold", nameRu: "Шотландская вислоухая",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-6 kg", lifespan: "11-14 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "3-6 kg", lifespan: "11-14 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Остеохондродисплазия", "Кардиомиопатия", "Артрит"],
-    traits: ["Тихий", "Ласковый", "Сложенные уши", "Сидит как человек"],
-    origin: "Шотландия", emoji: "🐱"
+    healthIssues: ["Osteochondrodysplasia", "Cardiomyopathy", "Arthritis"],
+    traits: ["Quiet", "Affectionate", "Folded ears", "Sits like a human"],
+    origin: "Scotland", emoji: "🐱"
   },
   {
     id: "siamese", name: "Siamese", nameRu: "Сиамская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-20 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-20 years",
     activity: "high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Астма", "Болезни сердца", "Косоглазие"],
-    traits: ["Очень разговорчивый", "Привязчивый", "Умный", "Требует внимания"],
-    origin: "Таиланд", emoji: "🐱"
+    healthIssues: ["Asthma", "Heart disease", "Strabismus"],
+    traits: ["Very talkative", "Affectionate", "Smart", "Demands attention"],
+    origin: "Thailand", emoji: "🐱"
   },
   {
     id: "persian", name: "Persian", nameRu: "Персидская",
-    species: "cat", group: "Longhair", size: "medium", weight: "3-7 kg", lifespan: "12-17 лет",
+    species: "cat", group: "Longhair", size: "medium", weight: "3-7 kg", lifespan: "12-17 years",
     activity: "low", grooming: "high", trainability: "hard",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Поликистоз почек", "Проблемы с дыханием", "Болезни глаз"],
-    traits: ["Спокойный", "Ленивый", "Пушистый", "Мебель с глазами"],
-    origin: "Иран", emoji: "🐱"
+    healthIssues: ["Polycystic kidney disease", "Breathing issues", "Eye disease"],
+    traits: ["Calm", "Lazy", "Fluffy", "Furniture with eyes"],
+    origin: "Iran", emoji: "🐱"
   },
   {
     id: "bengal", name: "Bengal", nameRu: "Бенгальская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "4-7 kg", lifespan: "12-16 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "4-7 kg", lifespan: "12-16 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "low",
-    healthIssues: ["Кардиомиопатия", "PRA", "Вывих коленной чашечки"],
-    traits: ["Дикий вид", "Гиперактивный", "Умный", "Любит воду"],
-    origin: "США", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "PRA", "Patellar luxation"],
+    traits: ["Wild look", "Hyperactive", "Smart", "Loves water"],
+    origin: "USA", emoji: "🐱"
   },
   {
     id: "ragdoll", name: "Ragdoll", nameRu: "Рэгдолл",
-    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "12-17 лет",
+    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "12-17 years",
     activity: "low", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
-    healthIssues: ["Кардиомиопатия", "Мочекаменная болезнь", "Ожирение"],
-    traits: ["Тряпичная кукла", "Ласковый", "Следует за хозяином", "Расслабленный"],
-    origin: "США", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "Urolithiasis", "Obesity"],
+    traits: ["Ragdoll", "Affectionate", "Follows owner", "Relaxed"],
+    origin: "USA", emoji: "🐱"
   },
   {
     id: "sphynx", name: "Sphynx", nameRu: "Сфинкс",
-    species: "cat", group: "Hairless", size: "medium", weight: "3-6 kg", lifespan: "8-14 лет",
+    species: "cat", group: "Hairless", size: "medium", weight: "3-6 kg", lifespan: "8-14 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Кардиомиопатия", "Кожные инфекции", "Чувствительность к холоду"],
-    traits: ["Нет шерсти", "Горячий", "Ласковый до навязчивости", "Клоун"],
-    origin: "Канада", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "Skin infections", "Cold sensitivity"],
+    traits: ["Hairless", "Warm body", "Clingy affectionate", "Clown"],
+    origin: "Canada", emoji: "🐱"
   },
   {
     id: "abyssinian", name: "Abyssinian", nameRu: "Абиссинская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-15 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Почечный амилоидоз", "Болезни зубов", "Вывих коленной чашечки"],
-    traits: ["Любопытный", "Игривый", "Акробат", "Не сидит на месте"],
-    origin: "Эфиопия", emoji: "🐱"
+    healthIssues: ["Renal amyloidosis", "Dental disease", "Patellar luxation"],
+    traits: ["Curious", "Playful", "Acrobat", "Never sits still"],
+    origin: "Ethiopia", emoji: "🐱"
   },
   {
     id: "russian-blue", name: "Russian Blue", nameRu: "Русская голубая",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "15-20 лет",
+    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "15-20 years",
     activity: "medium", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Мочекаменная болезнь", "Ожирение"],
-    traits: ["Тихий", "Элегантный", "Привязчивый к одному", "Долгожитель"],
-    origin: "Россия", emoji: "🐱"
+    healthIssues: ["Urolithiasis", "Obesity"],
+    traits: ["Quiet", "Elegant", "Bonds with one", "Long-lived"],
+    origin: "Russia", emoji: "🐱"
   },
   {
     id: "norwegian-forest", name: "Norwegian Forest Cat", nameRu: "Норвежская лесная",
-    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "14-16 лет",
+    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "14-16 years",
     activity: "medium", grooming: "high", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
-    healthIssues: ["Кардиомиопатия", "Дисплазия", "Гликогеноз IV типа"],
-    traits: ["Ласковый", "Независимый", "Любит высоту", "Водостойкая шерсть"],
-    origin: "Норвегия", emoji: "🐱"
+    healthIssues: ["Cardiomyopathy", "Hip dysplasia", "Type IV glycogen storage disease"],
+    traits: ["Affectionate", "Independent", "Loves heights", "Water-resistant coat"],
+    origin: "Norway", emoji: "🐱"
   },
   {
     id: "sphinx-don", name: "Don Sphynx", nameRu: "Донской сфинкс",
-    species: "cat", group: "Hairless", size: "medium", weight: "3-5 kg", lifespan: "12-15 лет",
+    species: "cat", group: "Hairless", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
-    healthIssues: ["Кожные проблемы", "Болезни зубов", "Чувствительность к холоду"],
-    traits: ["Ласковый", "Инопланетный вид", "Любит тепло", "Общительный"],
-    origin: "Россия", emoji: "🐱"
+    healthIssues: ["Skin issues", "Dental disease", "Cold sensitivity"],
+    traits: ["Affectionate", "Alien look", "Loves warmth", "Social"],
+    origin: "Russia", emoji: "🐱"
   },
 ];
 

@@ -40,12 +40,12 @@ export default function ConsultationsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Консультации</h1>
-          <p className="text-sm text-gray-500">Ветеринары, кинологи, заводчики — онлайн и офлайн</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Consultations</h1>
+          <p className="text-sm text-gray-500">Vets, trainers, breeders — online and in-person</p>
         </div>
         {step !== "list" && (
           <Button variant="ghost" size="sm" onClick={reset}>
-            <ArrowLeft className="h-4 w-4" /> К списку
+            <ArrowLeft className="h-4 w-4" /> Back to list
           </Button>
         )}
       </div>
@@ -57,7 +57,7 @@ export default function ConsultationsPage() {
               <Filter className="h-4 w-4 text-gray-400 flex-shrink-0" />
               <button onClick={() => setFilter("all")}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${filter === "all" ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200"}`}>
-                Все
+                All
               </button>
               {(Object.keys(specialtyLabels) as ConsultantSpecialty[]).map((s) => (
                 <button key={s} onClick={() => setFilter(s)}
@@ -98,7 +98,7 @@ export default function ConsultationsPage() {
                             </span>
                             {c.availability !== "offline" && (
                               <span className="inline-flex items-center gap-1 text-green-600">
-                                <Video className="h-3 w-3" /> Онлайн
+                                <Video className="h-3 w-3" /> Online
                               </span>
                             )}
                             {c.location && (
@@ -130,10 +130,10 @@ export default function ConsultationsPage() {
                       <span className="inline-flex items-center gap-1">
                         <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                         <span className="font-semibold">{selected.rating}</span>
-                        <span className="text-gray-500">· {selected.reviewCount} отзывов</span>
+                        <span className="text-gray-500">· {selected.reviewCount} reviews</span>
                       </span>
                       <span className="text-gray-300">·</span>
-                      <span className="text-gray-600 dark:text-gray-300">{selected.experience} лет опыта</span>
+                      <span className="text-gray-600 dark:text-gray-300">{selected.experience} years of experience</span>
                     </div>
                   </div>
                 </div>
@@ -148,21 +148,21 @@ export default function ConsultationsPage() {
 
                 <div className="mt-6 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3">
-                    <p className="text-xs text-gray-400">Стоимость</p>
+                    <p className="text-xs text-gray-400">Price</p>
                     <p className="text-base font-bold text-gray-900 dark:text-white">{selected.price.toLocaleString()} {selected.currency}</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3">
-                    <p className="text-xs text-gray-400">Длительность</p>
+                    <p className="text-xs text-gray-400">Duration</p>
                     <p className="text-base font-bold text-gray-900 dark:text-white">{selected.duration}</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3">
-                    <p className="text-xs text-gray-400">Формат</p>
-                    <p className="text-base font-bold text-gray-900 dark:text-white">{selected.availability === "both" ? "Онлайн/Очно" : selected.availability === "online" ? "Онлайн" : "Очно"}</p>
+                    <p className="text-xs text-gray-400">Format</p>
+                    <p className="text-base font-bold text-gray-900 dark:text-white">{selected.availability === "both" ? "Online / In-person" : selected.availability === "online" ? "Online" : "In-person"}</p>
                   </div>
                 </div>
 
                 <Button size="lg" className="mt-6 w-full" onClick={() => setStep("booking")}>
-                  <Calendar className="h-4 w-4" /> Записаться на консультацию
+                  <Calendar className="h-4 w-4" /> Book a session
                 </Button>
               </CardContent>
             </Card>
@@ -173,8 +173,8 @@ export default function ConsultationsPage() {
           <motion.div key="booking" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
             <Card>
               <CardContent className="p-6">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Выберите время</h2>
-                <p className="text-sm text-gray-500 mt-1">Завтра, 18 мая · {selected.name}</p>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Pick a time</h2>
+                <p className="text-sm text-gray-500 mt-1">Tomorrow, May 18 · {selected.name}</p>
 
                 <div className="mt-6 grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {TIME_SLOTS.map((t) => (
@@ -187,22 +187,22 @@ export default function ConsultationsPage() {
 
                 <div className="mt-6 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 p-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Консультация</span>
+                    <span className="text-gray-500">Session</span>
                     <span className="font-medium text-gray-900 dark:text-white">{selected.duration}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                    <span className="text-gray-500">Комиссия PetAI</span>
-                    <span className="text-gray-400">включена</span>
+                    <span className="text-gray-500">PetAI fee</span>
+                    <span className="text-gray-400">included</span>
                   </div>
                   <div className="border-t border-gray-200 dark:border-gray-700 my-3" />
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900 dark:text-white">К оплате</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">Due</span>
                     <span className="text-2xl font-black text-gray-900 dark:text-white">{selected.price.toLocaleString()} {selected.currency}</span>
                   </div>
                 </div>
 
                 <Button size="lg" disabled={!time} className="mt-6 w-full" onClick={() => setStep("payment")}>
-                  <CreditCard className="h-4 w-4" /> Перейти к оплате
+                  <CreditCard className="h-4 w-4" /> Continue to payment
                 </Button>
               </CardContent>
             </Card>
@@ -214,13 +214,13 @@ export default function ConsultationsPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Lock className="h-3 w-3" /> Защищённая оплата · Stripe
+                  <Lock className="h-3 w-3" /> Secure payment · Stripe
                 </div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white mt-2">Оплата консультации</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white mt-2">Pay for session</h2>
 
                 <div className="mt-5 space-y-3">
                   <div>
-                    <label className="text-xs font-medium text-gray-500">Номер карты</label>
+                    <label className="text-xs font-medium text-gray-500">Card number</label>
                     <div className="mt-1 flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3">
                       <span className="text-sm font-mono tracking-wider text-gray-900 dark:text-white">4242 4242 4242 4242</span>
                       <span className="ml-auto text-xs font-semibold text-blue-600">VISA</span>
@@ -240,14 +240,14 @@ export default function ConsultationsPage() {
 
                 <div className="mt-6 rounded-2xl bg-gray-50 dark:bg-gray-800 p-4 space-y-1.5 text-sm">
                   <div className="flex justify-between"><span className="text-gray-500">{selected.name}</span><span className="font-medium">{selected.price.toLocaleString()} {selected.currency}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Время</span><span className="font-medium">завтра, {time}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Питомец</span><span className="font-medium">Luna</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Time</span><span className="font-medium">tomorrow, {time}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Pet</span><span className="font-medium">Luna</span></div>
                   <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
-                  <div className="flex justify-between text-base"><span className="font-semibold">Итого</span><span className="font-black">{selected.price.toLocaleString()} {selected.currency}</span></div>
+                  <div className="flex justify-between text-base"><span className="font-semibold">Total</span><span className="font-black">{selected.price.toLocaleString()} {selected.currency}</span></div>
                 </div>
 
                 <Button size="lg" disabled={paying} className="mt-6 w-full" onClick={startPay}>
-                  {paying ? (<><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Обработка...</>) : (<><Shield className="h-4 w-4" /> Оплатить {selected.price.toLocaleString()} {selected.currency}</>)}
+                  {paying ? (<><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Processing...</>) : (<><Shield className="h-4 w-4" /> Pay {selected.price.toLocaleString()} {selected.currency}</>)}
                 </Button>
               </CardContent>
             </Card>
@@ -262,19 +262,19 @@ export default function ConsultationsPage() {
                   className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-950/40">
                   <Check className="h-10 w-10 text-green-600" strokeWidth={3} />
                 </motion.div>
-                <h2 className="mt-5 text-2xl font-bold text-gray-900 dark:text-white">Запись подтверждена!</h2>
+                <h2 className="mt-5 text-2xl font-bold text-gray-900 dark:text-white">Booking confirmed!</h2>
                 <p className="mt-2 text-sm text-gray-500">
-                  {selected.name} · завтра, 18 мая в {time}
+                  {selected.name} · tomorrow, May 18 at {time}
                 </p>
 
                 <div className="mt-6 rounded-2xl border border-green-200 dark:border-green-900/40 bg-green-50 dark:bg-green-950/20 p-4 text-left">
-                  <p className="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide">План тренировок отправлен</p>
+                  <p className="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide">Training plan delivered</p>
                   <p className="text-sm text-green-900 dark:text-green-300 mt-1">
-                    Базовый план послушания на 8 недель уже в вашем профиле. Тренер свяжется в Telegram за час до сессии.
+                    An 8-week basic obedience plan is already in your profile. Trainer will reach out 1 hour before the session.
                   </p>
                 </div>
 
-                <Button size="lg" variant="outline" className="mt-6" onClick={reset}>Вернуться к списку</Button>
+                <Button size="lg" variant="outline" className="mt-6" onClick={reset}>Back to list</Button>
               </CardContent>
             </Card>
           </motion.div>

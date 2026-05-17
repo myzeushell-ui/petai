@@ -71,7 +71,7 @@ export function PetSwitcher() {
 
             <div className="border-t border-gray-100 px-3 py-2">
               <button className="flex w-full items-center gap-2 text-xs text-gray-400 hover:text-green-600 transition-colors py-1">
-                <span>+</span> Добавить питомца
+                <span>+</span> Add a pet
               </button>
             </div>
           </motion.div>

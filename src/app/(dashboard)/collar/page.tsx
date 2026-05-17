@@ -12,11 +12,11 @@ import {
 type Emotion = { id: string; label: string; emoji: string; color: string; bar: number; hint: string };
 
 const EMOTIONS: Emotion[] = [
-  { id: "joy",     label: "Радость",      emoji: "😊", color: "from-amber-400 to-yellow-500",  bar: 72, hint: "Игровой лай, высокая тональность" },
-  { id: "stress",  label: "Стресс",       emoji: "😰", color: "from-orange-400 to-red-500",    bar: 14, hint: "Норма" },
-  { id: "anxiety", label: "Тревога",      emoji: "😟", color: "from-purple-400 to-pink-500",   bar: 8,  hint: "Норма" },
-  { id: "pain",    label: "Боль",         emoji: "🤕", color: "from-red-500 to-rose-600",      bar: 0,  hint: "Не обнаружено" },
-  { id: "alert",   label: "Бдительность", emoji: "👀", color: "from-blue-400 to-cyan-500",     bar: 6,  hint: "Норма" },
+  { id: "joy",     label: "Joy",      emoji: "😊", color: "from-amber-400 to-yellow-500",  bar: 72, hint: "Play bark, high pitch" },
+  { id: "stress",  label: "Stress",       emoji: "😰", color: "from-orange-400 to-red-500",    bar: 14, hint: "Normal" },
+  { id: "anxiety", label: "Anxiety",      emoji: "😟", color: "from-purple-400 to-pink-500",   bar: 8,  hint: "Normal" },
+  { id: "pain",    label: "Pain",         emoji: "🤕", color: "from-red-500 to-rose-600",      bar: 0,  hint: "Not detected" },
+  { id: "alert",   label: "Alertness", emoji: "👀", color: "from-blue-400 to-cyan-500",     bar: 6,  hint: "Normal" },
 ];
 
 function generateWave(seed: number, len = 60) {
@@ -46,30 +46,30 @@ export default function CollarPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Mic className="h-6 w-6 text-purple-500" /> Smart Collar · Luna
           </h1>
-          <p className="text-sm text-gray-500">Голосовой AI и биометрия в реальном времени</p>
+          <p className="text-sm text-gray-500">Voice AI and biometrics in real time</p>
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-500">
-          <span className="inline-flex items-center gap-1"><Wifi className="h-3.5 w-3.5 text-green-500" /> онлайн</span>
+          <span className="inline-flex items-center gap-1"><Wifi className="h-3.5 w-3.5 text-green-500" /> online</span>
           <span className="inline-flex items-center gap-1"><Battery className="h-3.5 w-3.5 text-green-500" /> 87%</span>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <MetricCard Icon={Thermometer} label="Температура" value="38.6" unit="°C" tone="ok" detail="норма" />
-        <MetricCard Icon={Heart} label="Пульс" value={`${heart.toFixed(0)}`} unit="bpm" tone="ok" detail="покой" animate />
-        <MetricCard Icon={Activity} label="Активность" value="6.4" unit="km" tone="ok" detail="сегодня" />
-        <MetricCard Icon={MapPin} label="GPS" value="Дом" unit="" tone="ok" detail="< 30 м" />
+        <MetricCard Icon={Thermometer} label="Temperature" value="38.6" unit="°C" tone="ok" detail="normal" />
+        <MetricCard Icon={Heart} label="Heart rate" value={`${heart.toFixed(0)}`} unit="bpm" tone="ok" detail="resting" animate />
+        <MetricCard Icon={Activity} label="Activity" value="6.4" unit="km" tone="ok" detail="today" />
+        <MetricCard Icon={MapPin} label="GPS" value="Home" unit="" tone="ok" detail="< 100 ft" />
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <Mic className="h-4 w-4 text-purple-500" /> Voice AI · Анализ лая
+              <Mic className="h-4 w-4 text-purple-500" /> Voice AI · Bark analysis
             </CardTitle>
             <Badge variant={recording ? "danger" : "default"} className="inline-flex items-center gap-1.5">
               {recording && <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />}
-              {recording ? "LIVE" : "пауза"}
+              {recording ? "LIVE" : "paused"}
             </Badge>
           </div>
         </CardHeader>
@@ -85,17 +85,17 @@ export default function CollarPage() {
             </div>
             <div className="mt-4 flex items-center justify-between">
               <div className="text-xs text-purple-700 dark:text-purple-300">
-                <p className="font-semibold uppercase tracking-wide">Распознано</p>
-                <p className="text-base font-bold mt-0.5">Игровой лай · 0.8 сек</p>
+                <p className="font-semibold uppercase tracking-wide">Detected</p>
+                <p className="text-base font-bold mt-0.5">Play bark · 0.8 sec</p>
               </div>
               <Button size="sm" variant="outline" onClick={() => setRecording((r) => !r)}>
-                {recording ? "Пауза" : "Слушать"}
+                {recording ? "Pause" : "Listen"}
               </Button>
             </div>
           </div>
 
           <div className="mt-5">
-            <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">Эмоции питомца · 24 часа</p>
+            <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">Pet emotions · last 24 hours</p>
             <div className="space-y-2.5">
               {EMOTIONS.map((e) => (
                 <div key={e.id} className="flex items-center gap-3">
@@ -123,9 +123,9 @@ export default function CollarPage() {
               <div className="flex items-start gap-3">
                 <Sparkles className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-semibold text-amber-800 dark:text-amber-300">AI заметил утром</p>
+                  <p className="font-semibold text-amber-800 dark:text-amber-300">AI noticed this morning</p>
                   <p className="text-amber-700/90 dark:text-amber-300/80 mt-0.5">
-                    Между 06:40 и 07:10 уровень тревоги был на 28% выше обычного — лай при звуке грозы. Стоит обсудить с зоопсихологом, если повторится.
+                    Between 06:40 and 07:10 anxiety was 28% above baseline — barking at thunder. Worth discussing with a behaviorist if it recurs.
                   </p>
                 </div>
               </div>
