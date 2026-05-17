@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Bot, FlaskConical, Bell, FileText } from "lucide-react";
+import { LayoutDashboard, Bot, PawPrint, ShoppingCart, Stethoscope } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/assistant", label: "AI",         Icon: Bot             },
-  { href: "/labs",      label: "Labs",        Icon: FlaskConical    },
-  { href: "/reminders", label: "Reminders",   Icon: Bell            },
-  { href: "/vet-report",label: "Report",      Icon: FileText        },
+  { href: "/dashboard",     label: "Главная",   Icon: LayoutDashboard },
+  { href: "/assistant",     label: "AI",         Icon: Bot             },
+  { href: "/breeds",        label: "Породы",     Icon: PawPrint        },
+  { href: "/marketplace",   label: "Маркет",     Icon: ShoppingCart    },
+  { href: "/consultations", label: "Врачи",      Icon: Stethoscope     },
 ];
 
 export function MobileBottomNav() {

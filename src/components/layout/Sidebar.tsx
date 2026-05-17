@@ -10,6 +10,12 @@ import {
   Bell,
   FileText,
   Settings,
+  PawPrint,
+  ShoppingCart,
+  Utensils,
+  Stethoscope,
+  Dna,
+  Mic,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PetSwitcher } from "@/components/pet/PetSwitcher";
@@ -17,8 +23,14 @@ import { PetSwitcher } from "@/components/pet/PetSwitcher";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/assistant", label: "AI Assistant", icon: Bot },
+  { href: "/breeds", label: "Породы", icon: PawPrint },
+  { href: "/nutrition", label: "Питание", icon: Utensils },
+  { href: "/breeding", label: "Разведение", icon: Dna },
+  { href: "/collar", label: "Smart Collar", icon: Mic },
+  { href: "/marketplace", label: "Маркетплейс", icon: ShoppingCart },
+  { href: "/consultations", label: "Консультации", icon: Stethoscope },
   { href: "/labs", label: "Lab Results", icon: FlaskConical },
-  { href: "/timeline", label: "Health Timeline", icon: Clock },
+  { href: "/timeline", label: "Timeline", icon: Clock },
   { href: "/reminders", label: "Reminders", icon: Bell },
   { href: "/vet-report", label: "Vet Report", icon: FileText },
 ];

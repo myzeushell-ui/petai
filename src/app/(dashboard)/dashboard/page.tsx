@@ -24,10 +24,10 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Good morning, Alex 👋
         </h1>
-        <p className="text-sm text-gray-500">Here&apos;s how {primaryPet.name} is doing today</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Here&apos;s how {primaryPet.name} is doing today</p>
       </motion.div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -56,13 +56,13 @@ export default function DashboardPage() {
               {urgentReminders.map((reminder) => (
                 <div
                   key={reminder.id}
-                  className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3"
+                  className="flex items-center gap-3 rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-3"
                 >
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white dark:bg-gray-700 shadow-sm">
                     <Calendar className="h-4 w-4 text-gray-500" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{reminder.title}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{reminder.title}</p>
                     <p className="text-xs text-gray-500">{formatDate(reminder.dueDate)}</p>
                   </div>
                   <Badge variant={reminder.priority === "high" ? "danger" : "warning"}>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
           {/* AI Insights */}
           <div>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>🤖</span> AI Health Insights
               </h2>
               <Link href="/assistant">
