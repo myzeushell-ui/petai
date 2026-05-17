@@ -1,7 +1,7 @@
 {
   "name": "PetAI — AI Health OS for Pets",
   "short_name": "PetAI",
-  "description": "Умная платформа здоровья для питомцев. AI-анализ, подбор пород, маркетплейс, консультации.",
+  "description": "AI-powered pet health platform. Lab analysis, breed matching, marketplace, vet consultations.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#ffffff",
