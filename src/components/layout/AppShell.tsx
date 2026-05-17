@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { MobileBottomNav } from "./MobileBottomNav";
 import { DemoModeBanner } from "@/components/demo/DemoModeBanner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -49,9 +50,15 @@ export function AppShell({ children }: AppShellProps) {
 
         <div className="flex flex-1 flex-col overflow-hidden">
           <Header onMenuClick={() => setSidebarOpen(true)} />
-          <main className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
+          {/* Extra bottom padding on mobile so content doesn't hide behind bottom nav */}
+          <main className="flex-1 overflow-y-auto p-4 pb-24 lg:p-6 lg:pb-6">
+            {children}
+          </main>
         </div>
       </div>
+
+      {/* Mobile bottom navigation */}
+      <MobileBottomNav />
     </div>
   );
 }
