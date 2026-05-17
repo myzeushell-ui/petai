@@ -27,18 +27,18 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-gray-100 bg-white">
-      <div className="flex h-16 items-center gap-3 border-b border-gray-100 px-5">
+    <aside className="flex h-full w-64 flex-col border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <div className="flex h-16 items-center gap-3 border-b border-gray-100 dark:border-gray-800 px-5">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500 text-xl shadow-sm">
           🐾
         </div>
         <div>
-          <span className="text-lg font-bold text-gray-900">PetAI</span>
+          <span className="text-lg font-bold text-gray-900 dark:text-white">PetAI</span>
           <p className="text-xs text-gray-400">Health OS for Pets</p>
         </div>
       </div>
 
-      <div className="border-b border-gray-100 px-4 py-3">
+      <div className="border-b border-gray-100 dark:border-gray-800 px-4 py-3">
         <PetSwitcher />
       </div>
 
@@ -55,12 +55,12 @@ export function Sidebar() {
                   className={cn(
                     "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                     isActive
-                      ? "bg-green-50 text-green-700"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                   )}
                 >
                   <Icon
-                    className={cn("h-5 w-5 flex-shrink-0", isActive ? "text-green-600" : "text-gray-400")}
+                    className={cn("h-5 w-5 flex-shrink-0", isActive ? "text-green-600 dark:text-green-400" : "text-gray-400")}
                   />
                   {item.label}
                   {item.label === "Reminders" && (
@@ -73,13 +73,12 @@ export function Sidebar() {
             );
           })}
         </ul>
-
       </nav>
 
-      <div className="border-t border-gray-100 p-3">
+      <div className="border-t border-gray-100 dark:border-gray-800 p-3">
         <Link
           href="/settings"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 transition-all hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           <Settings className="h-5 w-5 text-gray-400" />
           Settings

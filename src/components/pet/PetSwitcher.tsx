@@ -21,7 +21,7 @@ export function PetSwitcher() {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-3 rounded-xl bg-amber-50 hover:bg-amber-100 p-3 transition-colors duration-150"
+        className="flex w-full items-center gap-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-950/50 p-3 transition-colors duration-150"
       >
         <div
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-xl"
@@ -30,7 +30,7 @@ export function PetSwitcher() {
           {speciesEmoji[activePet.species] ?? "🐾"}
         </div>
         <div className="flex-1 min-w-0 text-left">
-          <p className="font-semibold text-gray-900 truncate text-sm">{activePet.name}</p>
+          <p className="font-semibold text-gray-900 dark:text-white truncate text-sm">{activePet.name}</p>
           <p className="text-xs text-gray-500">{activePet.breed} · {activePet.age}y</p>
         </div>
         <div className="flex flex-col items-end gap-0.5">
@@ -46,7 +46,7 @@ export function PetSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg"
+            className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg"
           >
             {pets.map((pet) => {
               const isActive = pet.id === activePet.id;
