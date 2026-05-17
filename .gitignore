@@ -43,3 +43,6 @@ docs/video-assets/audio/*.mp3
 docs/video-assets/screencasts/
 
 .vercel
+
+docs/video-assets/_tmp/
+docs/video-assets/final.mp4
