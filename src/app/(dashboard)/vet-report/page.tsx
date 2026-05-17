@@ -21,7 +21,7 @@ export default function VetReportPage() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <FileText className="h-6 w-6 text-blue-500" />
           Vet Report
         </h1>
@@ -68,7 +68,7 @@ export default function VetReportPage() {
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
                 Chief Complaint
               </p>
-              <p className="text-sm text-gray-700">{report.chiefComplaint}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">{report.chiefComplaint}</p>
             </div>
 
             <div>
@@ -77,7 +77,7 @@ export default function VetReportPage() {
               </p>
               <ul className="space-y-1.5">
                 {report.diagnosis.map((d, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-400 mt-2" />
                     {d}
                   </li>
@@ -91,7 +91,7 @@ export default function VetReportPage() {
               </p>
               <ul className="space-y-1.5">
                 {report.treatment.map((t, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-400 mt-2" />
                     {t}
                   </li>

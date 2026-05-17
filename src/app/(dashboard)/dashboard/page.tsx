@@ -7,14 +7,15 @@ import { AIInsightCard } from "@/components/ai/AIInsightCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { primaryPet } from "@/data/demoPets";
 import { aiInsights } from "@/data/aiInsights";
 import { reminders } from "@/data/reminders";
 import { formatDate } from "@/lib/utils";
 import { Bell, ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
+import { usePet } from "@/contexts/PetContext";
 
 export default function DashboardPage() {
+  const { activePet } = usePet();
   const urgentReminders = reminders
     .filter((r) => !r.completed && r.priority === "high")
     .slice(0, 3);
@@ -27,13 +28,13 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Good morning, Alex 👋
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Here&apos;s how {primaryPet.name} is doing today</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Here&apos;s how {activePet.name} is doing today</p>
       </motion.div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1 space-y-6">
-          <PetProfile pet={primaryPet} />
-          <HealthScore score={primaryPet.healthScore} previousScore={83} />
+          <PetProfile pet={activePet} />
+          <HealthScore score={activePet.healthScore} previousScore={83} />
         </div>
 
         <div className="lg:col-span-2 space-y-6">

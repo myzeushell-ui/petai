@@ -30,7 +30,7 @@ export default function RemindersPage() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Bell className="h-6 w-6 text-orange-500" />
           Reminders
         </h1>
@@ -55,7 +55,7 @@ export default function RemindersPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-semibold text-gray-900">{reminder.title}</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{reminder.title}</p>
                       <Badge variant={priorityVariant[reminder.priority]}>{reminder.priority}</Badge>
                       {reminder.recurring && (
                         <span className="flex items-center gap-1 text-xs text-gray-400">
