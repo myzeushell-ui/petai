@@ -1,107 +1,99 @@
 # PetAI Ecosystem — Task Board
 
-> Sprint: Phase 1 Polish + a16z Application
+> Sprint: Phase 2 Feature Build
 > Updated: 2026-05-17
 
 ---
 
-## 🔴 КРИТИЧНО — a16z Speedrun (дедлайн сегодня)
+## 🔴 КРИТИЧНО — a16z Speedrun
 
 | Задача | Кто | Статус |
 |--------|-----|--------|
 | Написать one-liner pitch | Dev 1 | ⬜ Todo |
-| Записать demo video (2–3 мин) | Dev 1 | ⬜ Todo |
+| Записать demo video (2–3 мин) | Dev 1 | 🔄 Сценарий готов (docs/video-scenario.md) |
 | Заполнить форму speedrun.a16z.com | Dev 1 | ⬜ Todo |
 | LinkedIn профили (оба фаундера) | Оба | ⬜ Todo |
 | Уникальный инсайт: 1 абзац | Dev 1 | ⬜ Todo |
 
 ---
 
-## 🔴 Высокий приоритет — Demo-готовность
+## ✅ Phase 1 — Завершено
 
-| Задача | Кто | Ветка | Статус |
-|--------|-----|-------|--------|
-| Landing page hero + CTA | Dev 1 | feature/landing-page | ✅ Done |
-| App layout + sidebar nav | Dev 1 | feature/app-layout | ✅ Done |
-| Dashboard page | Dev 2 | feature/pet-dashboard | ✅ Done |
-| AI Assistant chat UI | Dev 2 | feature/ai-assistant | ✅ Done |
-| Lab Results + AI analysis | Dev 2 | feature/lab-analysis | ✅ Done |
-| Health Timeline | Dev 2 | feature/health-timeline | ✅ Done |
-| Reminders page | Dev 2 | feature/reminders | ✅ Done |
-| Vet Report page | Dev 2 | feature/vet-report | ✅ Done |
-| Mock data (все датасеты) | Dev 2 | chore/mock-data | ✅ Done |
-| Demo mode banner | Dev 1 | feature/demo-mode | ✅ Done |
-| Prototype (text5) — 7 вкладок | Dev 1 | — | ✅ Done |
-| Prototype — Explore (Breed+Shop+Voice) | Dev 1 | — | ✅ Done |
-| Prototype — Breeding (Течка+Роды+Вязка+Клички) | Dev 1 | — | ✅ Done |
-
----
-
-## 🟡 Средний приоритет — Неделя 1–2
-
-| Задача | Кто | Ветка | Статус |
-|--------|-----|-------|--------|
-| Vercel deploy | Dev 1 | — | 🔄 Config готов (vercel.json), нужен `vercel --prod` |
-| Mobile responsiveness | Dev 1 | fix/mobile-layout | ✅ Done (MobileBottomNav, pb-24) |
-| Pet switcher (Luna + Mochi) | Dev 1 | feature/pet-switcher | ✅ Done (PetSwitcher + PetContext) |
-| Animated page transitions | Dev 1 | feature/page-transitions | ✅ Done (AnimatePresence на роутах) |
-| Waitlist email на landing | Dev 1 | feature/waitlist | ✅ Done (форма с local state) |
-| Health score animated ring | Dev 1 | fix/health-score-ring | ✅ Done (SVG ring в text5 + petai) |
-| Prototype redesign (bottom nav) | Dev 1 | — | ✅ Done (BottomNav, 5 вкладок) |
-| Breed picker — полные 25 вопросов | Dev 2 | feature/breed-picker | ⬜ Todo |
-| База пород: 30 собак + 15 кошек | Dev 2 | chore/breed-db | ⬜ Todo |
+| Задача | Статус |
+|--------|--------|
+| Landing page hero + CTA + waitlist | ✅ Done |
+| App layout + sidebar nav | ✅ Done |
+| Dashboard page | ✅ Done |
+| AI Assistant chat UI | ✅ Done |
+| Lab Results + AI analysis | ✅ Done |
+| Health Timeline | ✅ Done |
+| Reminders page | ✅ Done |
+| Vet Report page | ✅ Done |
+| Mock data (все датасеты) | ✅ Done |
+| Demo mode banner | ✅ Done |
+| Prototype (text5) — 5 вкладок + BottomNav | ✅ Done |
+| Mobile responsiveness + MobileBottomNav | ✅ Done |
+| Pet switcher (Luna + Mochi) + PetContext | ✅ Done |
+| Animated page transitions (AnimatePresence) | ✅ Done |
+| Health score animated ring (SVG) | ✅ Done |
 
 ---
 
-## 🟢 Низкий приоритет — Фаза 2+
+## ✅ Phase 2 — Завершено
 
-| Задача | Кто | Ветка | Статус |
-|--------|-----|-------|--------|
-| Dark mode | Dev 1 | feature/dark-mode | ⬜ Todo |
-| Mochi — второй питомец | Dev 2 | feature/multi-pet | ⬜ Todo |
-| Lab upload drag & drop | Dev 2 | feature/lab-upload | ⬜ Todo |
-| Print/export vet report | Dev 2 | feature/report-export | ⬜ Todo |
-| Favicon + OG image | Dev 1 | chore/assets | ⬜ Todo |
-| Трекер течки — полная логика | Dev 2 | feature/heat-tracker | ⬜ Todo |
-| COI калькулятор MVP | Dev 2 | feature/coi-calc | ⬜ Todo |
-| Маркетплейс: 50 seed-объявлений | Dev 2 | chore/marketplace-seed | ⬜ Todo |
-| Генератор кличек — полная база | Dev 2 | feature/name-gen | ⬜ Todo |
-| Руководство по родам — полный контент | Dev 2 | feature/whelp-guide | ⬜ Todo |
-
----
-
-## Ответственность Developer 1 (myzeushell-ui)
-
-**Фокус:** Визуал, landing, deploy, прототип, a16z заявка
-
-Файлы:
-- `src/app/page.tsx` (landing)
-- `src/components/layout/` (AppShell, Sidebar, Header)
-- `src/components/demo/DemoModeBanner.tsx`
-- `text5/src/` (весь прототип)
-- Vercel deploy + домен
+| Задача | Статус |
+|--------|--------|
+| Dark mode (toggle + persistence + all pages) | ✅ Done |
+| Breed database (20 dogs + 12 cats = 32 breeds) | ✅ Done |
+| Breed explorer page (/breeds) с поиском и фильтрами | ✅ Done |
+| Nutrition data module (6 plans + 8 foods) | ✅ Done |
+| Nutrition page (/nutrition) — план питания + рекомендации кормов | ✅ Done |
+| Marketplace data (30 listings) | ✅ Done |
+| Marketplace page (/marketplace) с фильтрами и поиском | ✅ Done |
+| Marketplace: create listing page (/marketplace/new) | ✅ Done |
+| Consultants data (10 specialists) | ✅ Done |
+| Consultations page (/consultations) с booking flow | ✅ Done |
+| Breeding Suite (/breeding) — heat tracker, pair matching, COI calc, contract | ✅ Done |
+| Smart Collar (/collar) — live dashboard, voice AI, temp, GPS | ✅ Done |
+| Active pet context (dashboard + assistant use usePet()) | ✅ Done |
+| Dark mode across all existing pages | ✅ Done |
+| Sidebar: 12 nav items | ✅ Done |
+| MobileBottomNav: 5 priority tabs | ✅ Done |
 
 ---
 
-## Ответственность Developer 2 (standlord-prog)
+## 🟡 Phase 3 — Следующие шаги
 
-**Фокус:** Данные, AI-экраны, база пород, новые модули
-
-Файлы:
-- `src/app/(dashboard)/` (все страницы)
-- `src/data/` (все mock-датасеты)
-- `src/components/health/`, `src/components/ai/`, `src/components/pet/`
-- Breed picker логика
-- COI калькулятор
-- Heat tracker
+| Задача | Кто | Статус |
+|--------|-----|--------|
+| Breed picker — полные 25 вопросов | Dev 2 | ⬜ Todo |
+| Expand breed DB to 50+ breeds | Dev 2 | ⬜ Todo |
+| Lab upload drag & drop | Dev 2 | ⬜ Todo |
+| Print/export vet report PDF | Dev 2 | ⬜ Todo |
+| Real AI integration (Claude/GPT-4) | Dev 2 | ⬜ Todo |
+| PDF lab parsing (upload → AI analysis) | Dev 2 | ⬜ Todo |
+| Heat cycle AI predictions | Dev 2 | ⬜ Todo |
+| Voice AI prototype (dog bark analysis) | Dev 2 | ⬜ Todo |
+| Генератор кличек — полная база | Dev 2 | ⬜ Todo |
+| Vercel production deploy | Dev 1 | ⬜ Todo |
 
 ---
 
-## Как взять задачу
+## Pages Summary (16 total)
 
-1. Выбери ⬜ задачу
-2. Обнови этот файл: имя + `🔄 In Progress`
-3. `git checkout -b feature/task-name`
-4. Сделай
-5. PR → `dev` ветка
-6. Merge → `✅ Done`
+| Route | Description | Status |
+|-------|-------------|--------|
+| `/` | Landing + waitlist + pricing | ✅ |
+| `/dashboard` | Health overview + reminders + AI insights | ✅ |
+| `/assistant` | AI chat with mock responses | ✅ |
+| `/breeds` | Breed explorer (32 breeds, filters) | ✅ |
+| `/nutrition` | Diet plans + food recommendations | ✅ |
+| `/breeding` | Heat tracker + pair matching + COI + contract | ✅ |
+| `/collar` | Smart collar live dashboard | ✅ |
+| `/marketplace` | 30 listings (puppies, kittens, services, products) | ✅ |
+| `/marketplace/new` | Create marketplace listing | ✅ |
+| `/consultations` | 10 specialists with booking | ✅ |
+| `/labs` | Lab results with AI analysis | ✅ |
+| `/timeline` | Health event timeline | ✅ |
+| `/reminders` | Medication/vaccine/checkup reminders | ✅ |
+| `/vet-report` | Vet visit report with AI summary | ✅ |
