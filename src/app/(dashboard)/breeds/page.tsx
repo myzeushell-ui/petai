@@ -136,7 +136,6 @@ export default function BreedsPage() {
         const q = search.toLowerCase();
         return (
           b.name.toLowerCase().includes(q) ||
-          b.nameRu.toLowerCase().includes(q) ||
           b.traits.some((t) => t.toLowerCase().includes(q)) ||
           b.group.toLowerCase().includes(q)
         );

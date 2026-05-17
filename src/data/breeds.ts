@@ -1,7 +1,6 @@
 export interface Breed {
   id: string;
   name: string;
-  nameRu: string;
   species: "dog" | "cat";
   group: string;
   size: "small" | "medium" | "large" | "giant";
@@ -22,8 +21,8 @@ export interface Breed {
 
 export const dogBreeds: Breed[] = [
   {
-    id: "golden-retriever", name: "Golden Retriever", nameRu: "Золотистый ретривер",
-    species: "dog", group: "Sporting", size: "large", weight: "25-34 kg", lifespan: "10-12 years",
+    id: "golden-retriever", name: "Golden Retriever",
+species: "dog", group: "Sporting", size: "large", weight: "25-34 kg", lifespan: "10-12 years",
     activity: "high", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Hip dysplasia", "Cancer", "Heart disease"],
@@ -31,8 +30,8 @@ export const dogBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐕"
   },
   {
-    id: "labrador", name: "Labrador Retriever", nameRu: "Лабрадор-ретривер",
-    species: "dog", group: "Sporting", size: "large", weight: "25-36 kg", lifespan: "10-12 years",
+    id: "labrador", name: "Labrador Retriever",
+species: "dog", group: "Sporting", size: "large", weight: "25-36 kg", lifespan: "10-12 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Hip dysplasia", "Obesity", "Eye disease"],
@@ -40,8 +39,8 @@ export const dogBreeds: Breed[] = [
     origin: "Canada", emoji: "🦮"
   },
   {
-    id: "german-shepherd", name: "German Shepherd", nameRu: "Немецкая овчарка",
-    species: "dog", group: "Herding", size: "large", weight: "22-40 kg", lifespan: "9-13 years",
+    id: "german-shepherd", name: "German Shepherd",
+species: "dog", group: "Herding", size: "large", weight: "22-40 kg", lifespan: "9-13 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "high",
     healthIssues: ["Hip dysplasia", "Degenerative myelopathy", "Bloat"],
@@ -49,8 +48,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany", emoji: "🐕‍🦺"
   },
   {
-    id: "french-bulldog", name: "French Bulldog", nameRu: "Французский бульдог",
-    species: "dog", group: "Non-Sporting", size: "small", weight: "8-14 kg", lifespan: "10-12 years",
+    id: "french-bulldog", name: "French Bulldog",
+species: "dog", group: "Non-Sporting", size: "small", weight: "8-14 kg", lifespan: "10-12 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Brachycephaly", "Spinal issues", "Allergies"],
@@ -58,8 +57,8 @@ export const dogBreeds: Breed[] = [
     origin: "France", emoji: "🐶"
   },
   {
-    id: "poodle", name: "Poodle", nameRu: "Пудель",
-    species: "dog", group: "Non-Sporting", size: "medium", weight: "20-32 kg", lifespan: "12-15 years",
+    id: "poodle", name: "Poodle",
+species: "dog", group: "Non-Sporting", size: "medium", weight: "20-32 kg", lifespan: "12-15 years",
     activity: "high", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Addison's disease", "Bloat", "Hip dysplasia"],
@@ -67,8 +66,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany / France", emoji: "🐩"
   },
   {
-    id: "husky", name: "Siberian Husky", nameRu: "Сибирский хаски",
-    species: "dog", group: "Working", size: "medium", weight: "16-27 kg", lifespan: "12-14 years",
+    id: "husky", name: "Siberian Husky",
+species: "dog", group: "Working", size: "medium", weight: "16-27 kg", lifespan: "12-14 years",
     activity: "very_high", grooming: "high", trainability: "hard",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "high",
     healthIssues: ["Eye disease", "Hip dysplasia", "Hypothyroidism"],
@@ -76,8 +75,8 @@ export const dogBreeds: Breed[] = [
     origin: "Russia", emoji: "🐺"
   },
   {
-    id: "corgi", name: "Pembroke Welsh Corgi", nameRu: "Вельш-корги пемброк",
-    species: "dog", group: "Herding", size: "small", weight: "10-14 kg", lifespan: "12-15 years",
+    id: "corgi", name: "Pembroke Welsh Corgi",
+species: "dog", group: "Herding", size: "small", weight: "10-14 kg", lifespan: "12-15 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Hip dysplasia", "Eye disease", "Spinal issues"],
@@ -85,8 +84,8 @@ export const dogBreeds: Breed[] = [
     origin: "Wales", emoji: "🐕"
   },
   {
-    id: "doberman", name: "Doberman Pinscher", nameRu: "Доберман",
-    species: "dog", group: "Working", size: "large", weight: "27-45 kg", lifespan: "10-12 years",
+    id: "doberman", name: "Doberman Pinscher",
+species: "dog", group: "Working", size: "large", weight: "27-45 kg", lifespan: "10-12 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "low",
     healthIssues: ["Cardiomyopathy", "von Willebrand disease", "Bloat"],
@@ -94,8 +93,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany", emoji: "🐕"
   },
   {
-    id: "beagle", name: "Beagle", nameRu: "Бигль",
-    species: "dog", group: "Hound", size: "small", weight: "9-11 kg", lifespan: "12-15 years",
+    id: "beagle", name: "Beagle",
+species: "dog", group: "Hound", size: "small", weight: "9-11 kg", lifespan: "12-15 years",
     activity: "high", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Epilepsy", "Hypothyroidism", "Eye disease"],
@@ -103,8 +102,8 @@ export const dogBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐕"
   },
   {
-    id: "yorkshire-terrier", name: "Yorkshire Terrier", nameRu: "Йоркширский терьер",
-    species: "dog", group: "Toy", size: "small", weight: "2-3 kg", lifespan: "13-16 years",
+    id: "yorkshire-terrier", name: "Yorkshire Terrier",
+species: "dog", group: "Toy", size: "small", weight: "2-3 kg", lifespan: "13-16 years",
     activity: "medium", grooming: "high", trainability: "moderate",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "low",
     healthIssues: ["Dental disease", "Hypoglycemia", "Tracheal collapse"],
@@ -112,8 +111,8 @@ export const dogBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐕"
   },
   {
-    id: "dachshund", name: "Dachshund", nameRu: "Такса",
-    species: "dog", group: "Hound", size: "small", weight: "7-15 kg", lifespan: "12-16 years",
+    id: "dachshund", name: "Dachshund",
+species: "dog", group: "Hound", size: "small", weight: "7-15 kg", lifespan: "12-16 years",
     activity: "medium", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: false, apartment: true, shedding: "medium",
     healthIssues: ["Spinal disorders", "Obesity", "Epilepsy"],
@@ -121,8 +120,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany", emoji: "🐕"
   },
   {
-    id: "shiba-inu", name: "Shiba Inu", nameRu: "Сиба-ину",
-    species: "dog", group: "Non-Sporting", size: "small", weight: "8-11 kg", lifespan: "12-15 years",
+    id: "shiba-inu", name: "Shiba Inu",
+species: "dog", group: "Non-Sporting", size: "small", weight: "8-11 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "medium", trainability: "hard",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "high",
     healthIssues: ["Allergies", "Hip dysplasia", "Eye disease"],
@@ -130,8 +129,8 @@ export const dogBreeds: Breed[] = [
     origin: "Japan", emoji: "🐕"
   },
   {
-    id: "boxer", name: "Boxer", nameRu: "Боксёр",
-    species: "dog", group: "Working", size: "large", weight: "25-32 kg", lifespan: "10-12 years",
+    id: "boxer", name: "Boxer",
+species: "dog", group: "Working", size: "large", weight: "25-32 kg", lifespan: "10-12 years",
     activity: "high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "medium",
     healthIssues: ["Cancer", "Cardiomyopathy", "Hip dysplasia"],
@@ -139,8 +138,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany", emoji: "🐕"
   },
   {
-    id: "akita", name: "Akita", nameRu: "Акита-ину",
-    species: "dog", group: "Working", size: "large", weight: "32-45 kg", lifespan: "10-13 years",
+    id: "akita", name: "Akita",
+species: "dog", group: "Working", size: "large", weight: "32-45 kg", lifespan: "10-13 years",
     activity: "medium", grooming: "high", trainability: "hard",
     goodWithKids: false, goodWithPets: false, apartment: false, shedding: "high",
     healthIssues: ["Hip dysplasia", "Autoimmune disease", "Bloat"],
@@ -148,8 +147,8 @@ export const dogBreeds: Breed[] = [
     origin: "Japan", emoji: "🐕"
   },
   {
-    id: "samoyed", name: "Samoyed", nameRu: "Самоед",
-    species: "dog", group: "Working", size: "medium", weight: "16-30 kg", lifespan: "12-14 years",
+    id: "samoyed", name: "Samoyed",
+species: "dog", group: "Working", size: "medium", weight: "16-30 kg", lifespan: "12-14 years",
     activity: "high", grooming: "high", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "high",
     healthIssues: ["Hip dysplasia", "Glaucoma", "Diabetes"],
@@ -157,8 +156,8 @@ export const dogBreeds: Breed[] = [
     origin: "Russia", emoji: "🐕"
   },
   {
-    id: "border-collie", name: "Border Collie", nameRu: "Бордер-колли",
-    species: "dog", group: "Herding", size: "medium", weight: "14-20 kg", lifespan: "12-15 years",
+    id: "border-collie", name: "Border Collie",
+species: "dog", group: "Herding", size: "medium", weight: "14-20 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "medium",
     healthIssues: ["Epilepsy", "Hip dysplasia", "Collie eye anomaly"],
@@ -166,8 +165,8 @@ export const dogBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐕‍🦺"
   },
   {
-    id: "rottweiler", name: "Rottweiler", nameRu: "Ротвейлер",
-    species: "dog", group: "Working", size: "large", weight: "35-60 kg", lifespan: "8-10 years",
+    id: "rottweiler", name: "Rottweiler",
+species: "dog", group: "Working", size: "large", weight: "35-60 kg", lifespan: "8-10 years",
     activity: "medium", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "medium",
     healthIssues: ["Hip dysplasia", "Cancer", "Heart disease"],
@@ -175,8 +174,8 @@ export const dogBreeds: Breed[] = [
     origin: "Germany", emoji: "🐕"
   },
   {
-    id: "cavalier", name: "Cavalier King Charles Spaniel", nameRu: "Кавалер-кинг-чарльз-спаниель",
-    species: "dog", group: "Toy", size: "small", weight: "5-8 kg", lifespan: "9-14 years",
+    id: "cavalier", name: "Cavalier King Charles Spaniel",
+species: "dog", group: "Toy", size: "small", weight: "5-8 kg", lifespan: "9-14 years",
     activity: "medium", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Heart disease", "Syringomyelia", "Eye disease"],
@@ -184,8 +183,8 @@ export const dogBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐕"
   },
   {
-    id: "australian-shepherd", name: "Australian Shepherd", nameRu: "Австралийская овчарка",
-    species: "dog", group: "Herding", size: "medium", weight: "18-29 kg", lifespan: "12-15 years",
+    id: "australian-shepherd", name: "Australian Shepherd",
+species: "dog", group: "Herding", size: "medium", weight: "18-29 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: false, shedding: "high",
     healthIssues: ["Epilepsy", "Hip dysplasia", "Vision problems"],
@@ -193,8 +192,8 @@ export const dogBreeds: Breed[] = [
     origin: "USA", emoji: "🐕"
   },
   {
-    id: "chihuahua", name: "Chihuahua", nameRu: "Чихуахуа",
-    species: "dog", group: "Toy", size: "small", weight: "1.5-3 kg", lifespan: "14-16 years",
+    id: "chihuahua", name: "Chihuahua",
+species: "dog", group: "Toy", size: "small", weight: "1.5-3 kg", lifespan: "14-16 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: false, goodWithPets: false, apartment: true, shedding: "low",
     healthIssues: ["Dental disease", "Hydrocephalus", "Heart problems"],
@@ -205,8 +204,8 @@ export const dogBreeds: Breed[] = [
 
 export const catBreeds: Breed[] = [
   {
-    id: "british-shorthair", name: "British Shorthair", nameRu: "Британская короткошёрстная",
-    species: "cat", group: "Shorthair", size: "medium", weight: "4-8 kg", lifespan: "12-20 years",
+    id: "british-shorthair", name: "British Shorthair",
+species: "cat", group: "Shorthair", size: "medium", weight: "4-8 kg", lifespan: "12-20 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Cardiomyopathy", "Polycystic kidney disease", "Obesity"],
@@ -214,8 +213,8 @@ export const catBreeds: Breed[] = [
     origin: "United Kingdom", emoji: "🐱"
   },
   {
-    id: "maine-coon", name: "Maine Coon", nameRu: "Мейн-кун",
-    species: "cat", group: "Longhair", size: "giant", weight: "5-12 kg", lifespan: "12-15 years",
+    id: "maine-coon", name: "Maine Coon",
+species: "cat", group: "Longhair", size: "giant", weight: "5-12 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "high", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Cardiomyopathy", "Hip dysplasia", "Polycystic disease"],
@@ -223,8 +222,8 @@ export const catBreeds: Breed[] = [
     origin: "USA", emoji: "🐱"
   },
   {
-    id: "scottish-fold", name: "Scottish Fold", nameRu: "Шотландская вислоухая",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-6 kg", lifespan: "11-14 years",
+    id: "scottish-fold", name: "Scottish Fold",
+species: "cat", group: "Shorthair", size: "medium", weight: "3-6 kg", lifespan: "11-14 years",
     activity: "low", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Osteochondrodysplasia", "Cardiomyopathy", "Arthritis"],
@@ -232,8 +231,8 @@ export const catBreeds: Breed[] = [
     origin: "Scotland", emoji: "🐱"
   },
   {
-    id: "siamese", name: "Siamese", nameRu: "Сиамская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-20 years",
+    id: "siamese", name: "Siamese",
+species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-20 years",
     activity: "high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Asthma", "Heart disease", "Strabismus"],
@@ -241,8 +240,8 @@ export const catBreeds: Breed[] = [
     origin: "Thailand", emoji: "🐱"
   },
   {
-    id: "persian", name: "Persian", nameRu: "Персидская",
-    species: "cat", group: "Longhair", size: "medium", weight: "3-7 kg", lifespan: "12-17 years",
+    id: "persian", name: "Persian",
+species: "cat", group: "Longhair", size: "medium", weight: "3-7 kg", lifespan: "12-17 years",
     activity: "low", grooming: "high", trainability: "hard",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Polycystic kidney disease", "Breathing issues", "Eye disease"],
@@ -250,8 +249,8 @@ export const catBreeds: Breed[] = [
     origin: "Iran", emoji: "🐱"
   },
   {
-    id: "bengal", name: "Bengal", nameRu: "Бенгальская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "4-7 kg", lifespan: "12-16 years",
+    id: "bengal", name: "Bengal",
+species: "cat", group: "Shorthair", size: "medium", weight: "4-7 kg", lifespan: "12-16 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: false, apartment: false, shedding: "low",
     healthIssues: ["Cardiomyopathy", "PRA", "Patellar luxation"],
@@ -259,8 +258,8 @@ export const catBreeds: Breed[] = [
     origin: "USA", emoji: "🐱"
   },
   {
-    id: "ragdoll", name: "Ragdoll", nameRu: "Рэгдолл",
-    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "12-17 years",
+    id: "ragdoll", name: "Ragdoll",
+species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "12-17 years",
     activity: "low", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "medium",
     healthIssues: ["Cardiomyopathy", "Urolithiasis", "Obesity"],
@@ -268,8 +267,8 @@ export const catBreeds: Breed[] = [
     origin: "USA", emoji: "🐱"
   },
   {
-    id: "sphynx", name: "Sphynx", nameRu: "Сфинкс",
-    species: "cat", group: "Hairless", size: "medium", weight: "3-6 kg", lifespan: "8-14 years",
+    id: "sphynx", name: "Sphynx",
+species: "cat", group: "Hairless", size: "medium", weight: "3-6 kg", lifespan: "8-14 years",
     activity: "high", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Cardiomyopathy", "Skin infections", "Cold sensitivity"],
@@ -277,8 +276,8 @@ export const catBreeds: Breed[] = [
     origin: "Canada", emoji: "🐱"
   },
   {
-    id: "abyssinian", name: "Abyssinian", nameRu: "Абиссинская",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
+    id: "abyssinian", name: "Abyssinian",
+species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
     activity: "very_high", grooming: "low", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Renal amyloidosis", "Dental disease", "Patellar luxation"],
@@ -286,8 +285,8 @@ export const catBreeds: Breed[] = [
     origin: "Ethiopia", emoji: "🐱"
   },
   {
-    id: "russian-blue", name: "Russian Blue", nameRu: "Русская голубая",
-    species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "15-20 years",
+    id: "russian-blue", name: "Russian Blue",
+species: "cat", group: "Shorthair", size: "medium", weight: "3-5 kg", lifespan: "15-20 years",
     activity: "medium", grooming: "low", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Urolithiasis", "Obesity"],
@@ -295,8 +294,8 @@ export const catBreeds: Breed[] = [
     origin: "Russia", emoji: "🐱"
   },
   {
-    id: "norwegian-forest", name: "Norwegian Forest Cat", nameRu: "Норвежская лесная",
-    species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "14-16 years",
+    id: "norwegian-forest", name: "Norwegian Forest Cat",
+species: "cat", group: "Longhair", size: "large", weight: "4-9 kg", lifespan: "14-16 years",
     activity: "medium", grooming: "high", trainability: "moderate",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "high",
     healthIssues: ["Cardiomyopathy", "Hip dysplasia", "Type IV glycogen storage disease"],
@@ -304,8 +303,8 @@ export const catBreeds: Breed[] = [
     origin: "Norway", emoji: "🐱"
   },
   {
-    id: "sphinx-don", name: "Don Sphynx", nameRu: "Донской сфинкс",
-    species: "cat", group: "Hairless", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
+    id: "sphinx-don", name: "Don Sphynx",
+species: "cat", group: "Hairless", size: "medium", weight: "3-5 kg", lifespan: "12-15 years",
     activity: "medium", grooming: "medium", trainability: "easy",
     goodWithKids: true, goodWithPets: true, apartment: true, shedding: "low",
     healthIssues: ["Skin issues", "Dental disease", "Cold sensitivity"],

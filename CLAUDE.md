@@ -10,9 +10,9 @@
 - Fix lint/type errors immediately without asking.
 
 ## Project Structure
-- **Framework:** Next.js 15 (App Router), TypeScript strict, Tailwind CSS v4, Framer Motion
+- **Framework:** Next.js 16 (App Router), TypeScript strict, Tailwind CSS v4, Framer Motion
 - **Repo:** github.com/myzeushell-ui/petai, branch: `dev`
-- **Pages:** Landing (`/`), Dashboard, AI Assistant, Labs, Timeline, Reminders, Vet Report
+- **Pages:** Landing (`/`), Dashboard, AI Assistant, Labs, Timeline, Reminders, Vet Report, Breeds, Marketplace, Nutrition, Consultations, Breeding, Collar
 - **Layout:** AppShell with desktop Sidebar + mobile MobileBottomNav
 - **State:** PetContext for active pet (Luna/Mochi), local useState elsewhere
 - **Data:** All mock data in `src/data/` — no backend yet
@@ -23,15 +23,15 @@
 - All "use client" — no RSC data fetching yet
 - UI primitives: Card, Button, Badge, Progress from `src/components/ui/`
 - Colors: green-500 primary, amber for Luna, indigo for Mochi
-- Russian UI text where user-facing, English for code/variables
+- All UI text in English
 - Animations: framer-motion for page transitions, cards, nav indicators
 - Inter font via next/font/google
 
 ## Monetization Model
 - Free: 1 pet, basic health card, reminders, heat tracker
-- Pro (499₽/mo): 5 pets, AI lab analysis, unlimited AI chat, voice AI, export
-- Breeder (990₽/mo): COI calc, breeding contract, marketplace listings, name generator
-- Transactional: 20% vet consultations, 3% marketplace, 5% breeding deals, 490₽ contract
+- Pro ($4.99/mo): 5 pets, AI lab analysis, unlimited AI chat, voice AI, export
+- Breeder ($9.99/mo): COI calc, breeding contract, marketplace listings, name generator
+- Transactional: 20% vet consultations, 3% marketplace, 5% breeding deals, $4.90 contract
 
 ## Sibling Project
 - `C:\Users\PC\text5` — Mobile phone UI prototype (localhost:3001)

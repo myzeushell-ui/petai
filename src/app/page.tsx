@@ -19,73 +19,73 @@ const features = [
   { Icon: Mic,          title: "Voice AI",           desc: "Understand your pet's barks and vocalizations in real time", color: "bg-purple-100 text-purple-600" },
   { Icon: Shield,       title: "Vet Reports",        desc: "All visit records in one place with AI summaries",          color: "bg-teal-100 text-teal-600"     },
   { Icon: Zap,          title: "Health Timeline",    desc: "Complete medical history with trend analysis",              color: "bg-cyan-100 text-cyan-600"     },
-  { Icon: Heart,        title: "Marketplace",        desc: "Verified breeders, RKF pedigrees, breed picker quiz",      color: "bg-rose-100 text-rose-600"     },
+  { Icon: Heart,        title: "Marketplace",        desc: "Verified breeders, pedigrees, breed picker quiz",           color: "bg-rose-100 text-rose-600"     },
 ];
 
 /* ── Pricing ── */
 const plans = [
   {
     name: "Free",
-    price: "0₽",
+    price: "$0",
     period: "",
-    tagline: "Для старта",
+    tagline: "To get started",
     color: "border-gray-200",
     accent: "bg-gray-50",
-    cta: "Начать бесплатно",
+    cta: "Start for free",
     popular: false,
     features: [
-      "1 питомец",
-      "Медкарта и напоминания",
-      "Трекер течки",
-      "Health Score (базовый)",
-      "AI чат (5 вопросов/день)",
+      "1 pet profile",
+      "Health card & reminders",
+      "Heat cycle tracker",
+      "Health Score (basic)",
+      "AI chat (5 questions/day)",
     ],
   },
   {
     name: "Pro",
-    price: "499₽",
-    period: "/мес",
-    tagline: "Для заботливых владельцев",
+    price: "$4.99",
+    period: "/mo",
+    tagline: "For caring pet owners",
     color: "border-green-400",
     accent: "bg-green-50",
-    cta: "Попробовать 14 дней бесплатно",
+    cta: "Try 14 days free",
     popular: true,
     features: [
-      "До 5 питомцев",
-      "AI анализ анализов (PDF)",
-      "Неограниченный AI чат",
-      "Голосовой анализ (ошейник)",
-      "Детальный health score + тренды",
-      "Экспорт ветеринарного отчёта",
+      "Up to 5 pets",
+      "AI lab analysis (PDF upload)",
+      "Unlimited AI chat",
+      "Voice analysis (smart collar)",
+      "Detailed health score + trends",
+      "Export vet reports",
     ],
   },
   {
     name: "Breeder",
-    price: "990₽",
-    period: "/мес",
-    tagline: "Для заводчиков",
+    price: "$9.99",
+    period: "/mo",
+    tagline: "For professional breeders",
     color: "border-purple-400",
     accent: "bg-purple-50",
-    cta: "Связаться с нами",
+    cta: "Contact us",
     popular: false,
     features: [
-      "Всё из Pro",
-      "COI калькулятор",
-      "Автодоговор вязки (ЭЦП)",
-      "Маркетплейс объявлений",
-      "Подбор кандидатов по родословной",
-      "AI генератор кличек (РКФ 2026)",
-      "Приоритетная поддержка",
+      "Everything in Pro",
+      "COI calculator",
+      "Auto breeding contract (e-sign)",
+      "Marketplace listings",
+      "Pedigree-based mate matching",
+      "AI name generator",
+      "Priority support",
     ],
   },
 ];
 
 /* ── Stats ── */
 const stats = [
-  { value: "87%", label: "Точность голосового AI" },
-  { value: "50+", label: "Пород в базе данных" },
-  { value: "3x", label: "Быстрее диагностика" },
-  { value: "0₽", label: "Чтобы начать" },
+  { value: "87%", label: "Voice AI accuracy" },
+  { value: "50+", label: "Breeds in database" },
+  { value: "3x", label: "Faster diagnostics" },
+  { value: "$0", label: "To get started" },
 ];
 
 export default function LandingPage() {
@@ -117,8 +117,8 @@ export default function LandingPage() {
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-gray-500">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Возможности</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Тарифы</a>
+            <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-2">
             <Link href="/dashboard">
@@ -126,7 +126,7 @@ export default function LandingPage() {
             </Link>
             <Link href="/dashboard">
               <Button size="sm">
-                Открыть приложение <ArrowRight className="h-4 w-4" />
+                Open App <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -147,10 +147,10 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mt-6 text-5xl font-black tracking-tight text-gray-900 sm:text-6xl">
-            Health OS для вашего
+            The Health OS for your
             <br />
             <span className="bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
-              питомца
+              pet
             </span>
           </motion.h1>
 
@@ -158,8 +158,8 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-lg text-gray-500">
-            AI health score, расшифровка анализов, трекер течки, голосовой AI и маркетплейс заводчиков —
-            всё в одном приложении. Ваш питомец заслуживает лучшего.
+            AI health score, lab result analysis, heat cycle tracker, voice AI, and breeder marketplace —
+            all in one app. Your pet deserves the best.
           </motion.p>
 
           {/* Waitlist form */}
@@ -180,7 +180,7 @@ export default function LandingPage() {
                 />
                 <Button type="submit" size="lg" disabled={loading}
                   className="w-full sm:w-auto shadow-lg shadow-green-200">
-                  {loading ? "Записываем..." : "Вступить в список"}
+                  {loading ? "Joining..." : "Join the waitlist"}
                   {!loading && <ArrowRight className="h-5 w-5" />}
                 </Button>
               </form>
@@ -188,11 +188,11 @@ export default function LandingPage() {
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                 className="inline-flex items-center gap-2 rounded-2xl border border-green-200 bg-green-50 px-6 py-3 text-green-700 font-semibold">
                 <Check className="h-5 w-5" />
-                Вы в списке! Уведомим при запуске.
+                You&apos;re on the list! We&apos;ll notify you at launch.
               </motion.div>
             )}
             <p className="mt-3 text-sm text-gray-400">
-              Без регистрации · <Link href="/dashboard" className="underline hover:text-gray-600">Или сразу в Demo →</Link>
+              No sign-up required · <Link href="/dashboard" className="underline hover:text-gray-600">Or jump to Demo →</Link>
             </p>
           </motion.div>
 
@@ -232,7 +232,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">Luna · Golden Retriever</h3>
-                  <p className="text-sm text-gray-500">4 года · Самка · Стерилизована</p>
+                  <p className="text-sm text-gray-500">4 years · Female · Spayed</p>
                   <div className="mt-1 flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
                     <span className="text-xs text-green-600 font-medium">Excellent Health</span>
@@ -267,10 +267,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <h2 className="text-3xl font-black text-gray-900 sm:text-4xl">
-              Всё что нужно вашему питомцу
+              Everything your pet needs
             </h2>
             <p className="mt-3 text-gray-500">
-              От ежедневных напоминаний до анализа анализов — PetAI закрывает всё.
+              From daily reminders to lab analysis — PetAI covers it all.
             </p>
           </div>
 
@@ -295,8 +295,8 @@ export default function LandingPage() {
       <section id="pricing" className="px-4 py-20">
         <div className="mx-auto max-w-5xl">
           <div className="text-center">
-            <h2 className="text-3xl font-black text-gray-900 sm:text-4xl">Простые тарифы</h2>
-            <p className="mt-3 text-gray-500">Начните бесплатно. Платите только когда захотите большего.</p>
+            <h2 className="text-3xl font-black text-gray-900 sm:text-4xl">Simple pricing</h2>
+            <p className="mt-3 text-gray-500">Start free. Pay only when you want more.</p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -308,7 +308,7 @@ export default function LandingPage() {
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                     <span className="rounded-full bg-green-500 px-4 py-1 text-xs font-bold text-white shadow-sm">
-                      Популярный
+                      Popular
                     </span>
                   </div>
                 )}
@@ -340,7 +340,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-center text-sm text-gray-400 mt-8">
-            + 20% комиссия с консультаций · 3% с маркетплейс-сделок · Договор вязки: 490₽
+            + 20% commission on consultations · 3% on marketplace deals · Breeding contract: $4.90
           </p>
         </div>
       </section>
@@ -348,14 +348,14 @@ export default function LandingPage() {
       {/* ── CTA ── */}
       <section className="bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-16 text-center">
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-3xl font-black text-white">Готовы дать питомцу лучший уход?</h2>
+          <h2 className="text-3xl font-black text-white">Ready to give your pet the best care?</h2>
           <p className="mt-3 text-green-100">
-            Присоединяйтесь к владельцам, которые уже используют AI для умных решений о здоровье.
+            Join pet owners who already use AI for smarter health decisions.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/dashboard">
               <Button size="lg" className="bg-white text-green-700 hover:bg-green-50 w-full sm:w-auto shadow-lg">
-                Смотреть Demo <ArrowRight className="h-5 w-5" />
+                View Demo <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
           </div>
@@ -369,12 +369,12 @@ export default function LandingPage() {
             <span className="text-xl">🐾</span>
             <span className="font-bold text-gray-600">PetAI</span>
             <span className="text-gray-300">·</span>
-            <span>AI Health OS для питомцев</span>
+            <span>AI Health OS for Pets</span>
           </div>
           <div className="flex items-center gap-4">
             <span>© 2026</span>
-            <a href="#features" className="hover:text-gray-600 transition-colors">Возможности</a>
-            <a href="#pricing" className="hover:text-gray-600 transition-colors">Тарифы</a>
+            <a href="#features" className="hover:text-gray-600 transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-gray-600 transition-colors">Pricing</a>
             <Link href="/dashboard" className="hover:text-gray-600 transition-colors">Demo</Link>
           </div>
         </div>
