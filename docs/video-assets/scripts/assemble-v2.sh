@@ -62,7 +62,7 @@ echo "  -> $(stat -c %s scene-01.mp4) bytes"
 
 # Scenes 2-7 — screencasts (durations match v4 cloned-voice VO)
 build_simple 02 "$SC/scene-02.webm" 2 "$AU/scene-02.mp3" 14.39
-build_simple 03 "$SC/scene-03.webm" 2 "$AU/scene-03.mp3" 20.43
+build_simple 03 "$SC/scene-03.webm" 0 "$AU/scene-03.mp3" 20.43
 build_simple 04 "$SC/scene-04.webm" 4 "$AU/scene-04.mp3" 9.51
 build_simple 05 "$SC/scene-05.webm" 3 "$AU/scene-05.mp3" 12.62
 build_simple 06 "$SC/scene-06.webm" 3 "$AU/scene-06.mp3" 12.56
