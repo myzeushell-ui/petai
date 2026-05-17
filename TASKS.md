@@ -41,12 +41,13 @@
 
 | Задача | Кто | Ветка | Статус |
 |--------|-----|-------|--------|
-| Vercel deploy | Dev 1 | — | ⬜ Todo |
-| Mobile responsiveness test | Dev 1 | fix/mobile-layout | ⬜ Todo |
-| Pet switcher (Luna + Mochi) | Dev 2 | feature/pet-switcher | ⬜ Todo |
-| Animated page transitions | Dev 1 | feature/page-transitions | ⬜ Todo |
-| Waitlist email на landing | Dev 1 | feature/waitlist | ⬜ Todo |
-| Health score animated ring | Dev 2 | fix/health-score-ring | ⬜ Todo |
+| Vercel deploy | Dev 1 | — | 🔄 Config готов (vercel.json), нужен `vercel --prod` |
+| Mobile responsiveness | Dev 1 | fix/mobile-layout | ✅ Done (MobileBottomNav, pb-24) |
+| Pet switcher (Luna + Mochi) | Dev 1 | feature/pet-switcher | ✅ Done (PetSwitcher + PetContext) |
+| Animated page transitions | Dev 1 | feature/page-transitions | ✅ Done (AnimatePresence на роутах) |
+| Waitlist email на landing | Dev 1 | feature/waitlist | ✅ Done (форма с local state) |
+| Health score animated ring | Dev 1 | fix/health-score-ring | ✅ Done (SVG ring в text5 + petai) |
+| Prototype redesign (bottom nav) | Dev 1 | — | ✅ Done (BottomNav, 5 вкладок) |
 | Breed picker — полные 25 вопросов | Dev 2 | feature/breed-picker | ⬜ Todo |
 | База пород: 30 собак + 15 кошек | Dev 2 | chore/breed-db | ⬜ Todo |
 
