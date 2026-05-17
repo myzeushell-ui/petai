@@ -1,0 +1,18 @@
+{
+  "/(dashboard)/assistant/page": "app/(dashboard)/assistant/page.js",
+  "/(dashboard)/breeding/page": "app/(dashboard)/breeding/page.js",
+  "/(dashboard)/breeds/page": "app/(dashboard)/breeds/page.js",
+  "/(dashboard)/collar/page": "app/(dashboard)/collar/page.js",
+  "/(dashboard)/consultations/page": "app/(dashboard)/consultations/page.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/labs/page": "app/(dashboard)/labs/page.js",
+  "/(dashboard)/marketplace/new/page": "app/(dashboard)/marketplace/new/page.js",
+  "/(dashboard)/marketplace/page": "app/(dashboard)/marketplace/page.js",
+  "/(dashboard)/nutrition/page": "app/(dashboard)/nutrition/page.js",
+  "/(dashboard)/reminders/page": "app/(dashboard)/reminders/page.js",
+  "/(dashboard)/timeline/page": "app/(dashboard)/timeline/page.js",
+  "/(dashboard)/vet-report/page": "app/(dashboard)/vet-report/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js"
+}

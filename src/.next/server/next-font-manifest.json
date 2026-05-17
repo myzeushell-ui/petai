@@ -1,0 +1,67 @@
+{
+  "app": {
+    "[project]/src/app/(dashboard)/assistant/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/breeding/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/breeds/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/collar/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/consultations/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/dashboard/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/labs/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/marketplace/new/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/marketplace/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/nutrition/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/reminders/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/timeline/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/(dashboard)/vet-report/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/_not-found/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/page": [
+      "static/media/9c72aa0f40e4eef8-s.p.0m6w47a4e5dy9.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

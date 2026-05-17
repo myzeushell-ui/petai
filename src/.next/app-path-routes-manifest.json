@@ -1,0 +1,18 @@
+{
+  "/(dashboard)/assistant/page": "/assistant",
+  "/(dashboard)/breeding/page": "/breeding",
+  "/(dashboard)/breeds/page": "/breeds",
+  "/(dashboard)/collar/page": "/collar",
+  "/(dashboard)/consultations/page": "/consultations",
+  "/(dashboard)/dashboard/page": "/dashboard",
+  "/(dashboard)/labs/page": "/labs",
+  "/(dashboard)/marketplace/new/page": "/marketplace/new",
+  "/(dashboard)/marketplace/page": "/marketplace",
+  "/(dashboard)/nutrition/page": "/nutrition",
+  "/(dashboard)/reminders/page": "/reminders",
+  "/(dashboard)/timeline/page": "/timeline",
+  "/(dashboard)/vet-report/page": "/vet-report",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/page": "/"
+}

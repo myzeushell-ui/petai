@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(dashboard)/layout,_N_T_/(dashboard)/marketplace/layout,_N_T_/(dashboard)/marketplace/new/layout,_N_T_/(dashboard)/marketplace/new/page,_N_T_/marketplace/new"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGRhc2hib2FyZCk/marketplace/new/__PAGE__",
+    "/!KGRhc2hib2FyZCk/marketplace/new",
+    "/!KGRhc2hib2FyZCk/marketplace",
+    "/!KGRhc2hib2FyZCk",
+    "/_index",
+    "/_head"
+  ]
+}
