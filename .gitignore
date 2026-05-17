@@ -35,3 +35,9 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Video production assets (not versioned — too heavy)
+docs/video-assets/live-footage/
+docs/video-assets/thumbnails/
+docs/video-assets/audio/*.mp3
+docs/video-assets/screencasts/
