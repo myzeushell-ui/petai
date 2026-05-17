@@ -1,107 +1,150 @@
-# PetAI — Project Context
+# PetAI Ecosystem — Project Context
 
-## What is PetAI?
+## Что это?
 
-**PetAI is an AI Health Operating System for Pets.**
+**PetAI — вертикальный AI-маркетплейс для рынка домашних животных.**
 
-Pet owners are overwhelmed: scattered vet records, confusing lab results, forgotten vaccines, no way to track medications or understand what their vet said. PetAI solves this by bringing everything into one intelligent platform — like a health app for humans, but built for pets.
-
----
-
-## The Problem
-
-- Pet health records are scattered across clinics, apps, and paper forms
-- Lab results are written in medical jargon most owners can't understand
-- 67% of pet owners miss at least one vaccination or medication dose per year
-- Vets spend 20% of visits re-explaining history the owner forgot
-- There is no single platform that acts as a pet's health brain
+Не просто приложение — полная экосистема: медкарта, AI-ассистент, умный ошейник, подбор породы, маркетплейс щенков и котят, модуль для заводчиков, онлайн-консультации ветеринаров, расшифровка голоса питомца.
 
 ---
 
-## The Solution
+## Проблема
 
-PetAI is a unified health platform that:
-
-1. **Centralizes** all health records in one timeline
-2. **Translates** lab results into plain English via AI
-3. **Predicts** issues before they become serious using health scoring
-4. **Reminds** owners of medications, vaccines, and checkups automatically
-5. **Generates** shareable vet-ready reports
+- 67% владельцев пропускают вакцины или дозы лекарств
+- Медкарты хранятся на бумаге — теряются, недоступны на приёме
+- Анализы написаны медицинским жаргоном — владелец не понимает
+- Вет. тратит 20% визита на повторение истории, которую владелец забыл
+- Нет единой платформы для выбора породы, покупки, ухода и разведения
 
 ---
 
-## MVP Features (This Prototype)
+## Решение — 7 модулей одной экосистемы
 
-### 🏠 Dashboard
-- Pet profile card with health score
-- Upcoming reminders (high priority)
-- AI insights preview
+### 🏠 1. Медкарта и здоровье (бесплатно)
+- Профиль питомца: порода, возраст, вес, здоровье
+- Health Score 0–100 с AI-объяснением
+- История вакцин, операций, симптомов
+- Анализы: загрузка PDF → AI-расшифровка на понятном языке
+- Напоминания: лекарства, вакцины, груминг, визиты
 
-### 🤖 AI Health Assistant
-- Conversational interface
-- Responds based on pet's actual health data
-- Covers: lab results, vaccines, medications, breed-specific risks
+### 🤖 2. AI-ассистент (Pro)
+- Чат, знающий всю историю питомца
+- Ответы на вопросы по здоровью, питанию, поведению
+- Breed-specific риски и рекомендации
 
-### 🔬 Lab Results
-- Upload bloodwork (UI only in demo)
-- Panel-by-panel breakdown with status indicators
-- AI-generated plain-English analysis
+### 🔍 3. Подбор породы (бесплатно — главный маркетинговый крючок)
+- AI-тест из 25 вопросов: жильё, активность, опыт, цели
+- Топ-3 подходящих породы с матчингом, плюсами, минусами
+- Честная база: психические особенности, болезни, предупреждения
+  - Шотландская вислоухая: ⚠️ Остеохондродисплазия у всех
+  - Бенгальская кошка: ⚡ Только для опытных
+  - Мейн-кун: Требует 2–3 игровых сессии в день
+- После результата: "Смотреть объявления о продаже этой породы →"
 
-### 📅 Health Timeline
-- Full medical history: vaccines, checkups, surgeries, symptoms
-- Filterable by type and severity
-- Vet name and clinic attribution
+### 🛒 4. Маркетплейс (бесплатно для всех — монетизация на комиссии)
+- Объявления: щенки, котята, взрослые животные
+- Карточка: фото/видео, порода, возраст, пол, родословная РКФ/WCF
+- Верифицированные заводчики (Breeder-план)
+- Связь AI-подбора с маркетплейсом: выбрал породу → видишь объявления
+- Монетизация: 3% от сделки + платное продвижение объявлений
 
-### 🔔 Reminders
-- Medications, vaccines, checkups, grooming
-- Priority levels (high/medium/low)
-- Recurring reminders support
+### 🎙️ 5. Голос и умный ошейник (Pro + Hardware)
+- Умный ошейник: GPS, пульс, температура, активность, микрофон
+- Voice AI: классификация лая/мяуканья (70–96% точность, 2026)
+  - Playful bark / Alert / Whine / Growl / Purr
+  - Определение: возраст, порода, пол по голосу
+  - Аномалии: кашель → уведомление ветеринару
+- Партнёрство с Earth Species Project (open source AI)
+- Citizen science: данные с ошейников → University of Michigan research
 
-### 📋 Vet Report
-- Complete visit summary
-- Diagnosis, treatment, prescriptions
-- AI-generated summary
+### 🧬 6. Разведение и заводчики (Breeder-план)
+- Трекер течки с температурным графиком (собаки и кошки)
+- Роды: пошаговый гид, чек-лист, таймер, кнопка SOS → ветеринар
+- Подбор партнёра: AI-матчинг по COI, здоровью, генетике
+- COI калькулятор (интеграция РКФ / Pedigree Online)
+- Юридический договор вязки: автогенерация PDF с ЭЦП (490₽)
+- Площадка продажи помёта (в Маркетплейсе с приоритетом)
+
+### 💬 7. Консультации и сообщество (Pro + transactional)
+- Чат владельцев по породам и городам
+- Консультации ветеринаров и заводчиков (видео/аудио/чат)
+- PetAI берёт 20% комиссии с каждой консультации
+- Выбор клички: AI-генератор по происхождению породы + правила РКФ
 
 ---
 
-## Demo Pet Profile
+## Монетизационная модель
 
-**Luna** — 4-year-old Golden Retriever (female, spayed)
-- Weight: 28.5 kg
+| Tier | Цена | Ключевые фичи |
+|------|------|---------------|
+| **Free** | 0₽ | 1 питомец, медкарта, напоминания, трекер корма, подбор породы, магазин |
+| **Pro** | 499₽/мес | ∞ питомцев, AI-ассистент, анализы, расширенные трекеры, чат сообщества, доступ к консультациям |
+| **Breeder** | 990₽/мес | Всё из Pro + модуль заводчика, COI, подбор пары, площадка помёта, верифицированный бейдж |
+| **Clinic B2B** | от 2990₽/мес | White-label, несколько ветеринаров, API |
+
+### Транзакционный доход (главные деньги)
+- Консультации: 20–25% от суммы
+- Вязка (договор): 490₽ фикс + 5% от денежных сделок
+- Маркетплейс: 3% от продажи + продвижение объявлений
+- Ошейник Hardware: 3 500–5 500₽ (одноразово)
+
+---
+
+## Demo питомец
+
+**Luna** — Golden Retriever, 4 года, самка, стерилизована, 28.5 кг
 - Health Score: 87/100 (Excellent)
-- Key watchpoint: Mild ALT elevation (follow-up Feb 2026)
-- Dental cleaning recommended within 6 months
-- All vaccines current
+- ALT: 89 U/L (норма 10–55) — мягкое превышение
+- Все вакцины актуальны
+- Рекомендации: dental cleaning, recheck ALT Feb 2026
+- Ветеринар: Dr. Sarah Mitchell, Greenfield Animal Hospital
 
 ---
 
-## Target User
+## Целевой пользователь
 
-**Primary:** Pet owners aged 25-45 with dogs or cats, who already track their own health on apps like Apple Health, MyFitnessPal, or Whoop — and want the same experience for their pets.
+**Primary:** Владельцы питомцев 25–45 лет, уже следящие за здоровьем через Apple Health / Whoop — хотят того же для питомца.
 
-**Secondary:** Veterinary clinics wanting to offer digital health records and reminders as a value-add service.
+**Secondary:** Профессиональные заводчики с питомником (Breeder-план).
 
----
-
-## Business Model (Future)
-
-- **Freemium:** 1 pet free, additional pets = paid
-- **Pro Plan:** $9.99/month — unlimited pets, AI assistant, lab uploads
-- **Vet Clinic B2B:** White-label dashboard for clinics
+**Tertья:** Ветклиники (B2B white-label).
 
 ---
 
-## Tech Philosophy
+## Конкурентный ландшафт
 
-- **Demo-first:** Build to impress investors before building the real backend
-- **Data-driven UI:** Every component renders from typed data → easy to swap for real API
-- **AI-ready:** Mock AI today, real AI (GPT-4/Claude) tomorrow — same interface
-- **Supabase-ready:** Types match future DB schema
+| Конкурент | Что делает | Наш ответ |
+|-----------|-----------|-----------|
+| Petcube | Только камера | Нет здоровья, нет экосистемы |
+| Whistle | GPS + активность | Нет AI, нет маркетплейса |
+| Fi Collar | GPS + bark | Только ошейник, нет экосистемы |
+| Avito/Юла | Объявления животных | Нет здоровья, нет AI-подбора |
+| Ветеринарные приложения | Запись к врачу | Нет данных о питомце |
+| **PetAI** | **Всё в одном** | **Экосистемный lock-in** |
 
 ---
 
-## Investor Pitch Angle
+## Инвестиционный тезис
 
-> "Whoop for pets. Every pet owner wants to know their dog is healthy — but they have no idea. PetAI gives them the data, the AI, and the peace of mind — starting with a $9.99/month subscription."
+> "PetAI — это вертикальный маркетплейс для $3.5 млрд рынка Pet Care в России. Бесплатный AI-тест подбора породы создаёт органический трафик. Маркетплейс монетизирует намерение купить. Медкарта создаёт ежедневную привычку. Умный ошейник строит data moat. Чем больше питомцев — тем умнее AI. Это невозможно скопировать быстро."
 
-Target: a16z Speedrun · Seed stage · $500K raise
+**Pitch:** "Whoop для питомцев + Avito для животных + Консультации как Profi.ru"
+
+**Цель по инвестициям:** a16z Speedrun SR007 · $500K · 10% SAFE
+
+---
+
+## Стек
+
+```
+Frontend:  Next.js 15 (App Router) · TypeScript strict
+Styling:   Tailwind CSS v4
+Animation: Framer Motion
+Icons:     Lucide React
+AI:        Claude API / GPT-4 (Phase 2)
+DB:        Supabase (Phase 3)
+Voice AI:  Wav2Vec2 + Earth Species Project models
+Hardware:  ESP32 + MEMS микрофон + Neo-M9N GPS + MAX30102 пульс
+Deploy:    Vercel
+Repo:      github.com/myzeushell-ui/petai
+```

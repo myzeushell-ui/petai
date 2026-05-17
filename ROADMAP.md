@@ -1,83 +1,105 @@
-# PetAI — Roadmap
+# PetAI Ecosystem — Roadmap
 
-## Phase 0 — One-Evening Investor Demo ✅ (Current)
+## Phase 0 — Investor Demo ✅ DONE
 
-**Goal:** Clickable prototype ready to show at a16z Speedrun
+**Цель:** Кликабельный прототип для a16z Speedrun
 
-- [x] Landing page with product messaging
-- [x] Dashboard with pet profile + health score
-- [x] AI Health Assistant (mock, conversational)
-- [x] Lab Results with AI analysis
+- [x] Landing page с продуктовым месседжем
+- [x] Dashboard: профиль питомца + health score
+- [x] AI-ассистент (mock, контекстные ответы)
+- [x] Lab Results с AI-расшифровкой
 - [x] Health Timeline
-- [x] Reminders page
-- [x] Vet Report page
-- [x] Demo mode (no auth, no backend)
-- [x] Vercel deploy
-
-**Done when:** You can open the app and show every screen to an investor without anything being broken.
+- [x] Reminders (напоминания с приоритетами)
+- [x] Vet Report (полный отчёт)
+- [x] Demo-режим (без auth, без backend)
+- [x] Prototype (text5): 7 вкладок, 3 темы, голос, подбор пород, маркетплейс, разведение
 
 ---
 
-## Phase 1 — MVP Polish (Week 1-2)
+## Phase 1 — MVP Polish · Неделя 1–2
 
-**Goal:** Make it feel like a real product
+**Цель:** Выглядит и чувствуется как продукт
 
-- [ ] Mobile responsive (already started — needs testing)
-- [ ] Pet switcher (Luna + Mochi)
-- [ ] Animated health score history chart
-- [ ] Lab upload UI (drag & drop, file preview)
-- [ ] Reminders: mark as done interaction
-- [ ] Dark mode toggle
-- [ ] Onboarding flow (3 screens, skippable)
-- [ ] Waitlist form (connects to Airtable or Notion)
-
----
-
-## Phase 2 — AI Experience (Week 2-4)
-
-**Goal:** Make the AI feel real
-
-- [ ] Connect Claude or GPT-4 API to assistant
-- [ ] Lab PDF parsing (extract text → send to AI)
-- [ ] AI-generated health score explanation
-- [ ] Breed-specific risk alerts
-- [ ] AI-suggested reminders based on pet age + breed
-- [ ] Real-time typing indicator in chat
+- [ ] Vercel deploy + домен petai.app
+- [ ] Mobile responsive (тест на реальных устройствах)
+- [ ] Pet switcher: Luna → Mochi
+- [ ] Waitlist форма (Airtable/Notion)
+- [ ] Favicon + OG image + SEO meta
+- [ ] Анимированный health score ring
+- [ ] Переходы между страницами
+- [ ] Dark mode
 
 ---
 
-## Phase 3 — Auth + Backend (Month 2)
+## Phase 2 — AI + Voice · Неделя 2–4
 
-**Goal:** Real users can sign up and use the product
+**Цель:** AI начинает работать по-настоящему
 
-- [ ] Supabase auth (email + Google)
-- [ ] Real data persistence (Supabase DB)
-- [ ] File upload to Supabase Storage (lab reports)
-- [ ] Multi-pet support (real data)
-- [ ] Push notifications (reminders)
-- [ ] Vet report PDF export
-
----
-
-## Phase 4 — Growth Features (Month 3+)
-
-**Goal:** Make it sticky and shareable
-
-- [ ] Health score history charts (30/90/365 day)
-- [ ] Shareable pet health card (like Spotify Wrapped)
-- [ ] Vet visit booking integration
-- [ ] Apple Health / Google Fit sync (human-side data)
-- [ ] Wearable integration (FitBark, Whistle)
-- [ ] Vet clinic portal (B2B)
-- [ ] Stripe payments + subscription billing
+- [ ] Подключить Claude/GPT-4 к AI-ассистенту
+- [ ] Парсинг PDF анализов → AI объяснение
+- [ ] Breed picker: 25 вопросов → топ-3 результата (полная логика)
+- [ ] База пород: 50+ пород собак и кошек с честными описаниями
+- [ ] Трекер течки: AI-прогноз цикла и окна вязки
+- [ ] Голос (прототип): интеграция Wav2Vec2 для классификации
+- [ ] Маркетплейс: 50 реальных объявлений (ручной seed)
+- [ ] Выбор кличек: полная база + правила РКФ 2026
 
 ---
 
-## Phase 5 — Scale (Q2 2026+)
+## Phase 3 — Auth + Backend · Месяц 2
 
-- [ ] iOS app (React Native or native Swift)
-- [ ] Android app
-- [ ] AI symptom checker
-- [ ] Emergency vet finder
-- [ ] Pet insurance integration
-- [ ] Multi-language support
+**Цель:** Реальные пользователи могут зарегистрироваться
+
+- [ ] Supabase auth (email + Google + VK)
+- [ ] Реальная БД (питомцы, события, напоминания)
+- [ ] File upload (анализы, фото) → Supabase Storage
+- [ ] Push-уведомления (напоминания)
+- [ ] PDF экспорт ветеринарного отчёта
+- [ ] Мессенджер внутри приложения (покупатель ↔ продавец)
+- [ ] Система отзывов и рейтинга заводчиков
+
+---
+
+## Phase 4 — Marketplace + Breeder · Месяц 3
+
+**Цель:** Маркетплейс приносит деньги
+
+- [ ] Полноценный маркетплейс объявлений
+- [ ] Верификация заводчиков (проверка РКФ/WCF документов)
+- [ ] Юридический договор вязки (автогенерация PDF)
+- [ ] COI калькулятор (интеграция PedigreeOnline/РКФ)
+- [ ] Консультации: бронирование, видео/аудио (WebRTC), оплата
+- [ ] Stripe/ЮKassa оплата + комиссии
+- [ ] Аналитика: DAU, выручка, конверсии по воронке
+- [ ] Health score history charts (30/90/365 дней)
+- [ ] Shareable pet health card (как Spotify Wrapped)
+
+---
+
+## Phase 5 — Hardware · Месяц 4–6
+
+**Цель:** Умный ошейник в production
+
+- [ ] Прошивка ESP32: GPS + пульс + температура + шагомер
+- [ ] BLE синхронизация с телефоном
+- [ ] MEMS-микрофон: edge AI детекция вокализаций
+- [ ] Облачная классификация голоса (Wav2Vec2)
+- [ ] Партнёрство Earth Species Project: датасет + модели
+- [ ] Производство первой партии (100 ед., crowdfunding)
+- [ ] FCC/EAC сертификация
+- [ ] iOS приложение (React Native)
+- [ ] Android приложение
+
+---
+
+## Phase 6 — Scale · Q3 2026+
+
+- [ ] Интеграция FitBark / Whistle (импорт данных)
+- [ ] Apple Health / Google Fit синхронизация
+- [ ] Wearable: расширение датчиков (кортизол, ЭКГ)
+- [ ] AI symptom checker по фото (кожа, уши, глаза)
+- [ ] Запись к ветеринару (booking integration)
+- [ ] Страховая интеграция (данные для расчёта полиса)
+- [ ] Международный запуск (EU, US)
+- [ ] B2B: ветклиники white-label
+- [ ] Multi-language (EN, DE, FR)
