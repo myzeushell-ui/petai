@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PetSwitcher } from "@/components/pet/PetSwitcher";
+import { useVariant } from "@/contexts/VariantContext";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -37,11 +38,12 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { colors } = useVariant();
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
       <div className="flex h-16 items-center gap-3 border-b border-gray-100 dark:border-gray-800 px-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500 text-xl shadow-sm">
+        <div className={cn("flex h-9 w-9 items-center justify-center rounded-xl text-xl shadow-sm", colors.logoBg)}>
           🐾
         </div>
         <div>
@@ -67,12 +69,12 @@ export function Sidebar() {
                   className={cn(
                     "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                     isActive
-                      ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
+                      ? `${colors.activeBg} ${colors.activeText}`
                       : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                   )}
                 >
                   <Icon
-                    className={cn("h-5 w-5 flex-shrink-0", isActive ? "text-green-600 dark:text-green-400" : "text-gray-400")}
+                    className={cn("h-5 w-5 flex-shrink-0", isActive ? colors.activeIcon : colors.inactiveIcon)}
                   />
                   {item.label}
                   {item.label === "Reminders" && (

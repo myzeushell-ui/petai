@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { MobileBottomNav } from "./MobileBottomNav";
+import { VariantSwitcher } from "./VariantSwitcher";
 import { DemoModeBanner } from "@/components/demo/DemoModeBanner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -59,6 +60,9 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Mobile bottom navigation */}
       <MobileBottomNav />
+
+      {/* Floating variant switcher */}
+      <VariantSwitcher />
     </div>
   );
 }

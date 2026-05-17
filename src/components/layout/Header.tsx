@@ -3,6 +3,8 @@
 import { Bell, Search, Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useThemeMode } from "@/contexts/ThemeContext";
+import { useVariant } from "@/contexts/VariantContext";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 interface HeaderProps {
@@ -11,6 +13,7 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { isDark, toggle } = useThemeMode();
+  const { colors } = useVariant();
 
   return (
     <header className="sticky top-0 z-30 border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
@@ -20,7 +23,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         </Button>
 
         <Link href="/" className="flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500">
+          <div className={cn("flex h-8 w-8 items-center justify-center rounded-xl", colors.logoBg)}>
             <span className="text-lg">🐾</span>
           </div>
           <span className="text-lg font-bold text-gray-900 dark:text-white">PetAI</span>
@@ -37,7 +40,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Bell className="h-5 w-5" />
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
           </Button>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-blue-500 text-sm font-semibold text-white">
+          <div className={cn("flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-semibold text-white", colors.avatarGradient)}>
             AJ
           </div>
         </div>
