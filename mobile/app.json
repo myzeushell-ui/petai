@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "PetAI",
+    "slug": "petai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "petai",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#22c55e"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.petai.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "PetAI uses the microphone for Voice AI bark analysis",
+        "NSCameraUsageDescription": "PetAI uses the camera to take photos of your pet"
+      }
+    },
+    "android": {
+      "package": "com.petai.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#22c55e"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+import { Pet } from "../types";
+
+export const demoPets: Pet[] = [
+  {
+    id: "luna",
+    name: "Luna",
+    species: "dog",
+    breed: "Golden Retriever",
+    age: 4,
+    weight: 28.5,
+    weightUnit: "kg",
+    gender: "female",
+    neutered: true,
+    color: "#F59E0B",
+    ownerId: "demo-user",
+    createdAt: "2022-03-15",
+    healthScore: 87,
+    emoji: "🐕",
+  },
+  {
+    id: "mochi",
+    name: "Mochi",
+    species: "cat",
+    breed: "British Shorthair",
+    age: 2,
+    weight: 4.2,
+    weightUnit: "kg",
+    gender: "male",
+    neutered: true,
+    color: "#6366F1",
+    ownerId: "demo-user",
+    createdAt: "2024-01-10",
+    healthScore: 92,
+    emoji: "🐈",
+  },
+];
