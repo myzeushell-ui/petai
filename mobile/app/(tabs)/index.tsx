@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic } from "lucide-react-native";
+import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
 import { Card } from "../../src/components/ui/Card";
 import { Badge } from "../../src/components/ui/Badge";
@@ -47,10 +47,15 @@ export default function DashboardScreen() {
             <Text style={styles.greeting}>{greeting}, Alex</Text>
             <Text style={styles.subtitle}>Here's how <Text style={{ color: activePet.color, fontWeight: "700" }}>{activePet.name}</Text> is doing</Text>
           </View>
-          <TouchableOpacity style={styles.bellBtn}>
-            <Bell size={22} color={colors.text} />
-            <View style={styles.bellDot} />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity style={styles.bellBtn} onPress={() => router.push("/reminders")}>
+              <Bell size={22} color={colors.text} />
+              <View style={styles.bellDot} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bellBtn} onPress={() => router.push("/settings")}>
+              <Settings size={22} color={colors.text} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Pet Switcher */}
@@ -172,6 +177,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: spacing.lg },
   greeting: { fontSize: fontSize.xxl, fontWeight: "800", color: colors.text },
   subtitle: { fontSize: fontSize.md, color: colors.textSecondary, marginTop: 2 },
+  headerActions: { flexDirection: "row", gap: 4 },
   bellBtn: { padding: spacing.sm, position: "relative" },
   bellDot: { position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: 4, backgroundColor: colors.danger },
   petSwitcher: { marginBottom: spacing.lg },
