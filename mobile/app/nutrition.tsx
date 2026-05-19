@@ -7,6 +7,7 @@ import { getNutritionPlan, getFoodRecommendations } from "../src/data/nutrition"
 import { usePet } from "../src/contexts/PetContext";
 import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
+import { PetSwitcher } from "../src/components/pet/PetSwitcher";
 import { colors } from "../src/theme/colors";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
@@ -28,6 +29,7 @@ export default function NutritionScreen() {
               <ArrowLeft size={22} color={colors.text} />
             </TouchableOpacity>
           ),
+          headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
           headerTitleStyle: { fontWeight: "700" },
         }}

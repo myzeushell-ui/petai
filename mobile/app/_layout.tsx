@@ -1,17 +1,24 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from "@expo-google-fonts/inter";
 import { PetProvider } from "../src/contexts/PetContext";
 import { colors } from "../src/theme/colors";
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const ONBOARDING_KEY = "@petai:onboarded";
 
 export default function RootLayout() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold,
+  });
 
   useEffect(() => {
     (async () => {
@@ -26,7 +33,13 @@ export default function RootLayout() {
     })();
   }, []);
 
-  if (checking) {
+  const onLayoutReady = useCallback(async () => {
+    if (fontsLoaded && !checking) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, checking]);
+
+  if (checking || !fontsLoaded) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary }}>
         <ActivityIndicator color="#FFF" size="large" />
@@ -35,7 +48,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutReady}>
       <PetProvider>
         <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false }}>
