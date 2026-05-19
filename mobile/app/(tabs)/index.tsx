@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb } from "lucide-react-native";
+import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
 import { Card } from "../../src/components/ui/Card";
 import { Badge } from "../../src/components/ui/Badge";
@@ -11,6 +11,16 @@ import { spacing, radius, fontSize } from "../../src/theme/spacing";
 import { reminders } from "../../src/data/reminders";
 import { aiInsights } from "../../src/data/aiInsights";
 import { useRouter } from "expo-router";
+
+const features = [
+  { id: "reminders", label: "Reminders", Icon: Bell, color: "#EF4444" },
+  { id: "timeline", label: "Timeline", Icon: Clock, color: "#3B82F6" },
+  { id: "labs", label: "Lab Results", Icon: FlaskConical, color: "#0EA5E9" },
+  { id: "vet-report", label: "Vet Report", Icon: FileText, color: "#A855F7" },
+  { id: "nutrition", label: "Nutrition", Icon: Utensils, color: "#22c55e" },
+  { id: "breeding", label: "Breeding", Icon: Dna, color: "#EC4899" },
+  { id: "collar", label: "Smart Collar", Icon: Mic, color: "#F59E0B" },
+];
 
 const insightIcons: Record<string, React.ReactNode> = {
   health_alert: <AlertTriangle size={18} color={colors.warning} />,
@@ -91,11 +101,26 @@ export default function DashboardScreen() {
           </View>
         </Card>
 
+        {/* Feature Grid */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Explore</Text>
+          <View style={styles.featureGrid}>
+            {features.map((f) => (
+              <TouchableOpacity key={f.id} onPress={() => router.push(`/${f.id}` as any)} style={styles.featureCard}>
+                <View style={[styles.featureIcon, { backgroundColor: f.color + "18" }]}>
+                  <f.Icon size={22} color={f.color} />
+                </View>
+                <Text style={styles.featureLabel}>{f.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
         {/* Reminders */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Upcoming Reminders</Text>
-            <TouchableOpacity><Text style={styles.viewAll}>View all</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/reminders")}><Text style={styles.viewAll}>View all</Text></TouchableOpacity>
           </View>
           {petReminders.map((r) => (
             <Card key={r.id} style={styles.reminderCard}>
@@ -181,4 +206,8 @@ const styles = StyleSheet.create({
   insightBody: { fontSize: fontSize.sm, color: colors.textSecondary, lineHeight: 20 },
   insightAction: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: spacing.md },
   insightActionText: { fontSize: fontSize.sm, color: colors.primary, fontWeight: "600" },
+  featureGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
+  featureCard: { width: "23%", alignItems: "center", paddingVertical: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, gap: 6 },
+  featureIcon: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" },
+  featureLabel: { fontSize: 10, fontWeight: "600", color: colors.text, textAlign: "center" },
 });
