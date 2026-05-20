@@ -5,6 +5,7 @@ import { Send, Bot, Sparkles } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
 import { colors } from "../../src/theme/colors";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
+import { API_ENDPOINTS } from "../../src/config/api";
 
 interface Message {
   id: string;
@@ -47,19 +48,49 @@ export default function AssistantScreen() {
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [mode, setMode] = useState<"mock" | "live" | "unknown">("unknown");
   const scrollRef = useRef<ScrollView>(null);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     if (!text.trim()) return;
     const userMsg: Message = { id: Date.now().toString(), role: "user", text };
     setMessages((m) => [...m, userMsg]);
     setInput("");
     setTyping(true);
-    setTimeout(() => {
-      const reply: Message = { id: (Date.now() + 1).toString(), role: "assistant", text: generateResponse(text, activePet.name) };
-      setMessages((m) => [...m, reply]);
-      setTyping(false);
-    }, 900);
+
+    let replyText: string;
+    try {
+      const history = messages
+        .filter((m) => m.id !== "welcome")
+        .slice(-6)
+        .map((m) => ({ role: m.role, content: m.text }));
+
+      const res = await fetch(API_ENDPOINTS.chat, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          history,
+          petContext: {
+            name: activePet.name,
+            species: activePet.species,
+            breed: activePet.breed,
+            age: activePet.age,
+            healthScore: activePet.healthScore,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (data.mode) setMode(data.mode);
+      replyText = data.reply ?? generateResponse(text, activePet.name);
+    } catch {
+      replyText = generateResponse(text, activePet.name);
+      setMode("mock");
+    }
+
+    const reply: Message = { id: (Date.now() + 1).toString(), role: "assistant", text: replyText };
+    setMessages((m) => [...m, reply]);
+    setTyping(false);
   };
 
   useEffect(() => {
@@ -70,9 +101,13 @@ export default function AssistantScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <View style={styles.headerIcon}><Bot size={20} color={colors.primary} /></View>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>AI Assistant</Text>
-          <Text style={styles.headerSub}>Powered by veterinary AI</Text>
+          <Text style={styles.headerSub}>{mode === "live" ? "Powered by Claude" : mode === "mock" ? "Demo mode" : "Connecting..."}</Text>
+        </View>
+        <View style={[styles.modePill, mode === "live" && { backgroundColor: colors.primary + "20" }]}>
+          <View style={[styles.dot, { backgroundColor: mode === "live" ? colors.primary : "#F59E0B" }]} />
+          <Text style={[styles.modeText, mode === "live" && { color: colors.primary }]}>{mode === "live" ? "LIVE" : "DEMO"}</Text>
         </View>
       </View>
 
@@ -130,6 +165,9 @@ export default function AssistantScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   header: { flexDirection: "row", alignItems: "center", gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border },
+  modePill: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: spacing.sm, paddingVertical: 4, borderRadius: radius.full, backgroundColor: "#F59E0B20" },
+  dot: { width: 6, height: 6, borderRadius: 3 },
+  modeText: { fontSize: 10, fontWeight: "700", color: "#F59E0B", letterSpacing: 0.5 },
   headerIcon: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.primaryLight + "80", alignItems: "center", justifyContent: "center" },
   headerTitle: { fontSize: fontSize.lg, fontWeight: "700", color: colors.text },
   headerSub: { fontSize: fontSize.xs, color: colors.textSecondary },

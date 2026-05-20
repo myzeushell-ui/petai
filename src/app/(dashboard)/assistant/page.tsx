@@ -58,6 +58,7 @@ export default function AssistantPage() {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [aiMode, setAiMode] = useState<"mock" | "live" | "unknown">("unknown");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,12 +79,40 @@ export default function AssistantPage() {
     setInput("");
     setIsTyping(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1200 + Math.random() * 800));
+    let replyText: string;
+    try {
+      const history = messages
+        .filter((m) => m.id !== "welcome")
+        .slice(-6)
+        .map((m) => ({ role: m.role, content: m.content }));
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          history,
+          petContext: {
+            name: activePet.name,
+            species: activePet.species,
+            breed: activePet.breed,
+            age: activePet.age,
+            healthScore: activePet.healthScore,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (data.mode) setAiMode(data.mode);
+      replyText = data.reply ?? getMockResponse(text, activePet.name, activePet.healthScore, activePet.weight, activePet.breed);
+    } catch {
+      replyText = getMockResponse(text, activePet.name, activePet.healthScore, activePet.weight, activePet.breed);
+      setAiMode("mock");
+    }
 
     const aiMsg: Message = {
       id: (Date.now() + 1).toString(),
       role: "assistant",
-      content: getMockResponse(text, activePet.name, activePet.healthScore, activePet.weight, activePet.breed),
+      content: replyText,
       timestamp: new Date(),
     };
 
@@ -101,9 +130,13 @@ export default function AssistantPage() {
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">AI Health Assistant</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Powered by {activePet.name}&apos;s health data</p>
         </div>
-        <div className="ml-auto flex items-center gap-1.5 rounded-full border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/40 px-3 py-1 text-xs font-medium text-green-700 dark:text-green-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-          Demo AI Active
+        <div className={`ml-auto flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${
+          aiMode === "live"
+            ? "border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
+            : "border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400"
+        }`}>
+          <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${aiMode === "live" ? "bg-green-500" : "bg-amber-500"}`} />
+          {aiMode === "live" ? "Claude AI" : aiMode === "mock" ? "Demo AI" : "Connecting..."}
         </div>
       </div>
 
