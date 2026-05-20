@@ -1,18 +1,19 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings } from "lucide-react-native";
+import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
+import { useColors } from "../../src/contexts/ThemeContext";
 import { Card } from "../../src/components/ui/Card";
 import { Badge } from "../../src/components/ui/Badge";
 import { HealthScoreRing } from "../../src/components/ui/HealthScoreRing";
-import { colors, getHealthColor } from "../../src/theme/colors";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
 import { reminders } from "../../src/data/reminders";
 import { aiInsights } from "../../src/data/aiInsights";
 import { useRouter } from "expo-router";
 
 const features = [
+  { id: "breeds", label: "Breeds", Icon: PawPrint, color: "#22c55e" },
   { id: "reminders", label: "Reminders", Icon: Bell, color: "#EF4444" },
   { id: "timeline", label: "Timeline", Icon: Clock, color: "#3B82F6" },
   { id: "labs", label: "Lab Results", Icon: FlaskConical, color: "#0EA5E9" },
@@ -22,21 +23,24 @@ const features = [
   { id: "collar", label: "Smart Collar", Icon: Mic, color: "#F59E0B" },
 ];
 
-const insightIcons: Record<string, React.ReactNode> = {
-  health_alert: <AlertTriangle size={18} color={colors.warning} />,
-  recommendation: <Lightbulb size={18} color={colors.info} />,
-  trend: <TrendingUp size={18} color={colors.primary} />,
-  praise: <Award size={18} color={colors.primary} />,
-};
-
 export default function DashboardScreen() {
   const { activePet, pets, switchPet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
+
   const petReminders = reminders.filter((r) => r.petId === activePet.id && !r.completed).slice(0, 3);
   const petInsights = aiInsights.filter((i) => i.petId === activePet.id).slice(0, 2);
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+
+  const insightIcons: Record<string, React.ReactNode> = {
+    health_alert: <AlertTriangle size={18} color={colors.warning} />,
+    recommendation: <Lightbulb size={18} color={colors.info} />,
+    trend: <TrendingUp size={18} color={colors.primary} />,
+    praise: <Award size={18} color={colors.primary} />,
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -106,6 +110,22 @@ export default function DashboardScreen() {
           </View>
         </Card>
 
+        {/* QUIZ HERO BUTTON */}
+        <TouchableOpacity activeOpacity={0.9} onPress={() => router.push("/quiz")} style={styles.quizHero}>
+          <View style={styles.quizHeroInner}>
+            <View style={styles.quizIconBox}>
+              <Sparkles size={26} color="#FFF" strokeWidth={2.5} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.quizTitle}>Find Your Perfect Dog</Text>
+              <Text style={styles.quizSub}>8-question quiz · personalized matches</Text>
+            </View>
+            <View style={styles.quizArrowBox}>
+              <ChevronRight size={20} color="#FFF" strokeWidth={3} />
+            </View>
+          </View>
+        </TouchableOpacity>
+
         {/* Feature Grid */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Explore</Text>
@@ -170,7 +190,7 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   scroll: { flex: 1 },
   content: { padding: spacing.lg },
@@ -196,6 +216,12 @@ const styles = StyleSheet.create({
   statsRow: { flexDirection: "row", justifyContent: "space-between" },
   stat: { alignItems: "center", gap: spacing.xs },
   statLabel: { fontSize: fontSize.xs, color: colors.textSecondary, fontWeight: "500" },
+  quizHero: { backgroundColor: colors.primary, borderRadius: radius.xl, marginBottom: spacing.md, shadowColor: colors.primary, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.25, shadowRadius: 12, elevation: 6 },
+  quizHeroInner: { flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.lg },
+  quizIconBox: { width: 50, height: 50, borderRadius: 25, backgroundColor: "rgba(255,255,255,0.22)", alignItems: "center", justifyContent: "center" },
+  quizTitle: { fontSize: fontSize.lg, fontWeight: "800", color: "#FFF" },
+  quizSub: { fontSize: fontSize.xs, color: "rgba(255,255,255,0.9)", marginTop: 2 },
+  quizArrowBox: { width: 32, height: 32, borderRadius: 16, backgroundColor: "rgba(255,255,255,0.22)", alignItems: "center", justifyContent: "center" },
   section: { marginTop: spacing.lg },
   sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md },
   sectionTitle: { fontSize: fontSize.lg, fontWeight: "700", color: colors.text },

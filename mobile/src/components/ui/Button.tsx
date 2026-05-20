@@ -1,6 +1,6 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, ActivityIndicator } from "react-native";
-import { colors } from "../../theme/colors";
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, ActivityIndicator, StyleProp } from "react-native";
+import { useColors } from "../../contexts/ThemeContext";
 import { radius, spacing, fontSize } from "../../theme/spacing";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
@@ -12,47 +12,42 @@ interface ButtonProps {
   size?: "sm" | "md" | "lg";
   disabled?: boolean;
   loading?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   icon?: React.ReactNode;
 }
 
 export function Button({ title, onPress, variant = "primary", size = "md", disabled, loading, style, icon }: ButtonProps) {
+  const colors = useColors();
   const sizeStyle = sizeStyles[size];
-  const variantStyle = getVariantStyle(variant, disabled);
+  const opacity = disabled ? 0.5 : 1;
+
+  let containerStyle: ViewStyle;
+  let textColor: string;
+  switch (variant) {
+    case "primary": containerStyle = { backgroundColor: colors.primary, opacity }; textColor = "#FFF"; break;
+    case "secondary": containerStyle = { backgroundColor: colors.backgroundSecondary, opacity }; textColor = colors.text; break;
+    case "outline": containerStyle = { backgroundColor: "transparent", borderWidth: 1.5, borderColor: colors.border, opacity }; textColor = colors.text; break;
+    case "ghost": containerStyle = { backgroundColor: "transparent", opacity }; textColor = colors.primary; break;
+    case "danger": containerStyle = { backgroundColor: colors.danger, opacity }; textColor = "#FFF"; break;
+  }
 
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.7}
-      style={[styles.base, sizeStyle.container, variantStyle.container, style]}
+      style={[styles.base, sizeStyle.container, containerStyle, style]}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={variantStyle.textColor} />
+        <ActivityIndicator size="small" color={textColor} />
       ) : (
         <>
           {icon}
-          <Text style={[sizeStyle.text, { color: variantStyle.textColor, fontWeight: "600" }]}>{title}</Text>
+          <Text style={[sizeStyle.text, { color: textColor, fontWeight: "600" }]}>{title}</Text>
         </>
       )}
     </TouchableOpacity>
   );
-}
-
-function getVariantStyle(variant: ButtonVariant, disabled?: boolean) {
-  const opacity = disabled ? 0.5 : 1;
-  switch (variant) {
-    case "primary":
-      return { container: { backgroundColor: colors.primary, opacity } as ViewStyle, textColor: "#FFF" };
-    case "secondary":
-      return { container: { backgroundColor: "#F3F4F6", opacity } as ViewStyle, textColor: colors.text };
-    case "outline":
-      return { container: { backgroundColor: "transparent", borderWidth: 1.5, borderColor: colors.border, opacity } as ViewStyle, textColor: colors.text };
-    case "ghost":
-      return { container: { backgroundColor: "transparent", opacity } as ViewStyle, textColor: colors.primary };
-    case "danger":
-      return { container: { backgroundColor: colors.danger, opacity } as ViewStyle, textColor: "#FFF" };
-  }
 }
 
 const sizeStyles = {

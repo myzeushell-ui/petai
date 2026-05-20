@@ -8,7 +8,7 @@ import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { Button } from "../src/components/ui/Button";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 const tabs = [
@@ -27,6 +27,8 @@ const candidates = [
 export default function BreedingScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [tab, setTab] = useState("heat");
 
   return (
@@ -42,7 +44,8 @@ export default function BreedingScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
 
@@ -73,9 +76,9 @@ export default function BreedingScreen() {
             <Card style={styles.card}>
               <Text style={styles.sectionTitle}>Cycle History</Text>
               <View style={styles.statRow}>
-                <Stat label="Avg cycle" value="6.2 mo" />
-                <Stat label="Last heat" value="Nov '25" />
-                <Stat label="Cycles tracked" value="4" />
+                <Stat label="Avg cycle" value="6.2 mo" colors={colors} />
+                <Stat label="Last heat" value="Nov '25" colors={colors} />
+                <Stat label="Cycles tracked" value="4" colors={colors} />
               </View>
             </Card>
           </>
@@ -161,16 +164,16 @@ export default function BreedingScreen() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, colors }: { label: string; value: string; colors: ReturnType<typeof useColors> }) {
   return (
-    <View style={styles.statBox}>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
+    <View style={{ alignItems: "center" }}>
+      <Text style={{ fontSize: fontSize.lg, fontWeight: "800", color: colors.text }}>{value}</Text>
+      <Text style={{ fontSize: fontSize.xs, color: colors.textSecondary, marginTop: 2 }}>{label}</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   tabBar: { maxHeight: 52, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border },
   tabRow: { paddingHorizontal: spacing.lg, gap: spacing.sm, paddingVertical: spacing.sm },

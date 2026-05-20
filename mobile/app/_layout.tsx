@@ -7,11 +7,39 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from "@expo-google-fonts/inter";
 import { PetProvider } from "../src/contexts/PetContext";
-import { colors } from "../src/theme/colors";
+import { ThemeProvider, useTheme } from "../src/contexts/ThemeContext";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const ONBOARDING_KEY = "@petai:onboarded";
+
+function AppStack() {
+  const { colors, isDark } = useTheme();
+  return (
+    <>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="onboarding" options={{ presentation: "fullScreenModal" }} />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="breeds" />
+        <Stack.Screen name="quiz" />
+        <Stack.Screen name="reminders" />
+        <Stack.Screen name="timeline" />
+        <Stack.Screen name="labs" />
+        <Stack.Screen name="vet-report" />
+        <Stack.Screen name="nutrition" />
+        <Stack.Screen name="breeding" />
+        <Stack.Screen name="collar" />
+      </Stack>
+    </>
+  );
+}
 
 export default function RootLayout() {
   const router = useRouter();
@@ -41,7 +69,7 @@ export default function RootLayout() {
 
   if (checking || !fontsLoaded) {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary }}>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#22c55e" }}>
         <ActivityIndicator color="#FFF" size="large" />
       </View>
     );
@@ -49,21 +77,11 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutReady}>
-      <PetProvider>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="onboarding" options={{ presentation: "fullScreenModal" }} />
-          <Stack.Screen name="settings" options={{ presentation: "card" }} />
-          <Stack.Screen name="reminders" options={{ presentation: "card" }} />
-          <Stack.Screen name="timeline" options={{ presentation: "card" }} />
-          <Stack.Screen name="labs" options={{ presentation: "card" }} />
-          <Stack.Screen name="vet-report" options={{ presentation: "card" }} />
-          <Stack.Screen name="nutrition" options={{ presentation: "card" }} />
-          <Stack.Screen name="breeding" options={{ presentation: "card" }} />
-          <Stack.Screen name="collar" options={{ presentation: "card" }} />
-        </Stack>
-      </PetProvider>
+      <ThemeProvider>
+        <PetProvider>
+          <AppStack />
+        </PetProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

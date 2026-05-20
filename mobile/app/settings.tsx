@@ -4,8 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
 import { ArrowLeft, Bell, Moon, Globe, HelpCircle, Shield, Star, LogOut, ChevronRight, Heart, Trash2, Database } from "lucide-react-native";
 import { usePet } from "../src/contexts/PetContext";
+import { useTheme, useColors } from "../src/contexts/ThemeContext";
 import { Card } from "../src/components/ui/Card";
-import { colors } from "../src/theme/colors";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 interface RowProps {
@@ -20,36 +20,38 @@ interface RowProps {
   danger?: boolean;
 }
 
-function Row({ icon: Icon, iconColor = colors.text, label, value, onPress, toggle, toggleValue, onToggle, danger }: RowProps) {
-  const Content = (
-    <View style={styles.row}>
-      <View style={[styles.iconBox, { backgroundColor: iconColor + "15" }]}>
-        <Icon size={18} color={iconColor} />
-      </View>
-      <Text style={[styles.rowLabel, danger && { color: colors.danger }]}>{label}</Text>
-      {toggle ? (
-        <Switch value={toggleValue} onValueChange={onToggle} trackColor={{ true: colors.primary, false: colors.border }} thumbColor="#FFF" />
-      ) : (
-        <>
-          {value && <Text style={styles.rowValue}>{value}</Text>}
-          <ChevronRight size={16} color={colors.textTertiary} />
-        </>
-      )}
-    </View>
-  );
-  return onPress ? (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.6}>{Content}</TouchableOpacity>
-  ) : (
-    Content
-  );
-}
-
 export default function SettingsScreen() {
   const router = useRouter();
   const { activePet, pets } = usePet();
+  const { isDark, toggle: toggleTheme } = useTheme();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [notifications, setNotifications] = React.useState(true);
-  const [darkMode, setDarkMode] = React.useState(false);
   const [insights, setInsights] = React.useState(true);
+
+  const Row = ({ icon: Icon, iconColor = colors.text, label, value, onPress, toggle, toggleValue, onToggle, danger }: RowProps) => {
+    const Content = (
+      <View style={styles.row}>
+        <View style={[styles.iconBox, { backgroundColor: iconColor + "15" }]}>
+          <Icon size={18} color={iconColor} />
+        </View>
+        <Text style={[styles.rowLabel, danger && { color: colors.danger }]}>{label}</Text>
+        {toggle ? (
+          <Switch value={toggleValue} onValueChange={onToggle} trackColor={{ true: colors.primary, false: colors.border }} thumbColor="#FFF" />
+        ) : (
+          <>
+            {value && <Text style={styles.rowValue}>{value}</Text>}
+            <ChevronRight size={16} color={colors.textTertiary} />
+          </>
+        )}
+      </View>
+    );
+    return onPress ? (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.6}>{Content}</TouchableOpacity>
+    ) : (
+      Content
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["bottom"]}>
@@ -63,7 +65,8 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           ),
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
@@ -128,7 +131,7 @@ export default function SettingsScreen() {
         <Card style={styles.sectionCard}>
           <Row icon={Bell} iconColor="#EF4444" label="Notifications" toggle toggleValue={notifications} onToggle={setNotifications} />
           <View style={styles.divider} />
-          <Row icon={Moon} iconColor="#6366F1" label="Dark mode" toggle toggleValue={darkMode} onToggle={setDarkMode} />
+          <Row icon={Moon} iconColor="#6366F1" label="Dark mode" toggle toggleValue={isDark} onToggle={toggleTheme} />
           <View style={styles.divider} />
           <Row icon={Heart} iconColor="#EC4899" label="AI insights" toggle toggleValue={insights} onToggle={setInsights} />
           <View style={styles.divider} />
@@ -165,7 +168,7 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   content: { padding: spacing.lg },
   profileCard: { marginBottom: spacing.md },

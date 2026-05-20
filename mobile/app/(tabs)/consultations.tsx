@@ -7,7 +7,7 @@ import { Consultant } from "../../src/types";
 import { Card } from "../../src/components/ui/Card";
 import { Badge } from "../../src/components/ui/Badge";
 import { Button } from "../../src/components/ui/Button";
-import { colors } from "../../src/theme/colors";
+import { useColors } from "../../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
 
 const specialties = [
@@ -21,6 +21,8 @@ const specialties = [
 ];
 
 export default function ConsultationsScreen() {
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [filter, setFilter] = useState("all");
   const filtered = filter === "all" ? consultants : consultants.filter((c) => c.specialty === filter);
 
@@ -89,7 +91,7 @@ export default function ConsultationsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   header: { paddingHorizontal: spacing.lg, paddingTop: spacing.md, paddingBottom: spacing.md },
   headerTitle: { fontSize: fontSize.xxl, fontWeight: "800", color: colors.text },

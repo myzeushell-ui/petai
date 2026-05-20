@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle, StyleProp } from "react-native";
-import { colors } from "../../theme/colors";
+import { useColors } from "../../contexts/ThemeContext";
 import { radius, spacing } from "../../theme/spacing";
 
 interface CardProps {
@@ -10,31 +10,32 @@ interface CardProps {
 }
 
 export function Card({ children, style, variant = "default" }: CardProps) {
+  const colors = useColors();
   return (
-    <View style={[styles.card, variant === "elevated" && styles.elevated, variant === "outlined" && styles.outlined, style]}>
+    <View
+      style={[
+        {
+          backgroundColor: variant === "elevated" ? colors.surfaceElevated : colors.surface,
+          borderRadius: radius.xl,
+          padding: spacing.lg,
+          borderWidth: variant === "elevated" ? 0 : 1,
+          borderColor: colors.border,
+        },
+        variant === "elevated" && styles.elevated,
+        style,
+      ]}
+    >
       {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xl,
-    padding: spacing.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
   elevated: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 3,
-    borderWidth: 0,
-  },
-  outlined: {
-    borderWidth: 1.5,
-    borderColor: colors.border,
   },
 });

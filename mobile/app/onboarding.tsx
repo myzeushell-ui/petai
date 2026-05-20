@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from "rea
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
 import { ChevronRight, Heart, Bot, FlaskConical, Sparkles } from "lucide-react-native";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 const { width } = Dimensions.get("window");
@@ -13,7 +13,7 @@ const slides = [
     emoji: "🐾",
     title: "Welcome to PetAI",
     body: "The AI-powered health platform that keeps your pet thriving — from puppy to senior.",
-    color: colors.primary,
+    color: "#22c55e",
   },
   {
     Icon: Bot,
@@ -37,6 +37,8 @@ const slides = [
 
 export default function Onboarding() {
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [step, setStep] = useState(0);
   const slide = slides[step];
   const Icon = (slide as any).Icon;
@@ -111,7 +113,7 @@ export default function Onboarding() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1 },
   header: { flexDirection: "row", justifyContent: "flex-end", paddingHorizontal: spacing.lg, paddingTop: spacing.md, height: 44 },
   skip: { fontSize: fontSize.md, color: colors.textSecondary, fontWeight: "600", padding: spacing.sm },

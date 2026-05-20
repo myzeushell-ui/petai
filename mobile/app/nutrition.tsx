@@ -8,12 +8,14 @@ import { usePet } from "../src/contexts/PetContext";
 import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 export default function NutritionScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [tab, setTab] = useState<"plan" | "foods">("plan");
   const plan = getNutritionPlan(activePet.id);
   const foods = getFoodRecommendations(activePet.species === "cat" ? "cat" : "dog");
@@ -31,7 +33,8 @@ export default function NutritionScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <View style={styles.tabs}>
@@ -104,9 +107,9 @@ export default function NutritionScreen() {
                   </View>
                 </View>
                 <View style={styles.macroBars}>
-                  <Bar label="Protein" value={f.proteinPercent} color={colors.primary} />
-                  <Bar label="Fat" value={f.fatPercent} color={colors.warning} />
-                  <Bar label="Fiber" value={f.fiberPercent} color={colors.info} />
+                  <Bar label="Protein" value={f.proteinPercent} color={colors.primary} colors={colors} />
+                  <Bar label="Fat" value={f.fatPercent} color={colors.warning} colors={colors} />
+                  <Bar label="Fiber" value={f.fiberPercent} color={colors.info} colors={colors} />
                 </View>
                 <Text style={styles.foodIngredients}>{f.topIngredients.slice(0, 3).join(" · ")}</Text>
               </Card>
@@ -118,19 +121,19 @@ export default function NutritionScreen() {
   );
 }
 
-function Bar({ label, value, color }: { label: string; value: number; color: string }) {
+function Bar({ label, value, color, colors }: { label: string; value: number; color: string; colors: ReturnType<typeof useColors> }) {
   return (
-    <View style={styles.barWrap}>
-      <Text style={styles.barLabel}>{label}</Text>
-      <View style={styles.barTrack}>
-        <View style={[styles.barFill, { width: `${Math.min(value, 100)}%`, backgroundColor: color }]} />
+    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
+      <Text style={{ fontSize: fontSize.xs, color: colors.textSecondary, width: 50, fontWeight: "500" }}>{label}</Text>
+      <View style={{ flex: 1, height: 6, backgroundColor: colors.borderLight, borderRadius: 3, overflow: "hidden" }}>
+        <View style={{ width: `${Math.min(value, 100)}%`, height: "100%", borderRadius: 3, backgroundColor: color }} />
       </View>
-      <Text style={styles.barValue}>{value}%</Text>
+      <Text style={{ fontSize: fontSize.xs, color: colors.text, fontWeight: "600", width: 30, textAlign: "right" }}>{value}%</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   tabs: { flexDirection: "row", gap: spacing.sm, padding: spacing.lg, paddingBottom: 0 },
   tab: { flex: 1, paddingVertical: spacing.sm, alignItems: "center", borderRadius: radius.lg, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },

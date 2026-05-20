@@ -9,7 +9,8 @@ import { usePet } from "../src/contexts/PetContext";
 import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors, getPriorityColor } from "../src/theme/colors";
+import { useColors, useTheme } from "../src/contexts/ThemeContext";
+import { getPriorityColor } from "../src/theme/colors";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 const typeIcons: Record<Reminder["type"], React.ComponentType<any>> = {
@@ -19,6 +20,8 @@ const typeIcons: Record<Reminder["type"], React.ComponentType<any>> = {
 export default function RemindersScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [items, setItems] = useState<Reminder[]>(initialReminders);
 
   const petReminders = items.filter((r) => r.petId === activePet.id);
@@ -42,7 +45,8 @@ export default function RemindersScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
@@ -52,8 +56,8 @@ export default function RemindersScreen() {
           return (
             <Card key={r.id} style={styles.card}>
               <TouchableOpacity onPress={() => toggle(r.id)} style={styles.row}>
-                <View style={[styles.iconBox, { backgroundColor: getPriorityColor(r.priority) + "18" }]}>
-                  <Icon size={20} color={getPriorityColor(r.priority)} />
+                <View style={[styles.iconBox, { backgroundColor: getPriorityColor(r.priority, colors) + "18" }]}>
+                  <Icon size={20} color={getPriorityColor(r.priority, colors)} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.title}>{r.title}</Text>
@@ -99,7 +103,7 @@ export default function RemindersScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   content: { padding: spacing.lg },
   sectionTitle: { fontSize: fontSize.lg, fontWeight: "700", color: colors.text, marginBottom: spacing.md },

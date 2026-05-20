@@ -8,12 +8,14 @@ import { usePet } from "../src/contexts/PetContext";
 import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 export default function VetReportScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const report = vetReports.find((r) => r.petId === activePet.id);
 
   if (!report) {
@@ -40,7 +42,8 @@ export default function VetReportScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
@@ -118,7 +121,7 @@ export default function VetReportScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.xl },
   emptyText: { fontSize: fontSize.md, color: colors.textSecondary },

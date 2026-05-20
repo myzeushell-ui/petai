@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Keyboa
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Send, Bot, Sparkles } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
-import { colors } from "../../src/theme/colors";
+import { useColors } from "../../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
 import { API_ENDPOINTS } from "../../src/config/api";
 
@@ -43,6 +43,8 @@ function generateResponse(query: string, petName: string): string {
 
 export default function AssistantScreen() {
   const { activePet } = usePet();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [messages, setMessages] = useState<Message[]>([
     { id: "welcome", role: "assistant", text: `Hi! I'm your AI vet assistant. Ask me anything about ${activePet.name}'s health, behavior, or care.` },
   ]);
@@ -162,7 +164,7 @@ export default function AssistantScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   header: { flexDirection: "row", alignItems: "center", gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border },
   modePill: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: spacing.sm, paddingVertical: 4, borderRadius: radius.full, backgroundColor: "#F59E0B20" },

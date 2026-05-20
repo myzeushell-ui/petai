@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { Check, ChevronDown } from "lucide-react-native";
 import { usePet } from "../../contexts/PetContext";
-import { colors } from "../../theme/colors";
+import { useColors } from "../../contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../../theme/spacing";
 
 interface PetSwitcherProps {
@@ -11,6 +11,8 @@ interface PetSwitcherProps {
 
 export function PetSwitcher({ compact }: PetSwitcherProps) {
   const { activePet, pets, switchPet } = usePet();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,7 +56,7 @@ export function PetSwitcher({ compact }: PetSwitcherProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   trigger: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: spacing.sm, paddingVertical: 6, borderRadius: radius.full, backgroundColor: colors.backgroundSecondary },
   triggerCompact: { paddingHorizontal: spacing.xs, paddingVertical: 4 },
   emoji: { fontSize: 18 },

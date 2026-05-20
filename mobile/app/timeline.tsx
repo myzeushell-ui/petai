@@ -9,7 +9,7 @@ import { usePet } from "../src/contexts/PetContext";
 import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 const typeIcons: Record<HealthEvent["type"], React.ComponentType<any>> = {
@@ -17,14 +17,19 @@ const typeIcons: Record<HealthEvent["type"], React.ComponentType<any>> = {
   symptom: AlertTriangle, lab: FlaskConical, note: FileText,
 };
 
-const typeColors: Record<HealthEvent["type"], string> = {
-  vaccination: colors.info, checkup: colors.primary, surgery: colors.danger,
-  medication: "#A855F7", symptom: colors.warning, lab: "#0EA5E9", note: colors.textTertiary,
-};
+function getTypeColors(colors: ReturnType<typeof useColors>): Record<HealthEvent["type"], string> {
+  return {
+    vaccination: colors.info, checkup: colors.primary, surgery: colors.danger,
+    medication: "#A855F7", symptom: colors.warning, lab: "#0EA5E9", note: colors.textTertiary,
+  };
+}
 
 export default function TimelineScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
+  const typeColors = getTypeColors(colors);
   const events = healthEvents.filter((e) => e.petId === activePet.id).sort((a, b) => b.date.localeCompare(a.date));
 
   return (
@@ -40,7 +45,8 @@ export default function TimelineScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
@@ -80,7 +86,7 @@ export default function TimelineScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   content: { padding: spacing.lg },
   eventRow: { flexDirection: "row", gap: spacing.md, marginBottom: spacing.lg },

@@ -10,17 +10,18 @@ import { Card } from "../src/components/ui/Card";
 import { Badge } from "../src/components/ui/Badge";
 import { Button } from "../src/components/ui/Button";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
-import { colors } from "../src/theme/colors";
+import { useColors } from "../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
-
-const statusColors = {
-  normal: colors.primary, low: colors.warning, high: colors.warning, critical: colors.danger,
-};
 
 export default function LabsScreen() {
   const { activePet } = usePet();
   const router = useRouter();
+  const colors = useColors();
+  const styles = useStyles(colors);
   const petLabs = labResults.filter((l) => l.petId === activePet.id);
+  const statusColors = {
+    normal: colors.primary, low: colors.warning, high: colors.warning, critical: colors.danger,
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["bottom"]}>
@@ -35,7 +36,8 @@ export default function LabsScreen() {
           ),
           headerRight: () => <View style={{ marginRight: 8 }}><PetSwitcher /></View>,
           headerStyle: { backgroundColor: colors.surface },
-          headerTitleStyle: { fontWeight: "700" },
+          headerTitleStyle: { fontWeight: "700", color: colors.text },
+          headerTintColor: colors.text,
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
@@ -86,7 +88,7 @@ export default function LabsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   content: { padding: spacing.lg },
   labCard: { marginBottom: spacing.lg },

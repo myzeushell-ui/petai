@@ -1,19 +1,20 @@
 import { Tabs } from "expo-router";
-import { Home, Bot, PawPrint, ShoppingCart, Stethoscope } from "lucide-react-native";
-import { colors } from "../../src/theme/colors";
+import { Home, Bot, ShoppingCart, Stethoscope } from "lucide-react-native";
+import { useColors } from "../../src/contexts/ThemeContext";
 import { Platform } from "react-native";
 
 export default function TabLayout() {
+  const colors = useColors();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: "#9CA3AF",
+        tabBarInactiveTintColor: colors.textTertiary,
         tabBarStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.surface,
           borderTopWidth: 1,
-          borderTopColor: "#F3F4F6",
+          borderTopColor: colors.borderLight,
           paddingBottom: Platform.OS === "ios" ? 24 : 8,
           paddingTop: 8,
           height: Platform.OS === "ios" ? 88 : 64,
@@ -36,13 +37,6 @@ export default function TabLayout() {
         options={{
           title: "AI",
           tabBarIcon: ({ color, size }) => <Bot size={size} color={color} strokeWidth={2} />,
-        }}
-      />
-      <Tabs.Screen
-        name="breeds"
-        options={{
-          title: "Breeds",
-          tabBarIcon: ({ color, size }) => <PawPrint size={size} color={color} strokeWidth={2} />,
         }}
       />
       <Tabs.Screen
