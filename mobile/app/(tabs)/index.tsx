@@ -3,10 +3,12 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
-import { useColors } from "../../src/contexts/ThemeContext";
+import { useColors, useTheme } from "../../src/contexts/ThemeContext";
 import { Card } from "../../src/components/ui/Card";
 import { Badge } from "../../src/components/ui/Badge";
 import { HealthScoreRing } from "../../src/components/ui/HealthScoreRing";
+import { GradientBackground } from "../../src/components/ui/GradientBackground";
+import { PetCoverHeader } from "../../src/components/pet/PetCoverHeader";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
 import { reminders } from "../../src/data/reminders";
 import { aiInsights } from "../../src/data/aiInsights";
@@ -27,7 +29,9 @@ export default function DashboardScreen() {
   const { activePet, pets, switchPet } = usePet();
   const router = useRouter();
   const colors = useColors();
+  const { theme } = useTheme();
   const styles = useStyles(colors);
+  const isGlass = theme.style === "glass";
 
   const petReminders = reminders.filter((r) => r.petId === activePet.id && !r.completed).slice(0, 3);
   const petInsights = aiInsights.filter((i) => i.petId === activePet.id).slice(0, 2);
@@ -43,72 +47,53 @@ export default function DashboardScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.greeting}>{greeting}, Alex</Text>
-            <Text style={styles.subtitle}>Here's how <Text style={{ color: activePet.color, fontWeight: "700" }}>{activePet.name}</Text> is doing</Text>
-          </View>
-          <View style={styles.headerActions}>
-            <TouchableOpacity style={styles.bellBtn} onPress={() => router.push("/reminders")}>
-              <Bell size={22} color={colors.text} />
-              <View style={styles.bellDot} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.bellBtn} onPress={() => router.push("/settings")}>
-              <Settings size={22} color={colors.text} />
-            </TouchableOpacity>
-          </View>
-        </View>
+    <View style={styles.safe}>
+      <GradientBackground>
+        <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Cover photo header (Facebook-style) with pet info + user avatar */}
+          <PetCoverHeader
+            height={260}
+            onSettings={() => router.push("/settings")}
+            userInitials="AJ"
+          />
 
-        {/* Pet Switcher */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.petSwitcher}>
-          {pets.map((pet) => (
-            <TouchableOpacity
-              key={pet.id}
-              onPress={() => switchPet(pet.id)}
-              style={[styles.petChip, pet.id === activePet.id && { backgroundColor: pet.color + "18", borderColor: pet.color }]}
-            >
-              <Text style={styles.petEmoji}>{pet.emoji}</Text>
-              <View>
-                <Text style={[styles.petChipName, pet.id === activePet.id && { color: pet.color }]}>{pet.name}</Text>
-                <Text style={styles.petChipBreed}>{pet.breed}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+          <View style={styles.below}>
+            {/* Pet Switcher */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.petSwitcher}>
+              {pets.map((pet) => (
+                <TouchableOpacity
+                  key={pet.id}
+                  onPress={() => switchPet(pet.id)}
+                  style={[
+                    styles.petChip,
+                    pet.id === activePet.id && { backgroundColor: colors.primary + "20", borderColor: colors.primary },
+                  ]}
+                >
+                  <Text style={styles.petEmoji}>{pet.emoji}</Text>
+                  <View>
+                    <Text style={[styles.petChipName, pet.id === activePet.id && { color: colors.primary }]}>{pet.name}</Text>
+                    <Text style={styles.petChipBreed}>{pet.breed}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
 
-        {/* Pet Profile + Health Score */}
-        <Card variant="elevated" style={styles.profileCard}>
-          <View style={styles.profileRow}>
-            <View style={styles.profileInfo}>
-              <View style={[styles.avatar, { backgroundColor: activePet.color + "20" }]}>
-                <Text style={styles.avatarEmoji}>{activePet.emoji}</Text>
+            {/* Health Score Card */}
+            <Card variant={isGlass ? "default" : "elevated"} style={styles.profileCard}>
+              <View style={styles.profileRow}>
+                <View>
+                  <Text style={styles.scoreLabel}>Health Score</Text>
+                  <Text style={styles.scoreNumber}>{activePet.healthScore}</Text>
+                  <Text style={styles.scoreOf}>out of 100</Text>
+                </View>
+                <HealthScoreRing score={activePet.healthScore} size={90} strokeWidth={8} />
               </View>
-              <View>
-                <Text style={styles.petName}>{activePet.name}</Text>
-                <Text style={styles.petBreed}>{activePet.breed}</Text>
-                <Text style={styles.petMeta}>{activePet.age}y · {activePet.gender === "female" ? "♀" : "♂"} · {activePet.weight}{activePet.weightUnit}</Text>
+              <View style={styles.statsRow}>
+                <Badge label="✓ Vaccines" variant="success" />
+                <Badge label="⚠ ALT high" variant="warning" />
+                <Badge label="🦷 Dental" variant="info" />
               </View>
-            </View>
-            <HealthScoreRing score={activePet.healthScore} size={90} strokeWidth={8} />
-          </View>
-          <View style={styles.statsRow}>
-            <View style={styles.stat}>
-              <Text style={styles.statLabel}>Vaccines</Text>
-              <Badge label="Up to date" variant="success" />
-            </View>
-            <View style={styles.stat}>
-              <Text style={styles.statLabel}>ALT Level</Text>
-              <Badge label="Elevated" variant="warning" />
-            </View>
-            <View style={styles.stat}>
-              <Text style={styles.statLabel}>Dental</Text>
-              <Badge label="Due soon" variant="info" />
-            </View>
-          </View>
-        </Card>
+            </Card>
 
         {/* QUIZ HERO BUTTON */}
         <TouchableOpacity activeOpacity={0.9} onPress={() => router.push("/quiz")} style={styles.quizHero}>
@@ -184,22 +169,22 @@ export default function DashboardScreen() {
           ))}
         </View>
 
-        <View style={{ height: 32 }} />
-      </ScrollView>
-    </SafeAreaView>
+            <View style={{ height: 32 }} />
+          </View>
+        </ScrollView>
+      </GradientBackground>
+    </View>
   );
 }
 
 const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
+  safe: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
-  content: { padding: spacing.lg },
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: spacing.lg },
-  greeting: { fontSize: fontSize.xxl, fontWeight: "800", color: colors.text },
-  subtitle: { fontSize: fontSize.md, color: colors.textSecondary, marginTop: 2 },
-  headerActions: { flexDirection: "row", gap: 4 },
-  bellBtn: { padding: spacing.sm, position: "relative" },
-  bellDot: { position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: 4, backgroundColor: colors.danger },
+  content: { paddingBottom: spacing.xxxl },
+  below: { padding: spacing.lg, paddingTop: spacing.lg },
+  scoreLabel: { fontSize: 11, fontWeight: "700", color: colors.textSecondary, textTransform: "uppercase", letterSpacing: 0.08 * 11 },
+  scoreNumber: { fontSize: 48, fontWeight: "800", color: colors.text, lineHeight: 50, letterSpacing: -0.04 * 48, marginTop: 4 },
+  scoreOf: { fontSize: fontSize.xs, color: colors.textTertiary, marginTop: 2 },
   petSwitcher: { marginBottom: spacing.lg },
   petChip: { flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radius.xl, borderWidth: 1.5, borderColor: colors.border, marginRight: spacing.sm, backgroundColor: colors.surface },
   petEmoji: { fontSize: 24 },
@@ -213,10 +198,10 @@ const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   petName: { fontSize: fontSize.xl, fontWeight: "800", color: colors.text },
   petBreed: { fontSize: fontSize.sm, color: colors.textSecondary },
   petMeta: { fontSize: fontSize.xs, color: colors.textTertiary, marginTop: 2 },
-  statsRow: { flexDirection: "row", justifyContent: "space-between" },
+  statsRow: { flexDirection: "row", gap: 6, flexWrap: "wrap", marginTop: spacing.md, paddingTop: spacing.md, borderTopWidth: 1, borderTopColor: colors.borderLight },
   stat: { alignItems: "center", gap: spacing.xs },
   statLabel: { fontSize: fontSize.xs, color: colors.textSecondary, fontWeight: "500" },
-  quizHero: { backgroundColor: colors.primary, borderRadius: radius.xl, marginBottom: spacing.md, shadowColor: colors.primary, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.25, shadowRadius: 12, elevation: 6 },
+  quizHero: { backgroundColor: colors.primary, borderRadius: radius.xl, marginBottom: spacing.md, marginTop: spacing.md, shadowColor: colors.primary, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.25, shadowRadius: 12, elevation: 6 },
   quizHeroInner: { flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.lg },
   quizIconBox: { width: 50, height: 50, borderRadius: 25, backgroundColor: "rgba(255,255,255,0.22)", alignItems: "center", justifyContent: "center" },
   quizTitle: { fontSize: fontSize.lg, fontWeight: "800", color: "#FFF" },

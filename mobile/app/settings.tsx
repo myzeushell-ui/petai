@@ -2,10 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
-import { ArrowLeft, Bell, Moon, Globe, HelpCircle, Shield, Star, LogOut, ChevronRight, Heart, Trash2, Database } from "lucide-react-native";
+import { ArrowLeft, Bell, Palette, Globe, HelpCircle, Shield, Star, LogOut, ChevronRight, Heart, Trash2, Database } from "lucide-react-native";
 import { usePet } from "../src/contexts/PetContext";
 import { useTheme, useColors } from "../src/contexts/ThemeContext";
 import { Card } from "../src/components/ui/Card";
+import { ThemePicker } from "../src/components/settings/ThemePicker";
 import { sendTestNotification } from "../src/services/notifications";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
@@ -24,7 +25,7 @@ interface RowProps {
 export default function SettingsScreen() {
   const router = useRouter();
   const { activePet, pets } = usePet();
-  const { isDark, toggle: toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const colors = useColors();
   const styles = useStyles(colors);
   const [notifications, setNotifications] = React.useState(true);
@@ -98,6 +99,15 @@ export default function SettingsScreen() {
           </Card>
         </TouchableOpacity>
 
+        {/* Theme picker */}
+        <View style={styles.themeSection}>
+          <View style={styles.themeHeader}>
+            <Palette size={18} color={colors.primary} />
+            <Text style={[styles.sectionLabel, { marginTop: 0, marginLeft: 0, marginBottom: 0 }]}>APPEARANCE · {theme.name}</Text>
+          </View>
+          <ThemePicker />
+        </View>
+
         {/* Pets */}
         <Text style={styles.sectionLabel}>YOUR PETS</Text>
         <Card style={styles.sectionCard}>
@@ -139,8 +149,6 @@ export default function SettingsScreen() {
               ok ? "You'll get a test notification in 2 seconds." : "Enable notifications in your phone settings."
             );
           }} />
-          <View style={styles.divider} />
-          <Row icon={Moon} iconColor="#6366F1" label="Dark mode" toggle toggleValue={isDark} onToggle={toggleTheme} />
           <View style={styles.divider} />
           <Row icon={Heart} iconColor="#EC4899" label="AI insights" toggle toggleValue={insights} onToggle={setInsights} />
           <View style={styles.divider} />
@@ -193,6 +201,8 @@ const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   upgradeSub: { fontSize: fontSize.xs, color: "#FFF", opacity: 0.85, marginTop: 1 },
   upgradePrice: { fontSize: fontSize.md, fontWeight: "800", color: "#FFF" },
   sectionLabel: { fontSize: 11, fontWeight: "700", color: colors.textTertiary, marginTop: spacing.lg, marginBottom: spacing.sm, marginLeft: spacing.sm, letterSpacing: 0.5 },
+  themeSection: { marginTop: spacing.xl, marginHorizontal: -spacing.lg, paddingHorizontal: spacing.lg, paddingTop: spacing.md, paddingBottom: spacing.lg, backgroundColor: colors.surface, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.borderLight },
+  themeHeader: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md, paddingHorizontal: spacing.sm },
   sectionCard: { padding: 0, overflow: "hidden" },
   row: { flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.md },
   iconBox: { width: 34, height: 34, borderRadius: 10, alignItems: "center", justifyContent: "center" },
