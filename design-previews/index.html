@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PetAI · Design Direction Previews</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0a0a; font-family: 'Inter', sans-serif; color: #e5e5e5; min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 1900px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 60px; }
+  .header h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .header p { color: #888; font-size: 18px; max-width: 700px; margin: 0 auto; line-height: 1.5; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+  @media (max-width: 1400px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+  .design-card { display: flex; flex-direction: column; }
+  .design-label { text-align: center; margin-bottom: 20px; }
+  .design-label .num { display: inline-block; width: 32px; height: 32px; line-height: 32px; border-radius: 16px; background: #fff; color: #000; font-weight: 800; font-size: 16px; margin-bottom: 8px; }
+  .design-label h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .design-label .tags { color: #666; font-size: 13px; }
+
+  /* iPhone frame */
+  .phone {
+    width: 100%; max-width: 380px; margin: 0 auto;
+    aspect-ratio: 9/19.5;
+    border-radius: 48px;
+    padding: 14px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .phone::before {
+    content: ""; position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px; background: #000; border-radius: 16px; z-index: 10;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 36px; overflow: hidden;
+    position: relative; display: flex; flex-direction: column;
+  }
+
+  /* ===== Design 1: Premium Wellness ===== */
+  .d1 .screen { background: #FDF8F3; color: #2A2520; }
+  .d1 .top { padding: 60px 22px 14px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .d1 .greeting { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+  .d1 .greeting span { color: #C2562A; }
+  .d1 .greeting small { display: block; font-family: 'Inter'; font-size: 12px; font-weight: 500; color: #87766A; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .d1 .avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #E8B496, #C2562A); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; }
+  .d1 .hero { margin: 14px 18px; padding: 22px; background: linear-gradient(135deg, #F8E6D6, #F2CDB1); border-radius: 28px; position: relative; overflow: hidden; }
+  .d1 .hero::after { content: '🐕'; position: absolute; right: -10px; bottom: -25px; font-size: 130px; opacity: 0.18; }
+  .d1 .hero .label { font-size: 11px; font-weight: 700; color: #87503A; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .d1 .hero .name { font-family: 'Fraunces'; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+  .d1 .hero .breed { font-size: 12px; color: #87766A; margin-bottom: 18px; }
+  .d1 .hero .score-row { display: flex; align-items: baseline; gap: 8px; }
+  .d1 .hero .score { font-family: 'Fraunces'; font-size: 56px; font-weight: 600; color: #2A2520; line-height: 1; }
+  .d1 .hero .slash { font-size: 22px; color: #87766A; font-weight: 300; }
+  .d1 .hero .max { font-size: 18px; color: #87766A; font-weight: 500; }
+  .d1 .bento { margin: 0 18px 12px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+  .d1 .tile { background: #fff; border-radius: 20px; padding: 14px; }
+  .d1 .tile .ico { font-size: 18px; margin-bottom: 6px; }
+  .d1 .tile .num { font-family: 'Fraunces'; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+  .d1 .tile .lbl { font-size: 10px; color: #87766A; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+  .d1 .tile.coral { background: #F4D7C5; }
+  .d1 .tile.sage { background: #D9E5D1; }
+  .d1 .quiz { margin: 0 18px 16px; padding: 16px 18px; background: #2A2520; color: #fff; border-radius: 22px; display: flex; align-items: center; gap: 12px; }
+  .d1 .quiz .qicon { width: 36px; height: 36px; border-radius: 18px; background: #C2562A; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .d1 .quiz .qtitle { font-family: 'Fraunces'; font-size: 15px; font-weight: 600; }
+  .d1 .quiz .qsub { font-size: 11px; color: #b8a89b; }
+  .d1 .tabbar { margin-top: auto; padding: 14px 24px 28px; display: flex; justify-content: space-around; border-top: 1px solid rgba(0,0,0,0.06); background: #fff; }
+  .d1 .tab { font-size: 22px; opacity: 0.4; }
+  .d1 .tab.active { opacity: 1; }
+
+  /* ===== Design 2: Glass iOS 26 ===== */
+  .d2 .screen { background: #0E0820; color: #fff; position: relative; }
+  .d2 .screen::before { content: ""; position: absolute; top: -100px; right: -50px; width: 300px; height: 300px; background: radial-gradient(circle, #7C3AED 0%, transparent 70%); opacity: 0.5; }
+  .d2 .screen::after { content: ""; position: absolute; bottom: 100px; left: -80px; width: 280px; height: 280px; background: radial-gradient(circle, #0EA5E9 0%, transparent 70%); opacity: 0.4; }
+  .d2 .top { padding: 60px 22px 14px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+  .d2 .greeting { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .d2 .greeting small { display: block; font-size: 12px; color: #94a3b8; font-weight: 400; margin-top: 2px; }
+  .d2 .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7C3AED, #EC4899); }
+  .d2 .glass-card { margin: 14px 18px; padding: 20px; border-radius: 28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+    backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    position: relative; z-index: 1;
+  }
+  .d2 .pet-row { display: flex; align-items: center; gap: 14px; }
+  .d2 .pet-emoji { width: 60px; height: 60px; border-radius: 18px; background: linear-gradient(135deg, #F59E0B, #EF4444); display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 4px 16px rgba(245,158,11,0.4); }
+  .d2 .pet-name { font-size: 19px; font-weight: 700; }
+  .d2 .pet-meta { font-size: 11px; color: #94a3b8; }
+  .d2 .score-big { display: flex; align-items: flex-end; gap: 6px; margin-top: 16px; }
+  .d2 .score-big .num { font-size: 56px; font-weight: 800; background: linear-gradient(135deg, #22c55e, #84cc16); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9; letter-spacing: -0.04em; }
+  .d2 .score-big .lbl { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 6px; }
+  .d2 .ring { width: 60px; height: 60px; border-radius: 50%; margin-left: auto; background: conic-gradient(from -90deg, #22c55e 0%, #22c55e 87%, rgba(255,255,255,0.1) 87%); display: flex; align-items: center; justify-content: center; position: relative; }
+  .d2 .ring::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: rgba(14,8,32,0.9); }
+  .d2 .ring span { position: relative; z-index: 1; font-size: 16px; font-weight: 800; }
+  .d2 .pills { display: flex; gap: 6px; margin: 0 18px 12px; position: relative; z-index: 1; flex-wrap: wrap; }
+  .d2 .pill { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .d2 .pill.ok { background: rgba(34,197,94,0.18); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .d2 .pill.warn { background: rgba(245,158,11,0.18); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .d2 .pill.info { background: rgba(14,165,233,0.18); color: #38bdf8; border: 1px solid rgba(14,165,233,0.3); }
+  .d2 .feature-grid { margin: 0 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; position: relative; z-index: 1; }
+  .d2 .fcard { aspect-ratio: 1; border-radius: 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .d2 .fcard span { font-size: 20px; }
+  .d2 .fcard small { font-size: 9px; color: #94a3b8; font-weight: 600; }
+  .d2 .quiz { margin: 16px 18px 0; padding: 14px 16px; border-radius: 22px;
+    background: linear-gradient(135deg, #7C3AED, #EC4899);
+    box-shadow: 0 8px 24px rgba(124,58,237,0.4);
+    display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+  .d2 .quiz .qicon { width: 36px; height: 36px; border-radius: 18px; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .d2 .quiz .qtitle { font-size: 14px; font-weight: 700; }
+  .d2 .quiz .qsub { font-size: 10px; opacity: 0.85; }
+  .d2 .tabbar { margin-top: auto; padding: 14px 24px 28px; display: flex; justify-content: space-around;
+    background: rgba(14,8,32,0.7); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); position: relative; z-index: 1; }
+  .d2 .tab { font-size: 20px; opacity: 0.4; }
+  .d2 .tab.active { opacity: 1; color: #a78bfa; }
+
+  /* ===== Design 3: Playful Modern ===== */
+  .d3 .screen { background: #FAF8FF; color: #1a1a2e; }
+  .d3 .top { padding: 60px 22px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .d3 .greeting { font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .d3 .greeting span { color: #FF6B47; }
+  .d3 .avatar { width: 44px; height: 44px; border-radius: 14px; background: #FFE0D6; border: 3px solid #FF6B47; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+  .d3 .pet-card { margin: 16px 18px 8px; padding: 20px; background: linear-gradient(135deg, #FFD89B 0%, #FF6B47 100%); border-radius: 32px; color: #fff; position: relative; overflow: hidden; }
+  .d3 .pet-card::after { content: '🐕'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 90px; }
+  .d3 .pet-card .pname { font-family: 'Space Grotesk'; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .d3 .pet-card .pmeta { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .d3 .pet-card .pscore { margin-top: 14px; display: flex; align-items: baseline; gap: 6px; }
+  .d3 .pet-card .pscore .n { font-family: 'Space Grotesk'; font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  .d3 .pet-card .pscore .l { font-size: 12px; opacity: 0.9; font-weight: 600; }
+  .d3 .blocks { margin: 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .d3 .block { padding: 16px; border-radius: 24px; }
+  .d3 .b1 { background: #C8E6C9; }
+  .d3 .b2 { background: #D1C4E9; }
+  .d3 .b3 { background: #FFE0B2; }
+  .d3 .b4 { background: #B3E5FC; }
+  .d3 .block .bico { font-size: 22px; margin-bottom: 4px; }
+  .d3 .block .bnum { font-family: 'Space Grotesk'; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  .d3 .block .blbl { font-size: 11px; font-weight: 600; opacity: 0.7; }
+  .d3 .quiz { margin: 8px 18px 0; padding: 18px; background: #1a1a2e; color: #fff; border-radius: 26px; display: flex; align-items: center; gap: 12px; }
+  .d3 .quiz .qicon { width: 38px; height: 38px; border-radius: 12px; background: #FF6B47; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .d3 .quiz .qtitle { font-family: 'Space Grotesk'; font-size: 14px; font-weight: 700; }
+  .d3 .quiz .qsub { font-size: 11px; opacity: 0.7; }
+  .d3 .tabbar { margin-top: auto; padding: 14px 24px 28px; display: flex; justify-content: space-around; background: #fff; border-top: 2px solid #1a1a2e; }
+  .d3 .tab { font-size: 22px; opacity: 0.3; }
+  .d3 .tab.active { opacity: 1; }
+
+  /* ===== Design 4: Editorial Magazine ===== */
+  .d4 .screen { background: #F7F5F0; color: #1a1a1a; }
+  .d4 .top { padding: 60px 24px 16px; }
+  .d4 .date { font-family: 'Instrument Serif'; font-style: italic; font-size: 14px; color: #888; margin-bottom: 4px; }
+  .d4 .greeting { font-family: 'Instrument Serif'; font-size: 38px; font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+  .d4 .divider { height: 1px; background: #1a1a1a; margin: 14px 24px; }
+  .d4 .pet-hero { margin: 14px 24px; }
+  .d4 .pet-hero .label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+  .d4 .pet-hero .name { font-family: 'Instrument Serif'; font-size: 44px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .d4 .pet-hero .name em { font-style: italic; color: #C2562A; }
+  .d4 .pet-hero .breed { font-size: 12px; color: #555; }
+  .d4 .pet-hero .photo { margin-top: 14px; aspect-ratio: 16/9; border-radius: 4px; background: linear-gradient(135deg, #d4a574, #8b6f47); display: flex; align-items: center; justify-content: center; font-size: 90px; }
+  .d4 .stat-row { margin: 16px 24px; display: flex; justify-content: space-between; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; padding: 12px 0; }
+  .d4 .stat { text-align: center; }
+  .d4 .stat .n { font-family: 'Instrument Serif'; font-size: 28px; font-weight: 400; letter-spacing: -0.02em; }
+  .d4 .stat .l { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; }
+  .d4 .quiz { margin: 12px 24px 0; padding: 14px 0; border-top: 1px solid #1a1a1a; display: flex; align-items: center; gap: 12px; }
+  .d4 .quiz .ico { font-size: 22px; }
+  .d4 .quiz .text { flex: 1; }
+  .d4 .quiz .qt { font-family: 'Instrument Serif'; font-size: 18px; font-weight: 400; font-style: italic; }
+  .d4 .quiz .qs { font-size: 10px; color: #888; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .d4 .arrow { font-family: 'Instrument Serif'; font-size: 24px; font-style: italic; }
+  .d4 .tabbar { margin-top: auto; padding: 14px 24px 28px; display: flex; justify-content: space-around; border-top: 1px solid #1a1a1a; }
+  .d4 .tab { font-size: 22px; opacity: 0.3; }
+  .d4 .tab.active { opacity: 1; }
+
+  .footnote { text-align: center; color: #555; margin-top: 60px; font-size: 14px; line-height: 1.6; }
+  .footnote strong { color: #fff; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>PetAI — 4 Design Directions</h1>
+      <p>Pick one to redesign the entire app. Each shows the Home dashboard mockup with the same content in a totally different visual language.</p>
+    </div>
+
+    <div class="grid">
+
+      <!-- ============ 1. PREMIUM WELLNESS ============ -->
+      <div class="design-card d1">
+        <div class="design-label">
+          <div class="num">1</div>
+          <h2>Premium Wellness</h2>
+          <div class="tags">Apple Fitness+ · Calm · Headspace · Cron</div>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="top">
+            <div class="greeting">
+              Hello,<br>Alex <span>·</span>
+              <small>Tuesday, May 21</small>
+            </div>
+            <div class="avatar">AJ</div>
+          </div>
+          <div class="hero">
+            <div class="label">Today's pet</div>
+            <div class="name">Luna</div>
+            <div class="breed">Golden Retriever · 4 years</div>
+            <div class="score-row">
+              <div class="score">87</div>
+              <div class="slash">/</div>
+              <div class="max">100 vitality</div>
+            </div>
+          </div>
+          <div class="bento">
+            <div class="tile coral">
+              <div class="ico">🦴</div>
+              <div class="num">3 due</div>
+              <div class="lbl">Reminders</div>
+            </div>
+            <div class="tile sage">
+              <div class="ico">📋</div>
+              <div class="num">Recheck</div>
+              <div class="lbl">ALT level</div>
+            </div>
+          </div>
+          <div class="quiz">
+            <div class="qicon">✨</div>
+            <div>
+              <div class="qtitle">Find your perfect dog</div>
+              <div class="qsub">12-question quiz</div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active">🏠</div>
+            <div class="tab">💬</div>
+            <div class="tab">🛍️</div>
+            <div class="tab">🩺</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ============ 2. GLASS iOS 26 ============ -->
+      <div class="design-card d2">
+        <div class="design-label">
+          <div class="num">2</div>
+          <h2>Glass iOS 26</h2>
+          <div class="tags">iOS Liquid Glass · Linear · Vercel</div>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="top">
+            <div class="greeting">
+              Hi Alex
+              <small>Luna is doing great today</small>
+            </div>
+            <div class="avatar"></div>
+          </div>
+          <div class="glass-card">
+            <div class="pet-row">
+              <div class="pet-emoji">🐕</div>
+              <div>
+                <div class="pet-name">Luna</div>
+                <div class="pet-meta">Golden Retriever · 4y · 28.5kg</div>
+              </div>
+            </div>
+            <div class="score-big">
+              <div class="num">87</div>
+              <div class="lbl">Health Score</div>
+              <div class="ring"><span>87</span></div>
+            </div>
+          </div>
+          <div class="pills">
+            <div class="pill ok">✓ Vaccines</div>
+            <div class="pill warn">⚠ ALT high</div>
+            <div class="pill info">🦷 Dental due</div>
+          </div>
+          <div class="feature-grid">
+            <div class="fcard"><span>🔔</span><small>3</small></div>
+            <div class="fcard"><span>📊</span><small>Labs</small></div>
+            <div class="fcard"><span>🍖</span><small>Food</small></div>
+            <div class="fcard"><span>🐕</span><small>Breeds</small></div>
+          </div>
+          <div class="quiz">
+            <div class="qicon">✨</div>
+            <div>
+              <div class="qtitle">Find Your Perfect Dog</div>
+              <div class="qsub">Take the 12-question quiz</div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active">🏠</div>
+            <div class="tab">💬</div>
+            <div class="tab">🛍️</div>
+            <div class="tab">🩺</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ============ 3. PLAYFUL MODERN ============ -->
+      <div class="design-card d3">
+        <div class="design-label">
+          <div class="num">3</div>
+          <h2>Playful Modern</h2>
+          <div class="tags">Duolingo · Cash App · Notion AI</div>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="top">
+            <div class="greeting">Hey <span>Alex!</span> 👋</div>
+            <div class="avatar">AJ</div>
+          </div>
+          <div class="pet-card">
+            <div class="pname">Luna</div>
+            <div class="pmeta">Golden Retriever · 4y</div>
+            <div class="pscore">
+              <div class="n">87</div>
+              <div class="l">/ 100 health</div>
+            </div>
+          </div>
+          <div class="blocks">
+            <div class="block b1">
+              <div class="bico">🦴</div>
+              <div class="bnum">3</div>
+              <div class="blbl">Reminders today</div>
+            </div>
+            <div class="block b2">
+              <div class="bico">📊</div>
+              <div class="bnum">128</div>
+              <div class="blbl">ALT level (U/L)</div>
+            </div>
+            <div class="block b3">
+              <div class="bico">🍖</div>
+              <div class="bnum">2 cups</div>
+              <div class="blbl">Daily food</div>
+            </div>
+            <div class="block b4">
+              <div class="bico">💧</div>
+              <div class="bnum">28.5</div>
+              <div class="blbl">Weight (kg)</div>
+            </div>
+          </div>
+          <div class="quiz">
+            <div class="qicon">✨</div>
+            <div>
+              <div class="qtitle">Find Your Perfect Dog!</div>
+              <div class="qsub">12 quick questions</div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active">🏠</div>
+            <div class="tab">💬</div>
+            <div class="tab">🛍️</div>
+            <div class="tab">🩺</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ============ 4. EDITORIAL MAGAZINE ============ -->
+      <div class="design-card d4">
+        <div class="design-label">
+          <div class="num">4</div>
+          <h2>Editorial Magazine</h2>
+          <div class="tags">Aesop · Browser Company · Lovable</div>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="top">
+            <div class="date">Tuesday, May 21</div>
+            <div class="greeting">Good morning,<br><em>Alex.</em></div>
+          </div>
+          <div class="divider"></div>
+          <div class="pet-hero">
+            <div class="label">Today's Featured Companion</div>
+            <div class="name">Meet <em>Luna</em></div>
+            <div class="breed">Golden Retriever · 4 years</div>
+            <div class="photo">🐕</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><div class="n">87</div><div class="l">Health</div></div>
+            <div class="stat"><div class="n">3</div><div class="l">Reminders</div></div>
+            <div class="stat"><div class="n">28.5</div><div class="l">Weight kg</div></div>
+          </div>
+          <div class="quiz">
+            <div class="ico">✦</div>
+            <div class="text">
+              <div class="qt">Find your perfect dog</div>
+              <div class="qs">12 questions · 3 min</div>
+            </div>
+            <div class="arrow">→</div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active">⌂</div>
+            <div class="tab">✎</div>
+            <div class="tab">◐</div>
+            <div class="tab">+</div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+
+    <div class="footnote">
+      Each design uses the same content, just different visual language.<br>
+      Pick a number (<strong>1</strong>, <strong>2</strong>, <strong>3</strong>, or <strong>4</strong>) and I'll redesign the entire app in that direction.
+    </div>
+  </div>
+</body>
+</html>
