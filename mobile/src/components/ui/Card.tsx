@@ -1,27 +1,37 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle, StyleProp } from "react-native";
-import { useColors } from "../../contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { radius, spacing } from "../../theme/spacing";
 
 interface CardProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-  variant?: "default" | "elevated" | "outlined";
+  variant?: "default" | "elevated" | "outlined" | "glass";
 }
 
 export function Card({ children, style, variant = "default" }: CardProps) {
-  const colors = useColors();
+  const { colors, theme } = useTheme();
+  const isGlass = theme.style === "glass";
+
+  // For glass themes, default + elevated both use the glass look
+  const useGlassStyle = isGlass && variant !== "outlined";
+
+  const bg = useGlassStyle ? colors.glassBg : variant === "elevated" ? colors.surfaceElevated : colors.surface;
+  const borderColor = useGlassStyle ? colors.glassBorder : colors.border;
+  const borderWidth = variant === "elevated" && !useGlassStyle ? 0 : 1;
+
   return (
     <View
       style={[
         {
-          backgroundColor: variant === "elevated" ? colors.surfaceElevated : colors.surface,
+          backgroundColor: bg,
           borderRadius: radius.xl,
           padding: spacing.lg,
-          borderWidth: variant === "elevated" ? 0 : 1,
-          borderColor: colors.border,
+          borderWidth,
+          borderColor,
         },
-        variant === "elevated" && styles.elevated,
+        variant === "elevated" && !useGlassStyle && styles.elevated,
+        useGlassStyle && styles.glassShadow,
         style,
       ]}
     >
@@ -37,5 +47,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 3,
+  },
+  glassShadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 4,
   },
 });

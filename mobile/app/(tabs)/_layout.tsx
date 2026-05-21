@@ -1,10 +1,13 @@
 import { Tabs } from "expo-router";
 import { Home, Bot, ShoppingCart, Stethoscope } from "lucide-react-native";
-import { useColors } from "../../src/contexts/ThemeContext";
+import { useColors, useTheme } from "../../src/contexts/ThemeContext";
 import { Platform } from "react-native";
 
 export default function TabLayout() {
   const colors = useColors();
+  const { theme } = useTheme();
+  // Solid bg for glass themes (otherwise tab bar is invisible)
+  const tabBg = theme.style === "glass" ? theme.gradient?.base ?? "#0A0717" : "#FFFFFF";
   return (
     <Tabs
       screenOptions={{
@@ -12,9 +15,9 @@ export default function TabLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textTertiary,
         tabBarStyle: {
-          backgroundColor: colors.surface,
+          backgroundColor: tabBg,
           borderTopWidth: 1,
-          borderTopColor: colors.borderLight,
+          borderTopColor: theme.isDark ? "rgba(255,255,255,0.08)" : colors.borderLight,
           paddingBottom: Platform.OS === "ios" ? 24 : 8,
           paddingTop: 8,
           height: Platform.OS === "ios" ? 88 : 64,
