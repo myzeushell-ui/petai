@@ -8,6 +8,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from "@expo-google-fonts/inter";
 import { PetProvider } from "../src/contexts/PetContext";
 import { ThemeProvider, useTheme } from "../src/contexts/ThemeContext";
+import { syncReminders } from "../src/services/notifications";
+import { reminders as initialReminders } from "../src/data/reminders";
+import { demoPets } from "../src/data/demoPets";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -58,6 +61,12 @@ export default function RootLayout() {
         }
       } catch {}
       setChecking(false);
+
+      // Sync notifications after onboarding decided
+      setTimeout(() => {
+        syncReminders(initialReminders, (petId) => demoPets.find((p) => p.id === petId)?.name ?? "Your pet")
+          .catch((e) => console.warn("Notification sync failed:", e));
+      }, 2000);
     })();
   }, []);
 

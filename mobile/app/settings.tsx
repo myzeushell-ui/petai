@@ -6,6 +6,7 @@ import { ArrowLeft, Bell, Moon, Globe, HelpCircle, Shield, Star, LogOut, Chevron
 import { usePet } from "../src/contexts/PetContext";
 import { useTheme, useColors } from "../src/contexts/ThemeContext";
 import { Card } from "../src/components/ui/Card";
+import { sendTestNotification } from "../src/services/notifications";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
 
 interface RowProps {
@@ -130,6 +131,14 @@ export default function SettingsScreen() {
         <Text style={styles.sectionLabel}>PREFERENCES</Text>
         <Card style={styles.sectionCard}>
           <Row icon={Bell} iconColor="#EF4444" label="Notifications" toggle toggleValue={notifications} onToggle={setNotifications} />
+          <View style={styles.divider} />
+          <Row icon={Bell} iconColor="#22c55e" label="Send test notification" onPress={async () => {
+            const ok = await sendTestNotification();
+            Alert.alert(
+              ok ? "Test scheduled" : "Permission denied",
+              ok ? "You'll get a test notification in 2 seconds." : "Enable notifications in your phone settings."
+            );
+          }} />
           <View style={styles.divider} />
           <Row icon={Moon} iconColor="#6366F1" label="Dark mode" toggle toggleValue={isDark} onToggle={toggleTheme} />
           <View style={styles.divider} />
