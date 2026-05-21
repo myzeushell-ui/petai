@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles } from "lucide-react-native";
+import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles, Stethoscope } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
 import { useColors, useTheme } from "../../src/contexts/ThemeContext";
 import { Card } from "../../src/components/ui/Card";
@@ -54,7 +54,6 @@ export default function DashboardScreen() {
           <PetCoverHeader
             height={260}
             onSettings={() => router.push("/settings")}
-            userInitials="AJ"
           />
 
           <View style={styles.below}>
@@ -95,6 +94,22 @@ export default function DashboardScreen() {
               </View>
             </Card>
 
+        {/* AI TRIAGE HERO — primary action */}
+        <TouchableOpacity activeOpacity={0.9} onPress={() => router.push("/triage")} style={[styles.quizHero, { backgroundColor: "#DC2626", shadowColor: "#DC2626" }]}>
+          <View style={styles.quizHeroInner}>
+            <View style={styles.quizIconBox}>
+              <Stethoscope size={26} color="#FFF" strokeWidth={2.5} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.quizTitle}>Is {activePet.name} OK?</Text>
+              <Text style={styles.quizSub}>AI symptom triage · know what to do in 60 sec</Text>
+            </View>
+            <View style={styles.quizArrowBox}>
+              <ChevronRight size={20} color="#FFF" strokeWidth={3} />
+            </View>
+          </View>
+        </TouchableOpacity>
+
         {/* QUIZ HERO BUTTON */}
         <TouchableOpacity activeOpacity={0.9} onPress={() => router.push("/quiz")} style={styles.quizHero}>
           <View style={styles.quizHeroInner}>
@@ -103,7 +118,7 @@ export default function DashboardScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.quizTitle}>Find Your Perfect Dog</Text>
-              <Text style={styles.quizSub}>8-question quiz · personalized matches</Text>
+              <Text style={styles.quizSub}>12-question quiz · personalized matches</Text>
             </View>
             <View style={styles.quizArrowBox}>
               <ChevronRight size={20} color="#FFF" strokeWidth={3} />
