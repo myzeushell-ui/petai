@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { LayoutDashboard, ClipboardList, MessageCircle, User } from "lucide-react-native";
+import { LayoutDashboard, ClipboardList, MessageCircle, User, Calendar } from "lucide-react-native";
 import { useColors, useTheme } from "../../src/contexts/ThemeContext";
 import { useT } from "../../src/i18n";
 import { Platform } from "react-native";
@@ -29,6 +29,7 @@ export default function PartnerTabsLayout() {
     >
       <Tabs.Screen name="dashboard" options={{ title: t("partner_dashboard"), tabBarIcon: ({ color, size }) => <LayoutDashboard size={size} color={color} strokeWidth={2} /> }} />
       <Tabs.Screen name="orders" options={{ title: t("partner_orders"), tabBarIcon: ({ color, size }) => <ClipboardList size={size} color={color} strokeWidth={2} /> }} />
+      <Tabs.Screen name="schedule" options={{ title: "Schedule", tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} strokeWidth={2} /> }} />
       <Tabs.Screen name="chats" options={{ title: t("partner_chats"), tabBarIcon: ({ color, size }) => <MessageCircle size={size} color={color} strokeWidth={2} /> }} />
       <Tabs.Screen name="profile" options={{ title: t("partner_profile"), tabBarIcon: ({ color, size }) => <User size={size} color={color} strokeWidth={2} /> }} />
     </Tabs>

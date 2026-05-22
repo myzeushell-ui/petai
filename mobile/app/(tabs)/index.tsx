@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles, Stethoscope } from "lucide-react-native";
+import { Bell, ChevronRight, AlertTriangle, TrendingUp, Award, Lightbulb, FlaskConical, Clock, FileText, Utensils, Dna, Mic, Settings, PawPrint, Sparkles, Stethoscope, Camera as CameraIcon, ScanLine } from "lucide-react-native";
 import { usePet } from "../../src/contexts/PetContext";
 import { useColors, useTheme } from "../../src/contexts/ThemeContext";
 import { Card } from "../../src/components/ui/Card";
@@ -9,6 +9,7 @@ import { Badge } from "../../src/components/ui/Badge";
 import { HealthScoreRing } from "../../src/components/ui/HealthScoreRing";
 import { GradientBackground } from "../../src/components/ui/GradientBackground";
 import { PetCoverHeader } from "../../src/components/pet/PetCoverHeader";
+import { DailyInsight } from "../../src/components/home/DailyInsight";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
 import { reminders } from "../../src/data/reminders";
 import { aiInsights } from "../../src/data/aiInsights";
@@ -93,6 +94,23 @@ export default function DashboardScreen() {
                 <Badge label="🦷 Dental" variant="info" />
               </View>
             </Card>
+
+        {/* Daily AI Insight */}
+        <DailyInsight />
+
+        {/* AI VISION row — two buttons side by side */}
+        <View style={{ flexDirection: "row", gap: spacing.sm, marginBottom: spacing.md }}>
+          <TouchableOpacity onPress={() => router.push("/vision?mode=pet")} style={[styles.aiBtn, { backgroundColor: colors.surface, borderColor: colors.primary + "40" }]}>
+            <CameraIcon size={20} color={colors.primary} />
+            <Text style={[styles.aiBtnText, { color: colors.text }]}>Photo analysis</Text>
+            <Text style={[styles.aiBtnSub, { color: colors.textSecondary }]}>Breed · health · mood</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/vision?mode=lab")} style={[styles.aiBtn, { backgroundColor: colors.surface, borderColor: colors.primary + "40" }]}>
+            <ScanLine size={20} color={colors.primary} />
+            <Text style={[styles.aiBtnText, { color: colors.text }]}>Lab decoder</Text>
+            <Text style={[styles.aiBtnSub, { color: colors.textSecondary }]}>Bloodwork → plain Eng</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* AI TRIAGE HERO — primary action */}
         <TouchableOpacity activeOpacity={0.9} onPress={() => router.push("/triage")} style={[styles.quizHero, { backgroundColor: "#DC2626", shadowColor: "#DC2626" }]}>
@@ -238,6 +256,9 @@ const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   insightBody: { fontSize: fontSize.sm, color: colors.textSecondary, lineHeight: 20 },
   insightAction: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: spacing.md },
   insightActionText: { fontSize: fontSize.sm, color: colors.primary, fontWeight: "600" },
+  aiBtn: { flex: 1, padding: spacing.md, borderRadius: radius.lg, borderWidth: 1.5, gap: 4 },
+  aiBtnText: { fontSize: fontSize.sm, fontWeight: "700", marginTop: 4 },
+  aiBtnSub: { fontSize: 10, fontWeight: "500" },
   featureGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
   featureCard: { width: "23%", alignItems: "center", paddingVertical: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, gap: 6 },
   featureIcon: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" },

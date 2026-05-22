@@ -33,6 +33,7 @@ function AppStack() {
         <Stack.Screen name="breeds" />
         <Stack.Screen name="quiz" />
         <Stack.Screen name="triage" />
+        <Stack.Screen name="vision" />
         <Stack.Screen name="reminders" />
         <Stack.Screen name="timeline" />
         <Stack.Screen name="labs" />

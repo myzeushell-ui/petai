@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Send, Bot, Sparkles } from "lucide-react-native";
+import { Send, Bot, Sparkles, Volume2, VolumeX } from "lucide-react-native";
+import * as Speech from "expo-speech";
 import { usePet } from "../../src/contexts/PetContext";
 import { useColors } from "../../src/contexts/ThemeContext";
 import { spacing, radius, fontSize } from "../../src/theme/spacing";
@@ -51,7 +52,23 @@ export default function AssistantScreen() {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [mode, setMode] = useState<"mock" | "live" | "unknown">("unknown");
+  const [voiceOn, setVoiceOn] = useState(false);
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
   const scrollRef = useRef<ScrollView>(null);
+
+  const speak = (text: string, id: string) => {
+    Speech.stop();
+    setSpeakingId(id);
+    Speech.speak(text, {
+      language: "en-US",
+      rate: 1.0,
+      pitch: 1.05,
+      onDone: () => setSpeakingId(null),
+      onStopped: () => setSpeakingId(null),
+      onError: () => setSpeakingId(null),
+    });
+  };
+  const stopSpeak = () => { Speech.stop(); setSpeakingId(null); };
 
   const send = async (text: string) => {
     if (!text.trim()) return;
@@ -90,9 +107,11 @@ export default function AssistantScreen() {
       setMode("mock");
     }
 
-    const reply: Message = { id: (Date.now() + 1).toString(), role: "assistant", text: replyText };
+    const replyId = (Date.now() + 1).toString();
+    const reply: Message = { id: replyId, role: "assistant", text: replyText };
     setMessages((m) => [...m, reply]);
     setTyping(false);
+    if (voiceOn) speak(replyText, replyId);
   };
 
   useEffect(() => {
@@ -107,6 +126,9 @@ export default function AssistantScreen() {
           <Text style={styles.headerTitle}>AI Assistant</Text>
           <Text style={styles.headerSub}>{mode === "live" ? "Powered by Claude" : mode === "mock" ? "Demo mode" : "Connecting..."}</Text>
         </View>
+        <TouchableOpacity onPress={() => { setVoiceOn(!voiceOn); if (voiceOn) stopSpeak(); }} style={[styles.voiceBtn, voiceOn && { backgroundColor: colors.primary + "30" }]}>
+          {voiceOn ? <Volume2 size={18} color={colors.primary} /> : <VolumeX size={18} color={colors.textSecondary} />}
+        </TouchableOpacity>
         <View style={[styles.modePill, mode === "live" && { backgroundColor: colors.primary + "20" }]}>
           <View style={[styles.dot, { backgroundColor: mode === "live" ? colors.primary : "#F59E0B" }]} />
           <Text style={[styles.modeText, mode === "live" && { color: colors.primary }]}>{mode === "live" ? "LIVE" : "DEMO"}</Text>
@@ -117,9 +139,20 @@ export default function AssistantScreen() {
         <ScrollView ref={scrollRef} style={styles.scroll} contentContainerStyle={styles.scrollContent}>
           {messages.map((msg) => (
             <View key={msg.id} style={[styles.msgRow, msg.role === "user" && styles.msgRowUser]}>
-              <View style={[styles.bubble, msg.role === "user" ? styles.bubbleUser : styles.bubbleBot]}>
-                <Text style={[styles.bubbleText, msg.role === "user" && { color: "#FFF" }]}>{msg.text}</Text>
-              </View>
+              <TouchableOpacity
+                onLongPress={() => msg.role === "assistant" && (speakingId === msg.id ? stopSpeak() : speak(msg.text, msg.id))}
+                activeOpacity={0.85}
+              >
+                <View style={[styles.bubble, msg.role === "user" ? styles.bubbleUser : styles.bubbleBot, speakingId === msg.id && { borderWidth: 2, borderColor: colors.primary }]}>
+                  <Text style={[styles.bubbleText, msg.role === "user" && { color: "#FFF" }]}>{msg.text}</Text>
+                  {msg.role === "assistant" && speakingId === msg.id && (
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 4 }}>
+                      <Volume2 size={12} color={colors.primary} />
+                      <Text style={{ fontSize: 10, color: colors.primary, fontWeight: "700" }}>Speaking...</Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
             </View>
           ))}
           {typing && (
@@ -167,6 +200,7 @@ export default function AssistantScreen() {
 const useStyles = (colors: ReturnType<typeof useColors>) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.backgroundSecondary },
   header: { flexDirection: "row", alignItems: "center", gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border },
+  voiceBtn: { width: 36, height: 36, borderRadius: 18, alignItems: "center", justifyContent: "center", backgroundColor: colors.backgroundSecondary },
   modePill: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: spacing.sm, paddingVertical: 4, borderRadius: radius.full, backgroundColor: "#F59E0B20" },
   dot: { width: 6, height: 6, borderRadius: 3 },
   modeText: { fontSize: 10, fontWeight: "700", color: "#F59E0B", letterSpacing: 0.5 },

@@ -11,7 +11,27 @@ import { Badge } from "../src/components/ui/Badge";
 import { Button } from "../src/components/ui/Button";
 import { PetSwitcher } from "../src/components/pet/PetSwitcher";
 import { useColors } from "../src/contexts/ThemeContext";
+import { TrendChart } from "../src/components/ui/TrendChart";
 import { spacing, radius, fontSize } from "../src/theme/spacing";
+import { Dimensions } from "react-native";
+const { width: SW } = Dimensions.get("window");
+
+// Mock historical ALT trend
+const altTrend = [
+  { label: "Jan", value: 78 },
+  { label: "Mar", value: 92 },
+  { label: "Jun", value: 105 },
+  { label: "Sep", value: 118 },
+  { label: "Now", value: 128 },
+];
+// Weight trend
+const weightTrend = [
+  { label: "Jan", value: 27.2 },
+  { label: "Mar", value: 27.8 },
+  { label: "Jun", value: 28.1 },
+  { label: "Sep", value: 28.3 },
+  { label: "Now", value: 28.5 },
+];
 
 export default function LabsScreen() {
   const { activePet } = usePet();
@@ -41,7 +61,20 @@ export default function LabsScreen() {
         }}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        <Button title="Upload New Report" icon={<Upload size={16} color="#FFF" />} style={{ marginBottom: spacing.lg }} />
+        <Button title="Upload & Decode with AI" icon={<Upload size={16} color="#FFF" />} onPress={() => router.push("/vision?mode=lab")} style={{ marginBottom: spacing.lg }} />
+
+        {/* Trend charts */}
+        <Card variant="elevated" style={{ marginBottom: spacing.md }}>
+          <Text style={{ fontSize: fontSize.md, fontWeight: "700", color: colors.text, marginBottom: 4 }}>ALT (Liver Enzyme) trend</Text>
+          <Text style={{ fontSize: fontSize.xs, color: colors.textSecondary, marginBottom: spacing.md }}>Reference 10-100 U/L · trending up over the year</Text>
+          <TrendChart data={altTrend} width={SW - 64} height={140} unit="U/L" refLow={10} refHigh={100} color={colors.warning} />
+        </Card>
+
+        <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+          <Text style={{ fontSize: fontSize.md, fontWeight: "700", color: colors.text, marginBottom: 4 }}>Weight trend (kg)</Text>
+          <Text style={{ fontSize: fontSize.xs, color: colors.textSecondary, marginBottom: spacing.md }}>Stable around ideal range</Text>
+          <TrendChart data={weightTrend} width={SW - 64} height={140} unit="kg" color={colors.primary} />
+        </Card>
 
         {petLabs.map((lab) => (
           <Card key={lab.id} variant="elevated" style={styles.labCard}>
