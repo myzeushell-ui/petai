@@ -102,14 +102,15 @@ const p1c: ThemePalette = {
 // ============ Glass iOS palettes (dark) ============
 
 const p2a: ThemePalette = {
-  background: "#0A0717", backgroundSecondary: "#15102A", surface: "rgba(255,255,255,0.06)", surfaceElevated: "rgba(255,255,255,0.1)",
-  text: "#FFFFFF", textSecondary: "#94a3b8", textTertiary: "#64748B", textInverse: "#0A0717",
-  border: "rgba(255,255,255,0.12)", borderLight: "rgba(255,255,255,0.06)",
-  primary: "#A855F7", primaryDark: "#7C3AED", primaryLight: "rgba(168,85,247,0.25)",
-  success: "#4ADE80", warning: "#FBBF24", danger: "#F87171", info: "#38BDF8",
-  healthExcellent: "#4ADE80", healthGood: "#38BDF8", healthFair: "#FBBF24", healthPoor: "#F87171",
-  cardShadow: "rgba(0,0,0,0.3)", overlay: "rgba(10,7,23,0.6)",
-  glassBg: "rgba(255,255,255,0.08)", glassBorder: "rgba(255,255,255,0.14)",
+  // Slightly more opaque base for cards to make text crisp on busy gradients
+  background: "#0A0717", backgroundSecondary: "#15102A", surface: "rgba(30,18,55,0.85)", surfaceElevated: "rgba(40,25,70,0.92)",
+  text: "#FFFFFF", textSecondary: "#D4BFFF", textTertiary: "#9A86C7", textInverse: "#0A0717",
+  border: "rgba(196,170,255,0.25)", borderLight: "rgba(196,170,255,0.12)",
+  primary: "#C084FC", primaryDark: "#A855F7", primaryLight: "rgba(192,132,252,0.3)",
+  success: "#86EFAC", warning: "#FCD34D", danger: "#FCA5A5", info: "#7DD3FC",
+  healthExcellent: "#86EFAC", healthGood: "#7DD3FC", healthFair: "#FCD34D", healthPoor: "#FCA5A5",
+  cardShadow: "rgba(0,0,0,0.5)", overlay: "rgba(10,7,23,0.7)",
+  glassBg: "rgba(30,18,55,0.75)", glassBorder: "rgba(196,170,255,0.3)",
 };
 
 const p2b: ThemePalette = {

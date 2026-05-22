@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, Camera, Settings, User } from "lucide-react-native";
 import { useTheme } from "../../contexts/ThemeContext";
 import { usePet } from "../../contexts/PetContext";
@@ -23,6 +24,7 @@ interface Props {
 export function PetCoverHeader({ height = 240, showBack, onBack, onSettings }: Props) {
   const { theme, colors } = useTheme();
   const { activePet } = usePet();
+  const insets = useSafeAreaInsets();
   const [petPhoto, setPetPhoto] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
 
@@ -50,8 +52,12 @@ export function PetCoverHeader({ height = 240, showBack, onBack, onSettings }: P
     }
   };
 
+  // Safe-area top inset for status bar / camera notch
+  const topPad = insets.top + 8;
+  const totalHeight = height + topPad;
+
   return (
-    <View style={[styles.container, { height }]}>
+    <View style={[styles.container, { height: totalHeight }]}>
       <TouchableOpacity activeOpacity={0.85} onPress={changePetPhoto} style={StyleSheet.absoluteFillObject}>
         <ImageBackground source={{ uri: photoUri }} style={StyleSheet.absoluteFillObject} resizeMode="cover">
           <LinearGradient
@@ -62,8 +68,8 @@ export function PetCoverHeader({ height = 240, showBack, onBack, onSettings }: P
         </ImageBackground>
       </TouchableOpacity>
 
-      {/* Status row */}
-      <View style={styles.statusRow} pointerEvents="box-none">
+      {/* Status row — pushed BELOW status bar by safe-area inset */}
+      <View style={[styles.statusRow, { top: topPad }]} pointerEvents="box-none">
         {showBack && onBack ? (
           <TouchableOpacity onPress={onBack} style={styles.iconBtn}>
             <ArrowLeft size={18} color="#fff" />
@@ -82,10 +88,10 @@ export function PetCoverHeader({ height = 240, showBack, onBack, onSettings }: P
         )}
       </View>
 
-      {/* User avatar overlay (Facebook-style, tap to change) */}
+      {/* User avatar — positioned relative to safe-area-adjusted status row */}
       <TouchableOpacity
         onPress={changeUserAvatar}
-        style={[styles.userAvatar, { borderColor: theme.isDark ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.85)" }]}
+        style={[styles.userAvatar, { top: topPad + 56, borderColor: theme.isDark ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.85)" }]}
         activeOpacity={0.75}
       >
         {userAvatar ? (
@@ -113,9 +119,9 @@ export function PetCoverHeader({ height = 240, showBack, onBack, onSettings }: P
 
 const styles = StyleSheet.create({
   container: { position: "relative", overflow: "hidden", justifyContent: "flex-end" },
-  statusRow: { position: "absolute", top: 50, left: 0, right: 0, paddingHorizontal: spacing.lg, flexDirection: "row", alignItems: "center", zIndex: 4 },
+  statusRow: { position: "absolute", left: 0, right: 0, paddingHorizontal: spacing.lg, flexDirection: "row", alignItems: "center", zIndex: 4 },
   iconBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(0,0,0,0.4)", alignItems: "center", justifyContent: "center" },
-  userAvatar: { position: "absolute", top: 105, right: 16, zIndex: 5, width: 56, height: 56, borderRadius: 28, borderWidth: 3, overflow: "hidden", alignItems: "center", justifyContent: "center", elevation: 5, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 },
+  userAvatar: { position: "absolute", right: 16, zIndex: 5, width: 56, height: 56, borderRadius: 28, borderWidth: 3, overflow: "hidden", alignItems: "center", justifyContent: "center", elevation: 5, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 },
   petInfo: { position: "relative", zIndex: 2, padding: spacing.lg, paddingBottom: spacing.lg },
   petName: { fontSize: 32, fontWeight: "800", letterSpacing: -0.02 * 32, color: "#fff", lineHeight: 34, textShadowColor: "rgba(0,0,0,0.4)", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 8 },
   petMeta: { fontSize: fontSize.sm, color: "rgba(255,255,255,0.95)", marginTop: 4, textShadowColor: "rgba(0,0,0,0.4)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 4 },

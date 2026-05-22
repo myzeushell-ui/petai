@@ -2,9 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
-import { ArrowLeft, Bell, Palette, Globe, HelpCircle, Shield, Star, LogOut, ChevronRight, Heart, Trash2, Database } from "lucide-react-native";
+import { ArrowLeft, Bell, Palette, Globe, HelpCircle, Shield, Star, LogOut, ChevronRight, Heart, Trash2, Database, UserCog } from "lucide-react-native";
 import { usePet } from "../src/contexts/PetContext";
 import { useTheme, useColors } from "../src/contexts/ThemeContext";
+import { useRole } from "../src/contexts/RoleContext";
+import { useI18n, useT, LANG_LIST } from "../src/i18n";
 import { Card } from "../src/components/ui/Card";
 import { ThemePicker } from "../src/components/settings/ThemePicker";
 import { sendTestNotification } from "../src/services/notifications";
@@ -27,9 +29,14 @@ export default function SettingsScreen() {
   const { activePet, pets } = usePet();
   const { theme } = useTheme();
   const colors = useColors();
+  const { role } = useRole();
+  const { lang, setLang } = useI18n();
+  const t = useT();
   const styles = useStyles(colors);
   const [notifications, setNotifications] = React.useState(true);
   const [insights, setInsights] = React.useState(true);
+  const [langPickerOpen, setLangPickerOpen] = React.useState(false);
+  const currentLang = LANG_LIST.find((l) => l.code === lang);
 
   const Row = ({ icon: Icon, iconColor = colors.text, label, value, onPress, toggle, toggleValue, onToggle, danger }: RowProps) => {
     const Content = (
@@ -152,7 +159,20 @@ export default function SettingsScreen() {
           <View style={styles.divider} />
           <Row icon={Heart} iconColor="#EC4899" label="AI insights" toggle toggleValue={insights} onToggle={setInsights} />
           <View style={styles.divider} />
-          <Row icon={Globe} iconColor="#0EA5E9" label="Language" value="English" onPress={() => Alert.alert("Language", "More languages coming soon")} />
+          <Row icon={Globe} iconColor="#0EA5E9" label={t("language")} value={`${currentLang?.flag} ${currentLang?.name}`} onPress={() => setLangPickerOpen(!langPickerOpen)} />
+          {langPickerOpen && (
+            <View style={{ paddingHorizontal: spacing.md, paddingBottom: spacing.md, gap: 4 }}>
+              {LANG_LIST.map((l) => (
+                <TouchableOpacity key={l.code} onPress={() => { setLang(l.code); setLangPickerOpen(false); }} style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingVertical: 10, paddingHorizontal: spacing.sm, borderRadius: radius.md, backgroundColor: lang === l.code ? colors.primary + "20" : "transparent" }}>
+                  <Text style={{ fontSize: 22 }}>{l.flag}</Text>
+                  <Text style={{ fontSize: fontSize.md, color: lang === l.code ? colors.primary : colors.text, fontWeight: lang === l.code ? "700" : "500", flex: 1 }}>{l.name}</Text>
+                  {lang === l.code && <Text style={{ color: colors.primary, fontWeight: "800" }}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+          <View style={styles.divider} />
+          <Row icon={UserCog} iconColor="#A855F7" label={t("switch_role")} value={role === "owner" ? t("owner_mode") : t("partner_mode")} onPress={() => router.push("/role-select")} />
         </Card>
 
         {/* Data & Privacy */}

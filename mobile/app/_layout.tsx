@@ -8,6 +8,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from "@expo-google-fonts/inter";
 import { PetProvider } from "../src/contexts/PetContext";
 import { ThemeProvider, useTheme } from "../src/contexts/ThemeContext";
+import { RoleProvider } from "../src/contexts/RoleContext";
+import { I18nProvider } from "../src/i18n";
 import { syncReminders } from "../src/services/notifications";
 import { reminders as initialReminders } from "../src/data/reminders";
 import { demoPets } from "../src/data/demoPets";
@@ -15,20 +17,18 @@ import { demoPets } from "../src/data/demoPets";
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const ONBOARDING_KEY = "@petai:onboarded";
+const ROLE_PICKED_KEY = "@petai:role-picked";
 
 function AppStack() {
-  const { colors, isDark } = useTheme();
+  const { isDark } = useTheme();
   return (
     <>
       <StatusBar style={isDark ? "light" : "dark"} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
-        }}
-      >
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(partner)" />
         <Stack.Screen name="onboarding" options={{ presentation: "fullScreenModal" }} />
+        <Stack.Screen name="role-select" options={{ presentation: "fullScreenModal" }} />
         <Stack.Screen name="settings" />
         <Stack.Screen name="breeds" />
         <Stack.Screen name="quiz" />
@@ -40,6 +40,8 @@ function AppStack() {
         <Stack.Screen name="nutrition" />
         <Stack.Screen name="breeding" />
         <Stack.Screen name="collar" />
+        <Stack.Screen name="order/[id]" />
+        <Stack.Screen name="chat/[id]" />
       </Stack>
     </>
   );
@@ -55,15 +57,18 @@ export default function RootLayout() {
   useEffect(() => {
     (async () => {
       try {
-        const done = await AsyncStorage.getItem(ONBOARDING_KEY);
-        if (!done) {
+        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_KEY);
+        const rolePicked = await AsyncStorage.getItem(ROLE_PICKED_KEY);
+        if (!onboardingDone) {
           await AsyncStorage.setItem(ONBOARDING_KEY, "1");
           router.replace("/onboarding");
+        } else if (!rolePicked) {
+          await AsyncStorage.setItem(ROLE_PICKED_KEY, "1");
+          router.replace("/role-select");
         }
       } catch {}
       setChecking(false);
 
-      // Sync notifications after onboarding decided
       setTimeout(() => {
         syncReminders(initialReminders, (petId) => demoPets.find((p) => p.id === petId)?.name ?? "Your pet")
           .catch((e) => console.warn("Notification sync failed:", e));
@@ -87,11 +92,15 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutReady}>
-      <ThemeProvider>
-        <PetProvider>
-          <AppStack />
-        </PetProvider>
-      </ThemeProvider>
+      <I18nProvider>
+        <ThemeProvider>
+          <RoleProvider>
+            <PetProvider>
+              <AppStack />
+            </PetProvider>
+          </RoleProvider>
+        </ThemeProvider>
+      </I18nProvider>
     </GestureHandlerRootView>
   );
 }
