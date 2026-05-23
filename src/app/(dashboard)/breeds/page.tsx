@@ -1,19 +1,57 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ChevronDown, Heart, Home, Dumbbell, Scissors, Baby, Dog, Cat, X } from "lucide-react";
+import { Search, Filter, ChevronDown, Heart, Home, Dumbbell, Scissors, Baby, Dog, Cat, X, ArrowRight, GraduationCap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { allBreeds, type Breed } from "@/data/breeds";
+import { useLocale } from "@/contexts/LocaleContext";
+import { t, type LocaleString } from "@/lib/i18n";
 
-const sizeLabels: Record<string, string> = { small: "Small", medium: "Medium", large: "Large", giant: "Giant" };
-const activityLabels: Record<string, string> = { low: "Low", medium: "Medium", high: "High", very_high: "Very high" };
-const groomingLabels: Record<string, string> = { low: "Minimal", medium: "Moderate", high: "Demanding" };
+const sizeLabels: Record<string, LocaleString> = {
+  small:  { en: "Small",  ru: "Малая" },
+  medium: { en: "Medium", ru: "Средняя" },
+  large:  { en: "Large",  ru: "Крупная" },
+  giant:  { en: "Giant",  ru: "Гигантская" },
+};
+const activityLabels: Record<string, LocaleString> = {
+  low:       { en: "Low",       ru: "Низкая" },
+  medium:    { en: "Medium",    ru: "Средняя" },
+  high:      { en: "High",      ru: "Высокая" },
+  very_high: { en: "Very high", ru: "Очень высокая" },
+};
+const groomingLabels: Record<string, LocaleString> = {
+  low:    { en: "Minimal",     ru: "Минимальный" },
+  medium: { en: "Moderate",    ru: "Умеренный" },
+  high:   { en: "Demanding",   ru: "Требовательный" },
+};
+const UI = {
+  searchPlaceholder: { en: "Search by name or trait...", ru: "Поиск по имени или черте..." },
+  speciesLabel:      { en: "Species",   ru: "Вид" },
+  sizeLabel:         { en: "Size",      ru: "Размер" },
+  species_all:       { en: "All",       ru: "Все" },
+  species_dog:       { en: "Dogs",      ru: "Собаки" },
+  species_cat:       { en: "Cats",      ru: "Коты" },
+  size_all:          { en: "Any",       ru: "Любой" },
+  open:              { en: "Open guide", ru: "Открыть гид" },
+  upbringingGuide:   { en: "Lifecycle upbringing guide available", ru: "Доступен гид по воспитанию по этапам" },
+  results_single:    { en: "breed",     ru: "порода" },
+  results_plural:    { en: "breeds",    ru: "пород" },
+  noMatches:         { en: "No matches. Try a different query.", ru: "Ничего не найдено. Попробуй другой запрос." },
+  pageTitle:         { en: "Breeds",    ru: "Породы" },
+  pageSub:           { en: "breeds — find your perfect match", ru: "пород — найди свою" },
+  kids:              { en: "Kids",       ru: "С детьми" },
+  otherPets:         { en: "Other pets", ru: "С питомцами" },
+  apartment:         { en: "Apartment",  ru: "Квартира" },
+  healthRisks:       { en: "Health risks", ru: "Риски" },
+};
 
 function BreedCard({ breed, index }: { breed: Breed; index: number }) {
   const [expanded, setExpanded] = useState(false);
+  const { locale } = useLocale();
 
   return (
     <motion.div
@@ -32,13 +70,13 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">{breed.name}</h3>
                   <Badge variant={breed.species === "dog" ? "success" : "info"} className="text-[10px]">
-                    {breed.species === "dog" ? "Dog" : "Cat"}
+                    {breed.species === "dog" ? (locale === "ru" ? "Собака" : "Dog") : (locale === "ru" ? "Кот" : "Cat")}
                   </Badge>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">{breed.origin}</p>
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {breed.traits.slice(0, 3).map((t) => (
-                    <span key={t} className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-0.5 text-[10px] text-gray-600 dark:text-gray-300">{t}</span>
+                  {breed.traits.slice(0, 3).map((trait) => (
+                    <span key={trait} className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-0.5 text-[10px] text-gray-600 dark:text-gray-300">{trait}</span>
                   ))}
                 </div>
               </div>
@@ -58,56 +96,69 @@ function BreedCard({ breed, index }: { breed: Breed; index: number }) {
                 <div className="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4 space-y-3">
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Size</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{sizeLabels[breed.size]}</p>
+                      <p className="text-gray-400">{t(UI.sizeLabel, locale)}</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{t(sizeLabels[breed.size], locale)}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Weight</p>
+                      <p className="text-gray-400">{locale === "ru" ? "Вес" : "Weight"}</p>
                       <p className="font-medium text-gray-900 dark:text-white">{breed.weight}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Lifespan</p>
+                      <p className="text-gray-400">{locale === "ru" ? "Срок жизни" : "Lifespan"}</p>
                       <p className="font-medium text-gray-900 dark:text-white">{breed.lifespan}</p>
                     </div>
                     <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
-                      <p className="text-gray-400">Activity</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{activityLabels[breed.activity]}</p>
+                      <p className="text-gray-400">{locale === "ru" ? "Активность" : "Activity"}</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{t(activityLabels[breed.activity], locale)}</p>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {breed.goodWithKids && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/40 px-2 py-0.5 text-[10px] text-green-700 dark:text-green-400">
-                        <Baby className="h-3 w-3" /> Kids
+                        <Baby className="h-3 w-3" /> {t(UI.kids, locale)}
                       </span>
                     )}
                     {breed.goodWithPets && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 text-[10px] text-blue-700 dark:text-blue-400">
-                        <Heart className="h-3 w-3" /> Other pets
+                        <Heart className="h-3 w-3" /> {t(UI.otherPets, locale)}
                       </span>
                     )}
                     {breed.apartment && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 text-[10px] text-purple-700 dark:text-purple-400">
-                        <Home className="h-3 w-3" /> Apartment
+                        <Home className="h-3 w-3" /> {t(UI.apartment, locale)}
                       </span>
                     )}
                     <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 text-[10px] text-orange-700 dark:text-orange-400">
-                      <Scissors className="h-3 w-3" /> {groomingLabels[breed.grooming]}
+                      <Scissors className="h-3 w-3" /> {t(groomingLabels[breed.grooming], locale)}
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-cyan-50 dark:bg-cyan-950/40 px-2 py-0.5 text-[10px] text-cyan-700 dark:text-cyan-400">
-                      <Dumbbell className="h-3 w-3" /> {activityLabels[breed.activity]}
+                      <Dumbbell className="h-3 w-3" /> {t(activityLabels[breed.activity], locale)}
                     </span>
                   </div>
 
                   {breed.healthIssues.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">Health risks</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">{t(UI.healthRisks, locale)}</p>
                       <div className="flex flex-wrap gap-1">
                         {breed.healthIssues.map((h) => (
                           <Badge key={h} variant="warning" className="text-[10px]">{h}</Badge>
                         ))}
                       </div>
                     </div>
+                  )}
+
+                  {breed.species === "dog" && (
+                    <Link
+                      href={`/breeds/${breed.id}`}
+                      className="mt-2 flex items-center justify-between rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 px-3 py-2.5 hover:bg-emerald-100 dark:hover:bg-emerald-950/50 transition-colors"
+                    >
+                      <span className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                        <GraduationCap className="h-3.5 w-3.5" />
+                        {t(UI.upbringingGuide, locale)}
+                      </span>
+                      <ArrowRight className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    </Link>
                   )}
                 </div>
               </motion.div>
@@ -123,6 +174,7 @@ type SpeciesFilter = "all" | "dog" | "cat";
 type SizeFilter = "all" | "small" | "medium" | "large" | "giant";
 
 export default function BreedsPage() {
+  const { locale } = useLocale();
   const [search, setSearch] = useState("");
   const [species, setSpecies] = useState<SpeciesFilter>("all");
   const [size, setSize] = useState<SizeFilter>("all");
@@ -152,9 +204,9 @@ export default function BreedsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              🐾 Breeds
+              🐾 {t(UI.pageTitle, locale)}
             </h1>
-            <p className="text-sm text-gray-500">{allBreeds.length} breeds — find your perfect match</p>
+            <p className="text-sm text-gray-500">{allBreeds.length} {t(UI.pageSub, locale)}</p>
           </div>
         </div>
       </motion.div>
@@ -166,7 +218,7 @@ export default function BreedsPage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name or trait..."
+            placeholder={t(UI.searchPlaceholder, locale)}
             className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-900/30"
           />
           {search && (
@@ -200,7 +252,7 @@ export default function BreedsPage() {
           >
             <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 space-y-3">
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-2">Species</p>
+                <p className="text-xs font-medium text-gray-500 mb-2">{t(UI.speciesLabel, locale)}</p>
                 <div className="flex gap-2">
                   {(["all", "dog", "cat"] as SpeciesFilter[]).map((s) => (
                     <button
@@ -210,13 +262,13 @@ export default function BreedsPage() {
                         species === s ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      {s === "all" ? "All" : s === "dog" ? <><Dog className="h-3.5 w-3.5" /> Dogs</> : <><Cat className="h-3.5 w-3.5" /> Cats</>}
+                      {s === "all" ? t(UI.species_all, locale) : s === "dog" ? <><Dog className="h-3.5 w-3.5" /> {t(UI.species_dog, locale)}</> : <><Cat className="h-3.5 w-3.5" /> {t(UI.species_cat, locale)}</>}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-2">Size</p>
+                <p className="text-xs font-medium text-gray-500 mb-2">{t(UI.sizeLabel, locale)}</p>
                 <div className="flex flex-wrap gap-2">
                   {(["all", "small", "medium", "large", "giant"] as SizeFilter[]).map((s) => (
                     <button
@@ -226,7 +278,7 @@ export default function BreedsPage() {
                         size === s ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      {s === "all" ? "Any" : sizeLabels[s]}
+                      {s === "all" ? t(UI.size_all, locale) : t(sizeLabels[s], locale)}
                     </button>
                   ))}
                 </div>
@@ -238,7 +290,7 @@ export default function BreedsPage() {
 
       {/* Species quick tabs */}
       <div className="flex items-center gap-3 text-sm">
-        <span className="text-gray-400 font-medium">{filtered.length} {filtered.length === 1 ? "breed" : "breeds"}</span>
+        <span className="text-gray-400 font-medium">{filtered.length} {filtered.length === 1 ? t(UI.results_single, locale) : t(UI.results_plural, locale)}</span>
       </div>
 
       {/* Breed list */}
@@ -248,7 +300,7 @@ export default function BreedsPage() {
         ))}
         {filtered.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-gray-400 text-sm">No matches. Try a different query.</p>
+            <p className="text-gray-400 text-sm">{t(UI.noMatches, locale)}</p>
           </div>
         )}
       </div>

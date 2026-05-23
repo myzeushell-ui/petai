@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { PetProfile } from "@/components/pet/PetProfile";
 import { HealthScore } from "@/components/health/HealthScore";
 import { AIInsightCard } from "@/components/ai/AIInsightCard";
+import { CurrentStageCard } from "@/components/upbringing/CurrentStageCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-1 space-y-6">
           <PetProfile pet={activePet} />
           <HealthScore score={activePet.healthScore} previousScore={83} />
+          <CurrentStageCard />
         </div>
 
         <div className="lg:col-span-2 space-y-6">

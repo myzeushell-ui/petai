@@ -3,25 +3,28 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Bot, PawPrint, ShoppingCart, Stethoscope } from "lucide-react";
+import { LayoutDashboard, Bot, PawPrint, GraduationCap, Stethoscope } from "lucide-react";
 import { useVariant } from "@/contexts/VariantContext";
+import { useLocale } from "@/contexts/LocaleContext";
+import { t, type LocaleString } from "@/lib/i18n";
 
-const navItems = [
-  { href: "/dashboard",     label: "Home",      Icon: LayoutDashboard },
-  { href: "/assistant",     label: "AI",        Icon: Bot             },
-  { href: "/breeds",        label: "Breeds",    Icon: PawPrint        },
-  { href: "/marketplace",   label: "Market",    Icon: ShoppingCart    },
-  { href: "/consultations", label: "Vets",      Icon: Stethoscope     },
+const navItems: Array<{ href: string; label: LocaleString; Icon: any }> = [
+  { href: "/dashboard",     label: { en: "Home",    ru: "Главная" },   Icon: LayoutDashboard },
+  { href: "/assistant",     label: { en: "AI",      ru: "AI" },        Icon: Bot },
+  { href: "/upbringing",    label: { en: "Raise",   ru: "Учить" },     Icon: GraduationCap },
+  { href: "/breeds",        label: { en: "Breeds",  ru: "Породы" },    Icon: PawPrint },
+  { href: "/consultations", label: { en: "Vets",    ru: "Веты" },      Icon: Stethoscope },
 ];
 
 function EmeraldNav() {
   const pathname = usePathname();
   const { colors } = useVariant();
+  const { locale } = useLocale();
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm lg:hidden">
       <div className="flex items-stretch">
         {navItems.map(({ href, label, Icon }) => {
-          const isActive = pathname === href;
+          const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link key={href} href={href} className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2.5 relative">
               {isActive && (
@@ -35,7 +38,7 @@ function EmeraldNav() {
                   strokeWidth={isActive ? 2.5 : 1.8} />
               </motion.div>
               <span className={`text-[10px] font-semibold leading-none ${isActive ? colors.activeIcon : "text-gray-400 opacity-50"}`}>
-                {label}
+                {t(label, locale)}
               </span>
             </Link>
           );
@@ -47,12 +50,12 @@ function EmeraldNav() {
 
 function OceanNav() {
   const pathname = usePathname();
-  const { colors } = useVariant();
+  const { locale } = useLocale();
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t-2 border-indigo-100 dark:border-indigo-900/50 lg:hidden">
       <div className="flex items-stretch">
         {navItems.map(({ href, label, Icon }) => {
-          const isActive = pathname === href;
+          const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link key={href} href={href} className="flex flex-1 flex-col items-center justify-center gap-1 py-3 relative">
               <div className={`flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${
@@ -62,7 +65,7 @@ function OceanNav() {
                   strokeWidth={isActive ? 2.5 : 1.8} />
               </div>
               <span className={`text-[10px] font-bold leading-none ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400"}`}>
-                {label}
+                {t(label, locale)}
               </span>
             </Link>
           );
