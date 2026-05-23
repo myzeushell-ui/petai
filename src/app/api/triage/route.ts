@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { aiMode, callAI, extractJSON } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -81,43 +81,24 @@ function mockTriage(message: string, petName: string): any {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as TriageRequest;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
 
-    if (!apiKey) {
+    if (aiMode() === "mock") {
       return NextResponse.json({
         ...mockTriage(body.message, body.petContext.name),
         mode_label: "mock",
       });
     }
 
-    const anthropic = new Anthropic({ apiKey });
     const ctx = body.petContext;
     const systemPrompt = `${TRIAGE_SYSTEM}\n\nPET CONTEXT:\n- Name: ${ctx.name}\n- Species: ${ctx.species}\n- Breed: ${ctx.breed}\n- Age: ${ctx.age} years`;
 
-    const messages: Anthropic.MessageParam[] = [
-      ...(body.history ?? []).map((h) => ({ role: h.role, content: h.content })),
-      { role: "user", content: body.message },
+    const messages = [
+      ...(body.history ?? []),
+      { role: "user" as const, content: body.message },
     ];
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages,
-    });
-
-    const textBlock = response.content.find((b) => b.type === "text");
-    const raw = textBlock && "text" in textBlock ? textBlock.text : "{}";
-
-    // Parse JSON response from Claude
-    let parsed;
-    try {
-      const cleaned = raw.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
-      parsed = JSON.parse(cleaned);
-    } catch {
-      // Fallback: wrap raw text as a question
-      parsed = { mode: "question", message: raw, options: [] };
-    }
+    const raw = await callAI({ system: systemPrompt, messages, maxTokens: 1024 });
+    const parsed = extractJSON(raw) ?? { mode: "question", message: raw, options: [] };
 
     return NextResponse.json({ ...parsed, mode_label: "live" });
   } catch (err) {

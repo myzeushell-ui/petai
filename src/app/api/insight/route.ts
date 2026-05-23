@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { aiMode, callAI, extractJSON } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -35,30 +35,29 @@ const MOCK_TIPS = [
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as InsightReq;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
     const ctx = body.petContext;
 
-    if (!apiKey) {
+    if (aiMode() === "mock") {
       const tip = MOCK_TIPS[Math.floor(Math.random() * MOCK_TIPS.length)];
       return NextResponse.json({ ...tip, body: tip.body.replace("{pet}", ctx.name), mode_label: "mock" });
     }
 
-    const anthropic = new Anthropic({ apiKey });
     const userMsg = `Generate today's tip for ${ctx.name} — a ${ctx.age}yo ${ctx.breed} (${ctx.species}). Health score: ${ctx.healthScore ?? 80}/100.`;
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
-      max_tokens: 300,
+    const raw = await callAI({
       system: SYSTEM,
+      maxTokens: 300,
       messages: [{ role: "user", content: userMsg }],
     });
 
-    const textBlock = response.content.find((b) => b.type === "text");
-    const raw = textBlock && "text" in textBlock ? textBlock.text : "{}";
-    const cleaned = raw.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
-    const parsed = JSON.parse(cleaned);
+    const parsed = extractJSON(raw);
+    if (!parsed) {
+      const fallback = MOCK_TIPS[0];
+      return NextResponse.json({ ...fallback, body: fallback.body.replace("{pet}", ctx.name), mode_label: "live_fallback" });
+    }
     return NextResponse.json({ ...parsed, mode_label: "live" });
   } catch (err) {
+    console.error("[/api/insight] Error:", err);
     return NextResponse.json({ title: "Daily love", body: "Spend 5 extra minutes with your pet today — it matters more than you think.", category: "care", emoji: "❤️" });
   }
 }

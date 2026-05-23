@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { aiMode, callAI, extractJSON } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -67,7 +67,7 @@ function mockPetVision() {
     coat: { condition: "healthy", note: "Glossy and full." },
     concerns: ["None visible in this photo"],
     mood: "Happy and alert",
-    summary: "Beautiful healthy Golden Retriever in excellent condition. (Demo mode — set ANTHROPIC_API_KEY for real AI analysis)",
+    summary: "Beautiful healthy Golden Retriever in excellent condition. (Demo mode — connect AI Gateway for real analysis)",
   };
 }
 
@@ -90,52 +90,41 @@ function mockLabVision() {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as VisionRequest;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
 
-    if (!apiKey) {
+    if (aiMode() === "mock") {
       return NextResponse.json({
         ...(body.mode === "lab" ? mockLabVision() : mockPetVision()),
         mode_label: "mock",
       });
     }
 
-    const anthropic = new Anthropic({ apiKey });
     const system = body.mode === "lab" ? LAB_VISION_SYSTEM : PET_VISION_SYSTEM;
 
-    // Image source: base64 or URL
-    const imageSource: any = body.image.startsWith("http")
-      ? { type: "url" as const, url: body.image }
-      : { type: "base64" as const, media_type: "image/jpeg" as const, data: body.image.replace(/^data:image\/\w+;base64,/, "") };
+    // Vercel AI SDK accepts image as URL string OR base64 data URL OR Uint8Array.
+    const imageContent = body.image.startsWith("http")
+      ? body.image
+      : body.image.startsWith("data:")
+        ? body.image
+        : `data:image/jpeg;base64,${body.image}`;
 
     let userPrompt = body.mode === "lab" ? "Decode these lab results." : "Analyze this pet photo.";
     if (body.petContext) {
       userPrompt += `\n\nContext: this is ${body.petContext.name}, a ${body.petContext.age}-year-old ${body.petContext.breed} (${body.petContext.species}).`;
     }
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
-      max_tokens: 1500,
+    const raw = await callAI({
       system,
+      maxTokens: 1500,
       messages: [{
         role: "user",
         content: [
-          { type: "image", source: imageSource },
+          { type: "image", image: imageContent },
           { type: "text", text: userPrompt },
         ],
       }],
     });
 
-    const textBlock = response.content.find((b) => b.type === "text");
-    const raw = textBlock && "text" in textBlock ? textBlock.text : "{}";
-
-    let parsed;
-    try {
-      const cleaned = raw.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
-      parsed = JSON.parse(cleaned);
-    } catch {
-      parsed = { summary: raw, error: "parse_failed" };
-    }
-
+    const parsed = extractJSON(raw) ?? { summary: raw, error: "parse_failed" };
     return NextResponse.json({ ...parsed, mode_label: "live" });
   } catch (err) {
     console.error("[/api/vision] Error:", err);
