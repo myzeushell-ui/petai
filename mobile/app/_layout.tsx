@@ -25,6 +25,7 @@ function AppStack() {
     <>
       <StatusBar style={isDark ? "light" : "dark"} />
       <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(partner)" />
         <Stack.Screen name="onboarding" options={{ presentation: "fullScreenModal" }} />
@@ -56,25 +57,15 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    (async () => {
-      try {
-        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_KEY);
-        const rolePicked = await AsyncStorage.getItem(ROLE_PICKED_KEY);
-        if (!onboardingDone) {
-          await AsyncStorage.setItem(ONBOARDING_KEY, "1");
-          router.replace("/onboarding");
-        } else if (!rolePicked) {
-          await AsyncStorage.setItem(ROLE_PICKED_KEY, "1");
-          router.replace("/role-select");
-        }
-      } catch {}
-      setChecking(false);
+    // v1.1.0: root index is now a WebView wrapper of the live web app.
+    // Skip native onboarding/role redirects — those screens still exist
+    // in the codebase but are not reachable through default navigation.
+    setChecking(false);
 
-      setTimeout(() => {
-        syncReminders(initialReminders, (petId) => demoPets.find((p) => p.id === petId)?.name ?? "Your pet")
-          .catch((e) => console.warn("Notification sync failed:", e));
-      }, 2000);
-    })();
+    setTimeout(() => {
+      syncReminders(initialReminders, (petId) => demoPets.find((p) => p.id === petId)?.name ?? "Your pet")
+        .catch((e) => console.warn("Notification sync failed:", e));
+    }, 2000);
   }, []);
 
   const onLayoutReady = useCallback(async () => {
