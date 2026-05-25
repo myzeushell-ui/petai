@@ -11,17 +11,24 @@ import { Button } from "@/components/ui/button";
 import { useVariant, type VariantId } from "@/contexts/VariantContext";
 import { cn } from "@/lib/utils";
 
-/* ── Features ── */
+/* ── Features ──
+ * Per-variant color tuple. For minimal/dark/creative the palette
+ * derives from the theme's base accent (B&W, neon mint, purple/pink).
+ */
+type VariantColorMap = Record<VariantId, string>;
+const MIN = "bg-[#F0F0EE] text-[#1a1a1a]";
+const DARK = "bg-[#0E0E1C] text-[#00FFCC]";
+
 const features = [
-  { Icon: Activity,     title: "Health Score",       desc: "Real-time AI score based on all your pet's data",            color: { emerald: "bg-green-100 text-green-600", ocean: "bg-indigo-100 text-indigo-600", sunset: "bg-amber-100 text-amber-600" } },
-  { Icon: Bot,          title: "AI Health Assistant", desc: "Ask anything — get instant, personalized answers",          color: { emerald: "bg-indigo-100 text-indigo-600", ocean: "bg-cyan-100 text-cyan-600", sunset: "bg-rose-100 text-rose-600" } },
-  { Icon: FlaskConical, title: "Lab Analysis",        desc: "Upload bloodwork, get plain-English AI explanations",       color: { emerald: "bg-blue-100 text-blue-600", ocean: "bg-blue-100 text-blue-600", sunset: "bg-orange-100 text-orange-600" } },
-  { Icon: Bell,         title: "Smart Reminders",     desc: "Never miss a vaccine, medication, or checkup again",        color: { emerald: "bg-orange-100 text-orange-600", ocean: "bg-purple-100 text-purple-600", sunset: "bg-yellow-100 text-yellow-600" } },
-  { Icon: Dna,          title: "Breeding Suite",      desc: "Heat tracker, whelping guide, COI calculator, mating match",color: { emerald: "bg-pink-100 text-pink-600", ocean: "bg-pink-100 text-pink-600", sunset: "bg-red-100 text-red-600" } },
-  { Icon: Mic,          title: "Voice AI",            desc: "Understand your pet's barks and vocalizations in real time", color: { emerald: "bg-purple-100 text-purple-600", ocean: "bg-emerald-100 text-emerald-600", sunset: "bg-purple-100 text-purple-600" } },
-  { Icon: Shield,       title: "Vet Reports",         desc: "All visit records in one place with AI summaries",          color: { emerald: "bg-teal-100 text-teal-600", ocean: "bg-teal-100 text-teal-600", sunset: "bg-teal-100 text-teal-600" } },
-  { Icon: Zap,          title: "Health Timeline",     desc: "Complete medical history with trend analysis",              color: { emerald: "bg-cyan-100 text-cyan-600", ocean: "bg-amber-100 text-amber-600", sunset: "bg-lime-100 text-lime-600" } },
-  { Icon: Heart,        title: "Marketplace",         desc: "Verified breeders, pedigrees, breed picker quiz",           color: { emerald: "bg-rose-100 text-rose-600", ocean: "bg-rose-100 text-rose-600", sunset: "bg-pink-100 text-pink-600" } },
+  { Icon: Activity,     title: "Health Score",       desc: "Real-time AI score based on all your pet's data",            color: { emerald: "bg-green-100 text-green-600",  ocean: "bg-indigo-100 text-indigo-600", sunset: "bg-amber-100 text-amber-600",  minimal: MIN, dark: DARK, creative: "bg-emerald-100 text-[#7C3AED]" } as VariantColorMap },
+  { Icon: Bot,          title: "AI Health Assistant", desc: "Ask anything — get instant, personalized answers",          color: { emerald: "bg-indigo-100 text-indigo-600", ocean: "bg-cyan-100 text-cyan-600",    sunset: "bg-rose-100 text-rose-600",    minimal: MIN, dark: DARK, creative: "bg-purple-100 text-[#7C3AED]"  } as VariantColorMap },
+  { Icon: FlaskConical, title: "Lab Analysis",        desc: "Upload bloodwork, get plain-English AI explanations",       color: { emerald: "bg-blue-100 text-blue-600",    ocean: "bg-blue-100 text-blue-600",     sunset: "bg-orange-100 text-orange-600", minimal: MIN, dark: DARK, creative: "bg-blue-100 text-[#7C3AED]"    } as VariantColorMap },
+  { Icon: Bell,         title: "Smart Reminders",     desc: "Never miss a vaccine, medication, or checkup again",        color: { emerald: "bg-orange-100 text-orange-600",ocean: "bg-purple-100 text-purple-600", sunset: "bg-yellow-100 text-yellow-600",minimal: MIN, dark: DARK, creative: "bg-pink-100 text-[#EC4899]"    } as VariantColorMap },
+  { Icon: Dna,          title: "Breeding Suite",      desc: "Heat tracker, whelping guide, COI calculator, mating match",color: { emerald: "bg-pink-100 text-pink-600",    ocean: "bg-pink-100 text-pink-600",     sunset: "bg-red-100 text-red-600",      minimal: MIN, dark: DARK, creative: "bg-rose-100 text-[#EC4899]"    } as VariantColorMap },
+  { Icon: Mic,          title: "Voice AI",            desc: "Understand your pet's barks and vocalizations in real time", color: { emerald: "bg-purple-100 text-purple-600",ocean: "bg-emerald-100 text-emerald-600",sunset: "bg-purple-100 text-purple-600",minimal: MIN, dark: DARK, creative: "bg-violet-100 text-[#7C3AED]"  } as VariantColorMap },
+  { Icon: Shield,       title: "Vet Reports",         desc: "All visit records in one place with AI summaries",          color: { emerald: "bg-teal-100 text-teal-600",    ocean: "bg-teal-100 text-teal-600",     sunset: "bg-teal-100 text-teal-600",    minimal: MIN, dark: DARK, creative: "bg-teal-100 text-[#7C3AED]"    } as VariantColorMap },
+  { Icon: Zap,          title: "Health Timeline",     desc: "Complete medical history with trend analysis",              color: { emerald: "bg-cyan-100 text-cyan-600",    ocean: "bg-amber-100 text-amber-600",   sunset: "bg-lime-100 text-lime-600",    minimal: MIN, dark: DARK, creative: "bg-cyan-100 text-[#7C3AED]"    } as VariantColorMap },
+  { Icon: Heart,        title: "Marketplace",         desc: "Verified breeders, pedigrees, breed picker quiz",           color: { emerald: "bg-rose-100 text-rose-600",    ocean: "bg-rose-100 text-rose-600",     sunset: "bg-pink-100 text-pink-600",    minimal: MIN, dark: DARK, creative: "bg-amber-100 text-[#EC4899]"   } as VariantColorMap },
 ];
 
 /* ── Pricing ── */
@@ -31,8 +38,8 @@ const plans = [
     price: "$0",
     period: "",
     tagline: "To get started",
-    border: { emerald: "border-gray-200", ocean: "border-gray-200", sunset: "border-gray-200" },
-    accent: { emerald: "bg-gray-50", ocean: "bg-gray-50", sunset: "bg-gray-50" },
+    border: { emerald: "border-gray-200", ocean: "border-gray-200", sunset: "border-gray-200", minimal: "border-[#E0E0DC]",  dark: "border-[#1A1A2E]", creative: "border-purple-200" } as VariantColorMap,
+    accent: { emerald: "bg-gray-50",     ocean: "bg-gray-50",     sunset: "bg-gray-50",     minimal: "bg-[#F5F5F2]",      dark: "bg-[#0E0E1C]",     creative: "bg-purple-50"      } as VariantColorMap,
     cta: "Start for free",
     popular: false,
     features: [
@@ -49,8 +56,8 @@ const plans = [
     price: "$4.99",
     period: "/mo",
     tagline: "For caring pet owners",
-    border: { emerald: "border-green-400", ocean: "border-indigo-400", sunset: "border-amber-400" },
-    accent: { emerald: "bg-green-50", ocean: "bg-indigo-50", sunset: "bg-amber-50" },
+    border: { emerald: "border-green-400", ocean: "border-indigo-400", sunset: "border-amber-400", minimal: "border-[#1a1a1a]",  dark: "border-[#00FFCC]", creative: "border-[#7C3AED]" } as VariantColorMap,
+    accent: { emerald: "bg-green-50",      ocean: "bg-indigo-50",      sunset: "bg-amber-50",      minimal: "bg-[#F0F0EE]",       dark: "bg-[#0A2A20]",     creative: "bg-purple-50"     } as VariantColorMap,
     cta: "Try 14 days free",
     popular: true,
     features: [
@@ -68,8 +75,8 @@ const plans = [
     price: "$9.99",
     period: "/mo",
     tagline: "For professional breeders",
-    border: { emerald: "border-purple-400", ocean: "border-cyan-400", sunset: "border-rose-400" },
-    accent: { emerald: "bg-purple-50", ocean: "bg-cyan-50", sunset: "bg-rose-50" },
+    border: { emerald: "border-purple-400", ocean: "border-cyan-400", sunset: "border-rose-400", minimal: "border-gray-700",   dark: "border-[#EC4899]", creative: "border-[#EC4899]" } as VariantColorMap,
+    accent: { emerald: "bg-purple-50",      ocean: "bg-cyan-50",      sunset: "bg-rose-50",      minimal: "bg-gray-100",        dark: "bg-[#1A1A2E]",     creative: "bg-pink-50"       } as VariantColorMap,
     cta: "Contact us",
     popular: false,
     features: [
@@ -92,12 +99,12 @@ const stats = [
   { value: "$0", label: "To get started" },
 ];
 
-/* ── Variant Picker (landing-only, inline) ── */
+/* ── Variant Picker (landing-only, inline, all 6 themes) ── */
 function LandingVariantPicker() {
   const { variant, setVariant, allVariants } = useVariant();
-  const vList: VariantId[] = ["emerald", "ocean", "sunset"];
+  const vList: VariantId[] = ["emerald", "ocean", "sunset", "minimal", "dark", "creative"];
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-2 flex-wrap max-w-md">
       {vList.map((v) => {
         const vc = allVariants[v];
         return (
