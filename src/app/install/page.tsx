@@ -90,15 +90,15 @@ export default function InstallPage() {
 
             {/* Native APK */}
             <a
-              href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
+              href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
               className="block bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-2xl p-5 shadow-xl shadow-green-500/30 mb-4"
             >
               <div className="flex items-center gap-3">
                 <div className="text-3xl">📱</div>
                 <div className="flex-1">
                   <div className="text-xs font-bold uppercase tracking-wider opacity-90">RECOMMENDED</div>
-                  <div className="text-xl font-extrabold">Download APK (88 MB)</div>
-                  <div className="text-sm opacity-90 mt-1">Native app with all features. Tap to install.</div>
+                  <div className="text-xl font-extrabold">Download APK v1.1.0 (88 MB)</div>
+                  <div className="text-sm opacity-90 mt-1">Native shell over the latest web app — bilingual UI + lifecycle upbringing guide.</div>
                 </div>
                 <div className="text-2xl">↓</div>
               </div>
@@ -149,7 +149,7 @@ export default function InstallPage() {
 
             <div className="space-y-3">
               <a
-                href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
+                href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
                 className="block bg-gradient-to-r from-green-500 to-emerald-600 text-white text-center font-bold py-4 rounded-2xl shadow-lg shadow-green-500/30"
               >
                 📱 Download Android APK
