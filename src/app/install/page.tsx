@@ -86,47 +86,49 @@ export default function InstallPage() {
         {platform === "android" && (
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight mb-2 text-center">Install on Android</h1>
-            <p className="text-center text-gray-600 mb-8">Two ways. Native APK is recommended for full features.</p>
+            <p className="text-center text-gray-600 mb-8">Web install (PWA) — recommended. Always up to date with the latest features.</p>
 
-            {/* Native APK */}
-            <a
-              href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
+            {/* PWA — PRIMARY */}
+            <Link
+              href="/dashboard"
               className="block bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-2xl p-5 shadow-xl shadow-green-500/30 mb-4"
             >
               <div className="flex items-center gap-3">
-                <div className="text-3xl">📱</div>
+                <div className="text-3xl">🌐</div>
                 <div className="flex-1">
-                  <div className="text-xs font-bold uppercase tracking-wider opacity-90">RECOMMENDED</div>
-                  <div className="text-xl font-extrabold">Download APK v1.1.0 (88 MB)</div>
-                  <div className="text-sm opacity-90 mt-1">Native shell over the latest web app — bilingual UI + lifecycle upbringing guide.</div>
+                  <div className="text-xs font-bold uppercase tracking-wider opacity-90">RECOMMENDED · LATEST</div>
+                  <div className="text-xl font-extrabold">Open PetAI now →</div>
+                  <div className="text-sm opacity-90 mt-1">Lifecycle upbringing guide, bilingual UI 🇬🇧/🇷🇺, AI assistant, lab analysis. Always current.</div>
                 </div>
-                <div className="text-2xl">↓</div>
+                <div className="text-2xl">↗</div>
               </div>
-            </a>
-
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-              <div className="font-bold text-amber-900 text-sm">After downloading:</div>
-              <ol className="text-sm text-amber-900 mt-2 space-y-1 ml-4 list-decimal">
-                <li>Tap the downloaded file</li>
-                <li>If asked, allow "Install from unknown sources" for your browser</li>
-                <li>Tap "Install" → open PetAI from app drawer</li>
-              </ol>
-            </div>
-
-            {/* PWA alternative */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">OR: Web version</div>
-              <div className="font-bold text-base">Add to Home Screen via Chrome</div>
-              <ol className="text-sm text-gray-600 mt-2 space-y-1 ml-4 list-decimal">
-                <li>Open <a href="/" className="text-green-600 underline">petai-ochre.vercel.app</a> in Chrome</li>
-                <li>Tap menu (⋮) → "Add to Home screen"</li>
-                <li>Confirm. Icon appears on home screen.</li>
-              </ol>
-            </div>
-
-            <Link href="/" className="block mt-6 text-center font-bold text-green-600 py-2">
-              Or just try it in browser →
             </Link>
+
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+              <div className="font-bold text-emerald-900 text-sm">Add to home screen (looks like an installed app):</div>
+              <ol className="text-sm text-emerald-900 mt-2 space-y-1 ml-4 list-decimal">
+                <li>Open this page in Chrome (you might already be in it)</li>
+                <li>Tap the menu (⋮) in the top right corner</li>
+                <li>Tap <strong>&quot;Add to Home screen&quot;</strong> → <strong>&quot;Install&quot;</strong></li>
+                <li>PetAI icon appears on your home screen. Opens full-screen, no browser bars.</li>
+              </ol>
+            </div>
+
+            {/* Native APK — SECONDARY, clearly marked as old */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">OR: Native APK (older version)</div>
+              <div className="font-bold text-base text-gray-700">PetAI v1.0.0 (May 2026)</div>
+              <p className="text-xs text-gray-500 mt-1 mb-3">
+                Original native build. <strong>Does not include</strong> the bilingual UI or the lifecycle upbringing system —
+                those are in the web version above. Useful only if you need offline access to the early features.
+              </p>
+              <a
+                href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
+                className="block bg-gray-100 text-gray-700 rounded-xl p-3 text-center text-sm font-semibold hover:bg-gray-200"
+              >
+                ↓ Download v1.0.0 APK (88 MB)
+              </a>
+            </div>
           </div>
         )}
 
@@ -148,15 +150,15 @@ export default function InstallPage() {
             </div>
 
             <div className="space-y-3">
-              <a
-                href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
-                className="block bg-gradient-to-r from-green-500 to-emerald-600 text-white text-center font-bold py-4 rounded-2xl shadow-lg shadow-green-500/30"
-              >
-                📱 Download Android APK
-              </a>
-              <Link href="/" className="block bg-white border-2 border-gray-200 text-gray-800 text-center font-bold py-4 rounded-2xl">
-                🌐 Open web app
+              <Link href="/dashboard" className="block bg-gradient-to-r from-green-500 to-emerald-600 text-white text-center font-bold py-4 rounded-2xl shadow-lg shadow-green-500/30">
+                🌐 Open web app (latest)
               </Link>
+              <a
+                href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
+                className="block bg-white border-2 border-gray-200 text-gray-700 text-center font-semibold py-4 rounded-2xl text-sm"
+              >
+                ↓ Legacy v1.0.0 APK (88 MB)
+              </a>
             </div>
           </div>
         )}
