@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PetProfile } from "@/components/pet/PetProfile";
 import { HealthScore } from "@/components/health/HealthScore";
 import { AIInsightCard } from "@/components/ai/AIInsightCard";
 import { CurrentStageCard } from "@/components/upbringing/CurrentStageCard";
+import { PetCoverHeader } from "@/components/pet/PetCoverHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,19 @@ import { formatDate } from "@/lib/utils";
 import { Bell, ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import { usePet } from "@/contexts/PetContext";
+import { useLocale } from "@/contexts/LocaleContext";
+import { t } from "@/lib/i18n";
+
+const UI = {
+  upcomingReminders: { en: "Upcoming Reminders",  ru: "Ближайшие напоминания" },
+  viewAll:           { en: "View all",            ru: "Все" },
+  aiInsightsTitle:   { en: "AI Health Insights",  ru: "AI инсайты здоровья" },
+  askAi:             { en: "Ask AI",              ru: "Спросить AI" },
+};
 
 export default function DashboardPage() {
   const { activePet } = usePet();
+  const { locale } = useLocale();
   const urgentReminders = reminders
     .filter((r) => !r.completed && r.priority === "high")
     .slice(0, 3);
@@ -25,16 +35,11 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Good morning, Alex 👋
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Here&apos;s how {activePet.name} is doing today</p>
-      </motion.div>
+      {/* Pet cover photo — Facebook-style hero */}
+      <PetCoverHeader />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1 space-y-6">
-          <PetProfile pet={activePet} />
           <HealthScore score={activePet.healthScore} previousScore={83} />
           <CurrentStageCard />
         </div>
@@ -46,11 +51,11 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Bell className="h-4 w-4 text-orange-500" />
-                  Upcoming Reminders
+                  {t(UI.upcomingReminders, locale)}
                 </CardTitle>
                 <Link href="/reminders">
                   <Button variant="ghost" size="sm" className="text-xs">
-                    View all <ArrowRight className="h-3 w-3" />
+                    {t(UI.viewAll, locale)} <ArrowRight className="h-3 w-3" />
                   </Button>
                 </Link>
               </div>
@@ -80,11 +85,11 @@ export default function DashboardPage() {
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <span>🤖</span> AI Health Insights
+                <span>🤖</span> {t(UI.aiInsightsTitle, locale)}
               </h2>
               <Link href="/assistant">
                 <Button variant="ghost" size="sm" className="text-xs">
-                  Ask AI <ArrowRight className="h-3 w-3" />
+                  {t(UI.askAi, locale)} <ArrowRight className="h-3 w-3" />
                 </Button>
               </Link>
             </div>
