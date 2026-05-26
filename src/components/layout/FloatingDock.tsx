@@ -2,33 +2,36 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Bot, PawPrint, ShoppingCart, Stethoscope,
-  FlaskConical, Dna, Utensils, MoreHorizontal,
+  FlaskConical, Dna, Utensils, MoreHorizontal, GraduationCap,
 } from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import { useVariant } from "@/contexts/VariantContext";
+import { useLocale } from "@/contexts/LocaleContext";
+import { t, type LocaleString } from "@/lib/i18n";
 
-const mainItems = [
-  { href: "/dashboard", label: "Home", Icon: LayoutDashboard },
-  { href: "/assistant", label: "AI", Icon: Bot },
-  { href: "/breeds", label: "Breeds", Icon: PawPrint },
-  { href: "/marketplace", label: "Market", Icon: ShoppingCart },
-  { href: "/consultations", label: "Vets", Icon: Stethoscope },
+const mainItems: Array<{ href: string; label: LocaleString; Icon: any }> = [
+  { href: "/dashboard",     label: { en: "Home",   ru: "Главная" }, Icon: LayoutDashboard },
+  { href: "/assistant",     label: { en: "AI",     ru: "AI" },      Icon: Bot },
+  { href: "/upbringing",    label: { en: "Raise",  ru: "Учить" },   Icon: GraduationCap },
+  { href: "/breeds",        label: { en: "Breeds", ru: "Породы" },  Icon: PawPrint },
+  { href: "/consultations", label: { en: "Vets",   ru: "Веты" },    Icon: Stethoscope },
 ];
 
-const moreItems = [
-  { href: "/nutrition", label: "Nutrition", Icon: Utensils },
-  { href: "/breeding", label: "Breeding", Icon: Dna },
-  { href: "/labs", label: "Labs", Icon: FlaskConical },
+const moreItems: Array<{ href: string; label: LocaleString; Icon: any }> = [
+  { href: "/nutrition",   label: { en: "Nutrition", ru: "Питание" },     Icon: Utensils },
+  { href: "/breeding",    label: { en: "Breeding",  ru: "Разведение" },  Icon: Dna },
+  { href: "/labs",        label: { en: "Labs",      ru: "Анализы" },     Icon: FlaskConical },
+  { href: "/marketplace", label: { en: "Market",    ru: "Маркет" },      Icon: ShoppingCart },
 ];
 
 export function FloatingDock() {
   const pathname = usePathname();
   const [showMore, setShowMore] = useState(false);
   const { colors } = useVariant();
+  const { locale } = useLocale();
 
   return (
     <>
@@ -51,19 +54,20 @@ export function FloatingDock() {
               className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] flex gap-2 rounded-2xl border border-white/10 bg-gray-900/95 dark:bg-gray-800/95 backdrop-blur-xl p-2 shadow-2xl"
             >
               {moreItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                const label = t(item.label, locale);
                 return (
                   <Link key={item.href} href={item.href} onClick={() => setShowMore(false)}>
                     <motion.div
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       className={`flex flex-col items-center gap-1 rounded-xl px-4 py-2.5 ${
-                        isActive ? "bg-amber-500/20" : "hover:bg-white/10"
+                        isActive ? "bg-white/10" : "hover:bg-white/5"
                       }`}
                     >
-                      <item.Icon className={`h-5 w-5 ${isActive ? "text-amber-400" : "text-gray-400"}`} />
-                      <span className={`text-[10px] font-medium ${isActive ? "text-amber-400" : "text-gray-500"}`}>
-                        {item.label}
+                      <item.Icon className={`h-5 w-5 ${isActive ? colors.activeIcon : "text-gray-400"}`} />
+                      <span className={`text-[10px] font-medium ${isActive ? colors.activeText : "text-gray-500"}`}>
+                        {label}
                       </span>
                     </motion.div>
                   </Link>
@@ -83,15 +87,15 @@ export function FloatingDock() {
           className="flex items-center gap-1.5 rounded-full border border-white/10 bg-gray-900/90 dark:bg-gray-800/90 backdrop-blur-xl px-3 py-2 shadow-2xl shadow-black/30"
         >
           {mainItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href} href={item.href} aria-label={t(item.label, locale)}>
                 <motion.div
                   whileHover={{ scale: 1.15, y: -4 }}
                   whileTap={{ scale: 0.9 }}
                   className={`relative flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                     isActive
-                      ? "bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/30"
+                      ? `${colors.logoBg} shadow-lg ${colors.shadow}`
                       : "hover:bg-white/10"
                   }`}
                 >
@@ -102,7 +106,7 @@ export function FloatingDock() {
                   {isActive && (
                     <motion.div
                       layoutId="dockGlow"
-                      className="absolute -bottom-1.5 h-1 w-4 rounded-full bg-amber-400 blur-[2px]"
+                      className={`absolute -bottom-1.5 h-1 w-4 rounded-full ${colors.navLine} blur-[2px]`}
                       transition={{ type: "spring", stiffness: 500, damping: 30 }}
                     />
                   )}
@@ -116,6 +120,7 @@ export function FloatingDock() {
             whileHover={{ scale: 1.15, y: -4 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowMore(!showMore)}
+            aria-label="More"
             className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
               showMore ? "bg-white/20" : "hover:bg-white/10"
             }`}
