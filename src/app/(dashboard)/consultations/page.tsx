@@ -9,12 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   Star, MapPin, Clock, Video, Filter, Calendar, CreditCard, Check, ArrowLeft, Lock, Shield,
 } from "lucide-react";
+import { useLocale } from "@/contexts/LocaleContext";
 
 type Step = "list" | "detail" | "booking" | "payment" | "success";
 
 const TIME_SLOTS = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00", "18:30"];
 
 export default function ConsultationsPage() {
+  const { locale } = useLocale();
   const [step, setStep] = useState<Step>("list");
   const [filter, setFilter] = useState<ConsultantSpecialty | "all">("all");
   const [selected, setSelected] = useState<Consultant | null>(null);
@@ -40,12 +42,12 @@ export default function ConsultationsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Consultations</h1>
-          <p className="text-sm text-gray-500">Vets, trainers, breeders — online and in-person</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{locale === "ru" ? "Консультации" : "Consultations"}</h1>
+          <p className="text-sm text-gray-500">{locale === "ru" ? "Ветеринары, кинологи, заводчики — онлайн и очно" : "Vets, trainers, breeders — online and in-person"}</p>
         </div>
         {step !== "list" && (
           <Button variant="ghost" size="sm" onClick={reset}>
-            <ArrowLeft className="h-4 w-4" /> Back to list
+            <ArrowLeft className="h-4 w-4" /> {locale === "ru" ? "Назад" : "Back to list"}
           </Button>
         )}
       </div>

@@ -9,6 +9,7 @@ import { usePet } from "@/contexts/PetContext";
 import { getNutritionPlan, getFoodRecommendations, type FoodItem } from "@/data/nutrition";
 import { Star, AlertTriangle, Utensils, Apple, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/contexts/LocaleContext";
 
 function FoodCard({ food, index }: { food: FoodItem; index: number }) {
   return (
@@ -69,6 +70,7 @@ function FoodCard({ food, index }: { food: FoodItem; index: number }) {
 
 export default function NutritionPage() {
   const { activePet } = usePet();
+  const { locale } = useLocale();
   const [tab, setTab] = useState<"plan" | "food">("plan");
 
   // Determine size from breed/weight
@@ -92,10 +94,10 @@ export default function NutritionPage() {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Utensils className="h-6 w-6 text-orange-500" />
-          Nutrition
+          {locale === "ru" ? "Питание" : "Nutrition"}
         </h1>
         <p className="text-sm text-gray-500">
-          Balanced diet for {activePet.name} — {activePet.breed}, {activePet.age}{activePet.age === 1 ? "y" : "y"}, {activePet.weight} kg
+          {locale === "ru" ? "Сбалансированное питание для" : "Balanced diet for"} {activePet.name} — {activePet.breed}, {activePet.age}{locale === "ru" ? " г" : "y"}, {activePet.weight} {locale === "ru" ? "кг" : "kg"}
         </p>
       </motion.div>
 

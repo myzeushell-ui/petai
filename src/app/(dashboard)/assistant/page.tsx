@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePet } from "@/contexts/PetContext";
+import { useLocale } from "@/contexts/LocaleContext";
 
 interface Message {
   id: string;
@@ -39,6 +40,7 @@ function getMockResponse(query: string, name: string, score: number, weight: num
 
 export default function AssistantPage() {
   const { activePet } = usePet();
+  const { locale } = useLocale();
 
   const suggestedQuestions = [
     `What does ${activePet.name}'s elevated ALT mean?`,
@@ -127,8 +129,8 @@ export default function AssistantPage() {
           <Bot className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">AI Health Assistant</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Powered by {activePet.name}&apos;s health data</p>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">{locale === "ru" ? "AI Ассистент здоровья" : "AI Health Assistant"}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{locale === "ru" ? "На данных " : "Powered by "}{activePet.name}{locale === "ru" ? "" : "'s health data"}</p>
         </div>
         <div className={`ml-auto flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${
           aiMode === "live"

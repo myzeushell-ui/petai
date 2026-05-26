@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { marketplaceListings, type MarketplaceFilter, type MarketplaceListing } from "@/data/marketplace";
+import { useLocale } from "@/contexts/LocaleContext";
 
 const filterTabs: { value: MarketplaceFilter; label: string; emoji: string }[] = [
   { value: "all", label: "All", emoji: "📋" },
@@ -99,6 +100,7 @@ function ListingCard({ listing, index }: { listing: MarketplaceListing; index: n
 }
 
 export default function MarketplacePage() {
+  const { locale } = useLocale();
   const [filter, setFilter] = useState<MarketplaceFilter>("all");
   const [search, setSearch] = useState("");
 
@@ -120,9 +122,9 @@ export default function MarketplacePage() {
   return (
     <div className="space-y-4">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🛒 Marketplace</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🛒 {locale === "ru" ? "Маркетплейс" : "Marketplace"}</h1>
         <p className="text-sm text-gray-500">
-          {marketplaceListings.length} listings — puppies, kittens, services, products
+          {marketplaceListings.length} {locale === "ru" ? "объявлений — щенки, котята, услуги, товары" : "listings — puppies, kittens, services, products"}
         </p>
       </motion.div>
 

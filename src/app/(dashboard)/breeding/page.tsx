@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   Heart, Calendar, Dna, FileText, Sparkles, TrendingUp, Check, Download, Award,
 } from "lucide-react";
+import { useLocale } from "@/contexts/LocaleContext";
 
 type Tab = "heat" | "match" | "coi" | "contract";
 
@@ -28,6 +29,7 @@ const CANDIDATES = [
 const PARENT_A = { name: "Luna Goldenroot", coi: 1.8 };
 
 export default function BreedingPage() {
+  const { locale } = useLocale();
   const [tab, setTab] = useState<Tab>("heat");
   const [selected, setSelected] = useState<typeof CANDIDATES[0] | null>(null);
   const [contractGen, setContractGen] = useState(false);
@@ -44,9 +46,9 @@ export default function BreedingPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <Dna className="h-6 w-6 text-pink-500" /> Breeding Suite
+          <Dna className="h-6 w-6 text-pink-500" /> {locale === "ru" ? "Разведение" : "Breeding Suite"}
         </h1>
-        <p className="text-sm text-gray-500">Heat tracker, mating match, COI calculator, auto-contract</p>
+        <p className="text-sm text-gray-500">{locale === "ru" ? "Трекер течки, подбор пары, расчёт COI, авто-договор" : "Heat tracker, mating match, COI calculator, auto-contract"}</p>
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1">

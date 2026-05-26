@@ -5,8 +5,17 @@ import { FlaskConical, Upload } from "lucide-react";
 import { LabResults } from "@/components/health/LabResults";
 import { Button } from "@/components/ui/button";
 import { labResults } from "@/data/labResults";
+import { useLocale } from "@/contexts/LocaleContext";
+import { t } from "@/lib/i18n";
+
+const UI = {
+  title:    { en: "Lab Results",                                  ru: "Анализы" },
+  subtitle: { en: "AI-analyzed bloodwork and diagnostic results", ru: "AI-анализ крови и диагностических результатов" },
+  upload:   { en: "Upload Report",                                ru: "Загрузить" },
+};
 
 export default function LabsPage() {
+  const { locale } = useLocale();
   return (
     <div className="space-y-6">
       <motion.div
@@ -17,13 +26,13 @@ export default function LabsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <FlaskConical className="h-6 w-6 text-cyan-500" />
-            Lab Results
+            {t(UI.title, locale)}
           </h1>
-          <p className="text-sm text-gray-500">AI-analyzed bloodwork and diagnostic results</p>
+          <p className="text-sm text-gray-500">{t(UI.subtitle, locale)}</p>
         </div>
         <Button variant="outline" size="sm" className="gap-2">
           <Upload className="h-4 w-4" />
-          Upload Report
+          {t(UI.upload, locale)}
         </Button>
       </motion.div>
 
