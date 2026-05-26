@@ -114,20 +114,23 @@ export default function InstallPage() {
               </ol>
             </div>
 
-            {/* Native APK — SECONDARY, clearly marked as old */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">OR: Native APK (older version)</div>
-              <div className="font-bold text-base text-gray-700">PetAI v1.0.0 (May 2026)</div>
-              <p className="text-xs text-gray-500 mt-1 mb-3">
-                Original native build. <strong>Does not include</strong> the bilingual UI or the lifecycle upbringing system —
-                those are in the web version above. Useful only if you need offline access to the early features.
+            {/* APK v1.1.0 — TWA wrapper, signed, tiny */}
+            <div className="bg-white border-2 border-emerald-300 rounded-2xl p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-2">📦 Native APK · v1.1.0</div>
+              <div className="font-bold text-base text-gray-900">PetAI APK (1.1 MB)</div>
+              <p className="text-xs text-gray-600 mt-1 mb-3">
+                Native shell over the live web — gives you a real app icon and full-screen launch.
+                All 20 themes, lifecycle upbringing, bilingual UI included. Auto-updates with the web — no reinstall needed.
               </p>
               <a
-                href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
-                className="block bg-gray-100 text-gray-700 rounded-xl p-3 text-center text-sm font-semibold hover:bg-gray-200"
+                href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
+                className="block bg-emerald-500 text-white rounded-xl p-3 text-center text-sm font-semibold hover:bg-emerald-600"
               >
-                ↓ Download v1.0.0 APK (88 MB)
+                ↓ Download v1.1.0 APK (1.1 MB)
               </a>
+              <p className="text-[11px] text-gray-500 mt-2">
+                After download: tap the file → allow &quot;Install unknown apps&quot; for Chrome → Install.
+              </p>
             </div>
           </div>
         )}
@@ -154,10 +157,10 @@ export default function InstallPage() {
                 🌐 Open web app (latest)
               </Link>
               <a
-                href="https://github.com/myzeushell-ui/petai/releases/download/v1.0.0/PetAI.apk"
-                className="block bg-white border-2 border-gray-200 text-gray-700 text-center font-semibold py-4 rounded-2xl text-sm"
+                href="https://github.com/myzeushell-ui/petai/releases/download/v1.1.0/PetAI.apk"
+                className="block bg-white border-2 border-emerald-300 text-emerald-700 text-center font-semibold py-4 rounded-2xl text-sm"
               >
-                ↓ Legacy v1.0.0 APK (88 MB)
+                ↓ Download APK v1.1.0 (1.1 MB)
               </a>
             </div>
           </div>
