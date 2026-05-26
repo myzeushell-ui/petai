@@ -55,6 +55,32 @@ export default function ConsultationsPage() {
       <AnimatePresence mode="wait">
         {step === "list" && (
           <motion.div key="list" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-4">
+            {/* Affiliate quick-access — Vetster online vet consultation */}
+            <a
+              href="https://vetster.com/en-us?ref=PETAI"
+              target="_blank"
+              rel="noopener sponsored"
+              className="block rounded-2xl border border-emerald-200 dark:border-emerald-900 bg-gradient-to-r from-emerald-500 to-teal-600 p-4 text-white shadow-lg shadow-emerald-200/40 hover:shadow-xl hover:shadow-emerald-200/60 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm text-2xl">
+                  🩺
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[10px] font-bold uppercase tracking-wider opacity-90">
+                    {locale === "ru" ? "Срочно? Онлайн ветеринар 24/7" : "Need a vet NOW? Online vet 24/7"}
+                  </div>
+                  <div className="text-base font-extrabold leading-tight">
+                    {locale === "ru" ? "Видео-консультация за 5 минут — Vetster" : "Video consult in 5 min — Vetster"}
+                  </div>
+                  <div className="text-xs opacity-90 mt-0.5">
+                    {locale === "ru" ? "Лицензированные веты США/Канада. От $35. Откроется в новой вкладке." : "Licensed US/CA vets. From $35. Opens in new tab."}
+                  </div>
+                </div>
+                <div className="text-2xl flex-shrink-0">↗</div>
+              </div>
+            </a>
+
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               <Filter className="h-4 w-4 text-gray-400 flex-shrink-0" />
               <button onClick={() => setFilter("all")}

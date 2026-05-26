@@ -444,11 +444,12 @@ export default function LandingPage() {
             <span className="text-gray-300">·</span>
             <span>AI Health OS for Pets</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <span>© 2026</span>
             <a href="#features" className="hover:text-gray-600 transition-colors">Features</a>
             <a href="#pricing" className="hover:text-gray-600 transition-colors">Pricing</a>
             <Link href="/dashboard" className="hover:text-gray-600 transition-colors">Demo</Link>
+            <Link href="/partner" className="text-emerald-600 hover:text-emerald-700 transition-colors font-semibold">For vets &amp; breeders →</Link>
           </div>
         </div>
       </footer>
