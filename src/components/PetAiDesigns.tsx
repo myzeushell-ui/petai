@@ -527,7 +527,9 @@ export const THEMES: ThemeSpec[] = [
 // MOCK DATA
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PET = {
+/** Active pet data — exposed as `let` + setter so the host app (PetContext)
+ *  can inject real values without rewriting each of the 20 layouts. */
+export let PET = {
   name: "Bella",
   breed: "Golden Retriever",
   ageLabel: "3 years",
@@ -535,14 +537,24 @@ const PET = {
   emoji: "🐶",
 };
 
+/** Override the mock pet data with real values (call before rendering). */
+export function setPetData(p: Partial<typeof PET>) {
+  PET = { ...PET, ...p };
+}
+
 type CareItem = { title: string; due: string; icon: string; done?: boolean };
 
-const CARE: CareItem[] = [
+export let CARE: CareItem[] = [
   { title: "Breakfast", due: "Done · 8:00", icon: "🍽", done: true },
   { title: "Morning walk", due: "Due in 20 min", icon: "🚶" },
   { title: "Vitamin", due: "Due at 14:00", icon: "💊" },
   { title: "Vaccine booster", due: "In 12 days", icon: "💉" },
 ];
+
+/** Override the daily-care list (call before rendering). */
+export function setCareItems(items: CareItem[]) {
+  CARE = items;
+}
 
 const SCAN_RESULT = [
   { breed: "Golden Retriever", pct: 92 },
@@ -2022,6 +2034,78 @@ export default function PetAiApp() {
             onClose={() => setPickerOpen(false)}
           />
         )}
+      </div>
+    </ThemeCtx.Provider>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUBLIC API — exported components for host integration
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Renders ONLY the home-screen layout for the given themeId, wrapped in
+ * the internal ThemeCtx so all Pet* layouts work standalone. No bottom
+ * nav, no theme picker — the host app provides those.
+ *
+ * Falls back to the first theme if themeId is unknown.
+ */
+export function ThemedHome({
+  themeId,
+  onScan = () => {},
+  onOpenPet = () => {},
+}: {
+  themeId: string;
+  onScan?: () => void;
+  onOpenPet?: () => void;
+}) {
+  const spec = THEMES.find((t) => t.id === themeId) ?? THEMES[0];
+
+  // Layout map — some Pet* fns take LayoutProps, some don't; cast as
+  // a permissive any-props component so we can pass uniformly.
+  const Layout: React.ComponentType<Partial<LayoutProps>> =
+    (spec.id === "pet_pastel_pink"      ? PetPastelPink :
+    spec.id === "pet_dark_luxury"      ? PetDarkLuxury :
+    spec.id === "pet_rainbow"          ? PetRainbow :
+    spec.id === "pet_forest"           ? PetForest :
+    spec.id === "pet_sky"              ? PetSky :
+    spec.id === "pet_yellow"           ? PetYellow :
+    spec.id === "pet_paws"             ? PetPaws :
+    spec.id === "pet_cartoon"          ? PetCartoon :
+    spec.id === "pet_photo_dark"       ? PetPhotoDark :
+    spec.id === "pet_scandi"           ? PetScandi :
+    spec.id === "pet_coral"            ? PetCoral :
+    spec.id === "pet_neon_party"       ? PetNeonParty :
+    spec.id === "pet_vintage"          ? PetVintage :
+    spec.id === "pet_aqua_glass"       ? PetAquaGlass :
+    spec.id === "pet_watercolor"       ? PetWatercolor :
+    spec.id === "pet_3d_purple"        ? Pet3dPurple :
+    spec.id === "pet_sticker"          ? PetSticker :
+    spec.id === "pet_brutalist_orange" ? PetBrutalistOrange :
+    spec.id === "pet_cyber"            ? PetCyber :
+    spec.id === "pet_floral"           ? PetFloral :
+    PetPastelPink) as React.ComponentType<Partial<LayoutProps>>;
+
+  const ctxValue: Ctx = {
+    spec,
+    setThemeId: () => {},   // no-op — host controls the theme
+    openPicker: () => {},   // no-op — host has its own picker
+    onScan,
+    onOpenPet,
+  };
+
+  return (
+    <ThemeCtx.Provider value={ctxValue}>
+      <div
+        style={{
+          background: spec.bg,
+          color: spec.textPrimary,
+          minHeight: "100%",
+          width: "100%",
+          fontFamily: ff(spec.bodyFont),
+        }}
+      >
+        <Layout onScan={onScan} onOpenPet={onOpenPet} />
       </div>
     </ThemeCtx.Provider>
   );

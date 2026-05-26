@@ -1,105 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { HealthScore } from "@/components/health/HealthScore";
-import { AIInsightCard } from "@/components/ai/AIInsightCard";
-import { CurrentStageCard } from "@/components/upbringing/CurrentStageCard";
-import { PetCoverHeader } from "@/components/pet/PetCoverHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { aiInsights } from "@/data/aiInsights";
-import { reminders } from "@/data/reminders";
-import { formatDate } from "@/lib/utils";
-import { Bell, ArrowRight, Calendar } from "lucide-react";
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ThemedHome, setPetData, setCareItems } from "@/components/PetAiDesigns";
 import { usePet } from "@/contexts/PetContext";
+import { useVariant } from "@/contexts/VariantContext";
 import { useLocale } from "@/contexts/LocaleContext";
+import { reminders } from "@/data/reminders";
 import { t } from "@/lib/i18n";
 
+/**
+ * /dashboard — renders the bespoke home layout for the currently active
+ * theme (one of 20 from PetAiDesigns.tsx). Each theme has its own
+ * layout, button placement, iconography — not just a recoloured shell.
+ *
+ * Real pet data from PetContext is injected into the mock module
+ * (PetAiDesigns uses module-scoped `let PET` so we can swap values).
+ *
+ * The previous flat-card dashboard is preserved at /dashboard-classic
+ * for users who prefer the simpler layout.
+ */
+
 const UI = {
-  upcomingReminders: { en: "Upcoming Reminders",  ru: "Ближайшие напоминания" },
-  viewAll:           { en: "View all",            ru: "Все" },
-  aiInsightsTitle:   { en: "AI Health Insights",  ru: "AI инсайты здоровья" },
-  askAi:             { en: "Ask AI",              ru: "Спросить AI" },
+  classicLink: { en: "Use classic dashboard", ru: "Классический дашборд" },
+};
+
+const SPECIES_EMOJI: Record<string, string> = {
+  dog: "🐕",
+  cat: "🐱",
+  rabbit: "🐰",
+  bird: "🦜",
+  other: "🐾",
 };
 
 export default function DashboardPage() {
   const { activePet } = usePet();
+  const { variant, colors } = useVariant();
   const { locale } = useLocale();
-  const urgentReminders = reminders
-    .filter((r) => !r.completed && r.priority === "high")
-    .slice(0, 3);
+  const router = useRouter();
 
-  const topInsights = aiInsights.slice(0, 2);
+  // Inject real pet data into the mock module before the themed
+  // layout renders. Module-scoped variable mutation — V1 trade-off,
+  // future iterations should switch to a proper PetDataContext.
+  useEffect(() => {
+    setPetData({
+      name: activePet.name,
+      breed: activePet.breed,
+      ageLabel: `${activePet.age} ${activePet.age === 1 ? "year" : "years"}`,
+      moodScore: activePet.healthScore,
+      emoji: SPECIES_EMOJI[activePet.species] ?? "🐾",
+    });
+
+    const top = reminders
+      .filter((r) => !r.completed)
+      .slice(0, 4)
+      .map((r) => {
+        const icon =
+          r.type === "medication" ? "💊" :
+          r.type === "vaccination" ? "💉" :
+          r.type === "checkup" ? "🩺" :
+          r.type === "grooming" ? "✂️" : "📌";
+        return {
+          title: r.title.length > 40 ? r.title.slice(0, 38) + "…" : r.title,
+          due: new Date(r.dueDate).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US", { month: "short", day: "numeric" }),
+          icon,
+          done: r.completed,
+        };
+      });
+    if (top.length > 0) setCareItems(top);
+  }, [activePet, locale]);
 
   return (
-    <div className="space-y-6">
-      {/* Pet cover photo — Facebook-style hero */}
-      <PetCoverHeader />
+    <div className="-m-4 sm:-m-6 lg:-m-8 relative min-h-screen">
+      {/* Themed bespoke home layout for the active theme */}
+      <ThemedHome
+        themeId={variant}
+        onScan={() => router.push("/labs")}
+        onOpenPet={() => router.push("/breeds")}
+      />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1 space-y-6">
-          <HealthScore score={activePet.healthScore} previousScore={83} />
-          <CurrentStageCard />
-        </div>
-
-        <div className="lg:col-span-2 space-y-6">
-          {/* Upcoming Reminders */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-orange-500" />
-                  {t(UI.upcomingReminders, locale)}
-                </CardTitle>
-                <Link href="/reminders">
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    {t(UI.viewAll, locale)} <ArrowRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {urgentReminders.map((reminder) => (
-                <div
-                  key={reminder.id}
-                  className="flex items-center gap-3 rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-3"
-                >
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{reminder.title}</p>
-                    <p className="text-xs text-gray-500">{formatDate(reminder.dueDate)}</p>
-                  </div>
-                  <Badge variant={reminder.priority === "high" ? "danger" : "warning"}>
-                    {reminder.priority}
-                  </Badge>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* AI Insights */}
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <span>🤖</span> {t(UI.aiInsightsTitle, locale)}
-              </h2>
-              <Link href="/assistant">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  {t(UI.askAi, locale)} <ArrowRight className="h-3 w-3" />
-                </Button>
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {topInsights.map((insight, i) => (
-                <AIInsightCard key={insight.id} insight={insight} index={i} />
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* Back-door link to the classic flat-card dashboard */}
+      <div className="fixed bottom-24 left-4 z-[55] lg:bottom-6 lg:left-6">
+        <Link
+          href="/dashboard-classic"
+          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider ${colors.btnGhost} bg-black/30 backdrop-blur-md text-white hover:bg-black/45 transition-colors`}
+        >
+          ↩ {t(UI.classicLink, locale)}
+        </Link>
       </div>
     </div>
   );
