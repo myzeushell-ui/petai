@@ -449,6 +449,7 @@ export default function LandingPage() {
             <a href="#features" className="hover:text-gray-600 transition-colors">Features</a>
             <a href="#pricing" className="hover:text-gray-600 transition-colors">Pricing</a>
             <Link href="/dashboard" className="hover:text-gray-600 transition-colors">Demo</Link>
+            <Link href="/designs" className="hover:text-gray-600 transition-colors">20 Designs</Link>
             <Link href="/partner" className="text-emerald-600 hover:text-emerald-700 transition-colors font-semibold">For vets &amp; breeders →</Link>
           </div>
         </div>
