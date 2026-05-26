@@ -8,35 +8,24 @@ import {
   Shield, Zap, Check, Heart, Dna, Mic, Palette,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useVariant, type VariantId } from "@/contexts/VariantContext";
+import { useVariant } from "@/contexts/VariantContext";
 import { cn } from "@/lib/utils";
 
-/* ── Features ──
- * Color tuple per variant. Warm themes (terracotta/sage/peach) use
- * solid pastel tiles; glass themes (aurora/deepOcean/sunrise) use
- * subtle white/10 on translucent for the floating dock aesthetic.
- */
-type VariantColorMap = Record<VariantId, string>;
-
-// Default tile for warm themes — soft accent + dark text (reads on cream bg)
-const W_TERRA = "bg-[#F4D7C5] text-[#2A2520]";
-const W_SAGE  = "bg-[#D9E5D1] text-[#2C322A]";
-const W_PEACH = "bg-[#FFD8C6] text-[#2A1A14]";
-// Default tile for glass themes — translucent white with accent text
-const G_AURORA = "bg-purple-100/70 dark:bg-white/10 text-[#A855F7] dark:text-[#c4b5fd] backdrop-blur-sm";
-const G_OCEAN  = "bg-cyan-100/70 dark:bg-white/10 text-[#06b6d4] dark:text-[#67e8f9] backdrop-blur-sm";
-const G_SUN    = "bg-orange-100/70 dark:bg-white/10 text-[#fb923c] backdrop-blur-sm";
+/* All theme-dependent colours flow through CSS variables set by
+ * VariantContext, so feature tiles & plan borders no longer need
+ * per-variant hardcoded maps. One class string works for all 20. */
+const FEATURE_TILE = "bg-[var(--petai-surface-variant)] text-[var(--petai-primary)]";
 
 const features = [
-  { Icon: Activity,     title: "Health Score",        desc: "Real-time AI score based on all your pet's data",            color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Bot,          title: "AI Health Assistant", desc: "Ask anything — get instant, personalized answers",          color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: FlaskConical, title: "Lab Analysis",         desc: "Upload bloodwork, get plain-English AI explanations",       color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Bell,         title: "Smart Reminders",     desc: "Never miss a vaccine, medication, or checkup again",        color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Dna,          title: "Breeding Suite",      desc: "Heat tracker, whelping guide, COI calculator, mating match",color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Mic,          title: "Voice AI",            desc: "Understand your pet's barks and vocalizations in real time", color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Shield,       title: "Vet Reports",         desc: "All visit records in one place with AI summaries",          color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Zap,          title: "Health Timeline",     desc: "Complete medical history with trend analysis",              color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
-  { Icon: Heart,        title: "Marketplace",         desc: "Verified breeders, pedigrees, breed picker quiz",           color: { terracotta: W_TERRA, sage: W_SAGE, peach: W_PEACH, aurora: G_AURORA, deepOcean: G_OCEAN, sunrise: G_SUN } as VariantColorMap },
+  { Icon: Activity,     title: "Health Score",        desc: "Real-time AI score based on all your pet's data" },
+  { Icon: Bot,          title: "AI Health Assistant", desc: "Ask anything — get instant, personalized answers" },
+  { Icon: FlaskConical, title: "Lab Analysis",        desc: "Upload bloodwork, get plain-English AI explanations" },
+  { Icon: Bell,         title: "Smart Reminders",     desc: "Never miss a vaccine, medication, or checkup again" },
+  { Icon: Dna,          title: "Breeding Suite",      desc: "Heat tracker, whelping guide, COI calculator, mating match" },
+  { Icon: Mic,          title: "Voice AI",            desc: "Understand your pet's barks and vocalizations in real time" },
+  { Icon: Shield,       title: "Vet Reports",         desc: "All visit records in one place with AI summaries" },
+  { Icon: Zap,          title: "Health Timeline",     desc: "Complete medical history with trend analysis" },
+  { Icon: Heart,        title: "Marketplace",         desc: "Verified breeders, pedigrees, breed picker quiz" },
 ];
 
 /* ── Pricing ── */
@@ -46,8 +35,8 @@ const plans = [
     price: "$0",
     period: "",
     tagline: "To get started",
-    border: { terracotta: "border-[#F2E2D2]", sage: "border-[#E0E5D5]", peach: "border-[#FFE0D6]", aurora: "border-purple-200 dark:border-white/10", deepOcean: "border-cyan-200 dark:border-white/10", sunrise: "border-orange-200 dark:border-white/10" } as VariantColorMap,
-    accent: { terracotta: "bg-[#FCEEDF]",     sage: "bg-[#EDE6D3]",     peach: "bg-[#FCEEDF]",      aurora: "bg-purple-50/70 dark:bg-white/5",         deepOcean: "bg-cyan-50/70 dark:bg-white/5",         sunrise: "bg-orange-50/70 dark:bg-white/5"         } as VariantColorMap,
+    border: "border-[var(--petai-outline)]",
+    accent: "bg-[var(--petai-surface-variant)]/60",
     cta: "Start for free",
     popular: false,
     features: [
@@ -64,8 +53,8 @@ const plans = [
     price: "$4.99",
     period: "/mo",
     tagline: "For caring pet owners",
-    border: { terracotta: "border-[#C2562A]", sage: "border-[#6A8059]", peach: "border-[#FF6B47]", aurora: "border-[#A855F7]", deepOcean: "border-[#06b6d4]", sunrise: "border-[#fb923c]" } as VariantColorMap,
-    accent: { terracotta: "bg-[#F4D7C5]",     sage: "bg-[#D9E5D1]",     peach: "bg-[#FFD8C6]",      aurora: "bg-purple-100/70 dark:bg-white/10", deepOcean: "bg-cyan-100/70 dark:bg-white/10", sunrise: "bg-orange-100/70 dark:bg-white/10" } as VariantColorMap,
+    border: "border-[var(--petai-primary)]",
+    accent: "bg-[var(--petai-surface-variant)]",
     cta: "Try 14 days free",
     popular: true,
     features: [
@@ -83,8 +72,8 @@ const plans = [
     price: "$9.99",
     period: "/mo",
     tagline: "For professional breeders",
-    border: { terracotta: "border-[#2A2520]", sage: "border-[#2C322A]", peach: "border-[#2A1A14]", aurora: "border-[#EC4899]", deepOcean: "border-[#0EA5E9]", sunrise: "border-[#f43f5e]" } as VariantColorMap,
-    accent: { terracotta: "bg-[#FCEEDF]",     sage: "bg-[#EDE6D3]",     peach: "bg-[#FCEEDF]",     aurora: "bg-pink-50/70 dark:bg-white/5",     deepOcean: "bg-sky-50/70 dark:bg-white/5",     sunrise: "bg-rose-50/70 dark:bg-white/5"   } as VariantColorMap,
+    border: "border-[var(--petai-accent)]",
+    accent: "bg-[var(--petai-surface-variant)]/80",
     cta: "Contact us",
     popular: false,
     features: [
@@ -107,27 +96,28 @@ const stats = [
   { value: "$0", label: "To get started" },
 ];
 
-/* ── Variant Picker (landing-only, inline, 6 themes from design v2) ── */
+/* ── Variant Picker (landing-only, inline, all 20 themes) ── */
 function LandingVariantPicker() {
   const { variant, setVariant, allVariants } = useVariant();
-  const vList: VariantId[] = ["terracotta", "sage", "peach", "aurora", "deepOcean", "sunrise"];
+  const vList = Object.keys(allVariants);
   return (
-    <div className="flex items-center justify-center gap-2 flex-wrap max-w-md">
+    <div className="flex items-center justify-center gap-1.5 flex-wrap max-w-3xl mx-auto">
       {vList.map((v) => {
         const vc = allVariants[v];
         return (
           <button
             key={v}
             onClick={() => setVariant(v)}
+            title={vc.name}
             className={cn(
-              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all border",
+              "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium transition-all border",
               variant === v
                 ? "bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white"
                 : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
             )}
           >
             <span>{vc.emoji}</span>
-            {vc.name}
+            <span className="hidden sm:inline">{vc.name}</span>
           </button>
         );
       })}
@@ -341,7 +331,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.06 }}
                 className="rounded-2xl border border-gray-100 bg-white p-6 hover:border-gray-200 hover:shadow-md transition-all duration-200">
-                <div className={cn("flex h-11 w-11 items-center justify-center rounded-xl", f.color[variant])}>
+                <div className={cn("flex h-11 w-11 items-center justify-center rounded-xl", FEATURE_TILE)}>
                   <f.Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-gray-900">{f.title}</h3>
@@ -367,7 +357,7 @@ export default function LandingPage() {
                 viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className={cn(
                   "relative rounded-3xl border-2 p-6 flex flex-col",
-                  plan.border[variant],
+                  plan.border,
                   plan.popular ? `shadow-xl ${colors.shadow}` : ""
                 )}>
                 {plan.popular && (
@@ -377,7 +367,7 @@ export default function LandingPage() {
                     </span>
                   </div>
                 )}
-                <div className={cn("rounded-2xl px-4 py-3 mb-5", plan.accent[variant])}>
+                <div className={cn("rounded-2xl px-4 py-3 mb-5", plan.accent)}>
                   <p className="text-sm font-bold text-gray-500">{plan.name}</p>
                   <div className="flex items-baseline gap-1">
                     <p className="text-4xl font-black text-gray-900">{plan.price}</p>
@@ -419,15 +409,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/dashboard">
-              <Button size="lg" className={cn(
-                "w-full sm:w-auto shadow-lg",
-                variant === "terracotta" ? "bg-white text-[#C2562A] hover:bg-[#FCEEDF]" :
-                variant === "sage"       ? "bg-white text-[#6A8059] hover:bg-[#EDE6D3]" :
-                variant === "peach"      ? "bg-white text-[#FF6B47] hover:bg-[#FCEEDF]" :
-                variant === "aurora"     ? "bg-white text-[#A855F7] hover:bg-purple-50" :
-                variant === "deepOcean"  ? "bg-white text-[#06b6d4] hover:bg-cyan-50" :
-                                           "bg-white text-[#fb923c] hover:bg-orange-50"
-              )}>
+              <Button size="lg" className="w-full sm:w-auto shadow-lg bg-white text-[var(--petai-primary)] hover:bg-[var(--petai-surface-variant)]">
                 View Demo <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>

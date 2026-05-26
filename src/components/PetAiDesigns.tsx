@@ -30,7 +30,7 @@ import React, {
 // THEME SPEC + THE 20 PALETTES
 // ─────────────────────────────────────────────────────────────────────────────
 
-type ThemeSpec = {
+export type ThemeSpec = {
   id: string;
   name: string;
   dark: boolean;
@@ -94,7 +94,7 @@ const DEFAULTS = {
 
 const mk = (t: ThemeInput): ThemeSpec => ({ ...DEFAULTS, ...t });
 
-const THEMES: ThemeSpec[] = [
+export const THEMES: ThemeSpec[] = [
   mk({
     id: "pet_pastel_pink",
     name: "01 · Pastel Pink",

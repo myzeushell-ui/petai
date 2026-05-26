@@ -3,69 +3,47 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette } from "lucide-react";
-import { useVariant, variants, type VariantId } from "@/contexts/VariantContext";
+import { useVariant, variants, type VariantId, getActiveSpec } from "@/contexts/VariantContext";
 import { useLocale } from "@/contexts/LocaleContext";
 import { t, type LocaleString } from "@/lib/i18n";
 
-// All 6 themes from design-previews.html v2 — grouped by warm/glass families
-const WARM_THEMES: VariantId[] = ["terracotta", "sage", "peach"];
-const GLASS_THEMES: VariantId[] = ["aurora", "deepOcean", "sunrise"];
-
-const VARIANT_LABEL: Record<VariantId, LocaleString> = {
-  terracotta: { en: "Terracotta",  ru: "Терракота" },
-  sage:       { en: "Sage",        ru: "Шалфей" },
-  peach:      { en: "Peach",       ru: "Персик" },
-  aurora:     { en: "Aurora",      ru: "Аврора" },
-  deepOcean:  { en: "Deep Ocean",  ru: "Океан" },
-  sunrise:    { en: "Sunrise",     ru: "Рассвет" },
-};
-const VARIANT_DESC: Record<VariantId, LocaleString> = {
-  terracotta: { en: "Warm earth · Premium",       ru: "Тёплая земля · Премиум" },
-  sage:       { en: "Green calm · Botanical",     ru: "Зелёный покой · Ботаника" },
-  peach:      { en: "Sunset coral · Warm",        ru: "Закатный коралл · Тепло" },
-  aurora:     { en: "Glass · Purple-pink aurora", ru: "Стекло · Фиолет-розовая" },
-  deepOcean:  { en: "Glass · Cyan deep water",    ru: "Стекло · Глубокий бирюз" },
-  sunrise:    { en: "Glass · Orange-rose dawn",   ru: "Стекло · Оранжево-розовый" },
-};
-
 const UI = {
-  title:       { en: "Choose theme",  ru: "Выбрать тему" },
-  active:      { en: "Active",        ru: "Активна" },
-  groupWarm:   { en: "Warm · Premium", ru: "Тёплая · Премиум" },
-  groupGlass:  { en: "Glass · Aurora", ru: "Стекло · Аврора" },
-  layoutLabel: { en: "Layout",        ru: "Раскладка" },
+  title:       { en: "Choose theme · 20 designs", ru: "Тема · 20 дизайнов" },
+  active:      { en: "Active",                    ru: "Активна" },
+  groupLight:  { en: "Light themes",              ru: "Светлые" },
+  groupDark:   { en: "Dark themes",               ru: "Тёмные" },
 };
 
-function ThemeButton({ v, locale, isActive, onClick }: { v: VariantId; locale: "en" | "ru"; isActive: boolean; onClick: () => void }) {
+function ThemeButton({ v, isActive, onClick }: { v: VariantId; isActive: boolean; onClick: () => void }) {
   const vc = variants[v];
+  const spec = getActiveSpec(v);
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all ${
+      className={`flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition-all ${
         isActive
           ? "bg-gray-100 dark:bg-gray-700 ring-2 ring-gray-300 dark:ring-gray-500"
           : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
       }`}
     >
-      <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg shadow-sm ${vc.logoBg}`}>
-        <span className={vc.group === "warm" ? "text-white" : ""}>{vc.emoji}</span>
+      {/* Tiny color preview using inline styles (works without Tailwind compilation) */}
+      <div
+        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-base shadow-sm"
+        style={{
+          background: spec ? `linear-gradient(135deg, ${spec.gradient?.[0] ?? spec.primary}, ${spec.gradient?.[1] ?? spec.accent})` : "#888",
+          color: spec?.onPrimary ?? "#fff",
+        }}
+      >
+        {vc.emoji}
       </div>
       <div className="min-w-0 flex-1">
-        <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-200"}`}>
-          {t(VARIANT_LABEL[v], locale)}
+        <p className={`text-xs font-semibold leading-tight truncate ${isActive ? "text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-200"}`}>
+          {vc.name}
         </p>
-        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight">
-          {t(VARIANT_DESC[v], locale)}
-        </p>
-        <p className="text-[9px] uppercase tracking-wider text-gray-300 dark:text-gray-600 mt-0.5">
-          {t(UI.layoutLabel, locale)}: {vc.layout}
+        <p className="text-[9px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight truncate">
+          {vc.description}
         </p>
       </div>
-      {isActive && (
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex-shrink-0">
-          {t(UI.active, locale)}
-        </span>
-      )}
     </button>
   );
 }
@@ -74,6 +52,9 @@ export function VariantSwitcher() {
   const { variant, setVariant, colors } = useVariant();
   const { locale } = useLocale();
   const [open, setOpen] = useState(false);
+
+  const lightThemes = Object.keys(variants).filter((id) => variants[id].group === "light");
+  const darkThemes = Object.keys(variants).filter((id) => variants[id].group === "dark");
 
   return (
     <div className="fixed bottom-24 right-4 z-[60] lg:bottom-6 lg:right-6 flex flex-col items-end gap-2">
@@ -84,46 +65,36 @@ export function VariantSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            className="mb-2 w-72 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="mb-2 w-80 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 shadow-2xl max-h-[80vh] overflow-y-auto"
           >
             <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1 pb-2">
               {t(UI.title, locale)}
             </div>
 
-            {/* Warm group */}
             <div className="text-[9px] font-bold uppercase tracking-wider text-gray-300 dark:text-gray-600 px-1 pt-1 pb-1">
-              ☀ {t(UI.groupWarm, locale)}
+              ☀ {t(UI.groupLight, locale)} · {lightThemes.length}
             </div>
-            <div className="flex flex-col gap-1 mb-2">
-              {WARM_THEMES.map((v) => (
+            <div className="grid grid-cols-1 gap-0.5 mb-2">
+              {lightThemes.map((v) => (
                 <ThemeButton
                   key={v}
                   v={v}
-                  locale={locale}
                   isActive={variant === v}
-                  onClick={() => {
-                    setVariant(v);
-                    setOpen(false);
-                  }}
+                  onClick={() => { setVariant(v); setOpen(false); }}
                 />
               ))}
             </div>
 
-            {/* Glass group */}
-            <div className="text-[9px] font-bold uppercase tracking-wider text-gray-300 dark:text-gray-600 px-1 pt-1 pb-1">
-              ✨ {t(UI.groupGlass, locale)}
+            <div className="text-[9px] font-bold uppercase tracking-wider text-gray-300 dark:text-gray-600 px-1 pt-2 pb-1">
+              🌙 {t(UI.groupDark, locale)} · {darkThemes.length}
             </div>
-            <div className="flex flex-col gap-1">
-              {GLASS_THEMES.map((v) => (
+            <div className="grid grid-cols-1 gap-0.5">
+              {darkThemes.map((v) => (
                 <ThemeButton
                   key={v}
                   v={v}
-                  locale={locale}
                   isActive={variant === v}
-                  onClick={() => {
-                    setVariant(v);
-                    setOpen(false);
-                  }}
+                  onClick={() => { setVariant(v); setOpen(false); }}
                 />
               ))}
             </div>
