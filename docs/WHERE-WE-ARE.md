@@ -77,6 +77,20 @@
 - **Pre-seed $1M** — outreach к Carmichael Roberts, Aaron Easterly, Ben Jacobs, Pincus и т.д. через шаблоны в `fundraising-3-outreach-templates.md`
 - **B2B письма по ошейникам** — `docs/b2b-collar-partners.md` готовы к отправке
 
+### ⚠️ Открытый вопрос (последний разговор 2026-05-28)
+**Дима сказал что темы работают только как цветовые схемы, layouts не меняются.**
+
+Реальное состояние: на `/dashboard` рендерится `<ThemedHome>` который для каждой темы вызывает уникальный Pet* компонент (PetPastelPink, PetDarkLuxury, PetCyber и т.д.) — layouts ТОЧНО разные. Возможные причины почему Дима не видит:
+1. Browser cache (нужен Ctrl+Shift+R)
+2. Sidebar/AppShell не меняется — Дима смотрит на framework а не на content
+3. Дима ожидает что меняются все страницы — но в исходниках Pet* layouts ТОЛЬКО для Home/Dashboard, на /reminders /breeds /upbringing меняются только цвета
+
+**Что нужно решить:**
+- A. Test через `/designs` — там layouts в чистом frame, разница максимально видна
+- B. Убрать AppShell с /dashboard (full-screen) — 30 мин работы
+- C. Сделать per-theme layouts для других страниц — 2-3 недели
+- D. Упростить до color scheme only — 1 час
+
 ---
 
 ## 🔧 Технический стек / окружение
