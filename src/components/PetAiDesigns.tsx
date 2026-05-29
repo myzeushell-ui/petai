@@ -25,6 +25,18 @@ import React, {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { motion } from "framer-motion";
+import {
+  pageVariants,
+  staggerContainer,
+  cardChildVariants,
+  scoreVariants,
+  heroPhotoVariants,
+  interactiveTile,
+  animationFlavor,
+} from "./pet-ai-designs/animations";
+import { PET_AI_FEATURES, TOP_FEATURES, HERO_FEATURES } from "./pet-ai-designs/petAiFeatures";
+import { getPetPhoto } from "./pet-ai-designs/petPhotos";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // THEME SPEC + THE 20 PALETTES
@@ -530,6 +542,7 @@ export const THEMES: ThemeSpec[] = [
 /** Active pet data — exposed as `let` + setter so the host app (PetContext)
  *  can inject real values without rewriting each of the 20 layouts. */
 export let PET = {
+  id: "pet-001",
   name: "Bella",
   breed: "Golden Retriever",
   ageLabel: "3 years",
@@ -669,7 +682,30 @@ function Emoji({ char, size = 22 }: { char: string; size?: number }) {
   return <span style={{ fontSize: size, lineHeight: 1 }}>{char}</span>;
 }
 
-function Avatar({ char, size = 68, bg, fontSize }: { char: string; size?: number; bg: string; fontSize?: number }) {
+function Avatar({ char, size = 68, bg, fontSize, photo }: { char: string; size?: number; bg: string; fontSize?: number; photo?: boolean }) {
+  // When `photo` is true, render real pet image from Unsplash instead of emoji.
+  // PET.id maps to the photo via getPetPhoto (defaults to Luna golden).
+  if (photo) {
+    return (
+      <div
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "50%",
+          overflow: "hidden",
+          flexShrink: 0,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={getPetPhoto((PET as any).id ?? "pet-001", "avatar")}
+          alt={PET.name}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      </div>
+    );
+  }
   return (
     <div
       style={{
@@ -779,54 +815,74 @@ function gradientCss(colors: string[], angle = "135deg") {
 type LayoutProps = { onScan: () => void; onOpenPet: () => void };
 
 // 01 · Pastel Pink
-function PetPastelPink() {
+function PetPastelPink({ onScan, onOpenPet }: Partial<LayoutProps> = {}) {
   const { spec } = useTheme();
   const t = text(spec);
+  const features = [PET_AI_FEATURES.bark, PET_AI_FEATURES.labs];
   return (
     <Page>
       <div style={{ ...ROW, gap: 10 }}>
-        <Avatar char={PET.emoji} size={36} bg={spec.surfaceVariant} fontSize={18} />
+        <Avatar char={PET.emoji} size={36} bg={spec.surfaceVariant} fontSize={18} photo />
         <p style={{ ...t.titleM(), flex: 1 }}>Hello, {PET.name}'s mom 🐾</p>
         <SwitchBtn />
       </div>
       <div style={{ height: 16 }} />
-      <Card>
-        <div style={{ ...ROW, gap: 16 }}>
-          <Avatar char={PET.emoji} size={68} bg={spec.surfaceVariant} />
-          <div style={{ ...COL, flex: 1 }}>
-            <p style={t.labelS()}>{PET.name.toUpperCase()} · {PET.breed}</p>
-            <p style={t.headlineM()}>She's happy</p>
-            <p style={t.bodyS()}>Mood {PET.moodScore}/100 ✨</p>
-            <div style={{ height: 6 }} />
-            <Progress value={PET.moodScore / 100} color={spec.accent} track={spec.surfaceVariant} />
+      <motion.div variants={cardChildVariants.soft} initial="hidden" animate="visible">
+        <Card onClick={onOpenPet}>
+          <div style={{ ...ROW, gap: 16 }}>
+            <Avatar char={PET.emoji} size={68} bg={spec.surfaceVariant} photo />
+            <div style={{ ...COL, flex: 1 }}>
+              <p style={t.labelS()}>{PET.name.toUpperCase()} · {PET.breed}</p>
+              <p style={t.headlineM()}>Mood {PET.moodScore}/100 ✨</p>
+              <p style={t.bodyS()}>Tap to open profile</p>
+              <div style={{ height: 6 }} />
+              <Progress value={PET.moodScore / 100} color={spec.accent} track={spec.surfaceVariant} />
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </motion.div>
       <div style={{ height: 16 }} />
-      <p style={t.titleL()}>Today's care 💕</p>
+      <p style={t.titleL()}>What can I do today 💕</p>
       <div style={{ height: 10 }} />
-      <div style={{ ...ROW, gap: 12, alignItems: "stretch" }}>
-        {CARE.slice(0, 2).map((c) => (
-          <div
-            key={c.title}
-            style={{ ...COL, flex: 1, background: spec.surfaceVariant, borderRadius: spec.cardRadius, padding: 16 }}
-          >
-            <Emoji char={c.icon} size={22} />
-            <div style={{ height: 16 }} />
-            <p style={t.titleM()}>{c.title}</p>
-            <p style={t.bodyS()}>{c.due}</p>
-          </div>
-        ))}
-      </div>
+      <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ ...ROW, gap: 12, alignItems: "stretch" }}>
+        {features.map((f) => {
+          const Icon = f.icon;
+          return (
+            <motion.button
+              key={f.id}
+              variants={cardChildVariants.soft}
+              {...interactiveTile}
+              onClick={f.id === "bark" ? onScan : undefined}
+              style={{ ...COL, flex: 1, background: spec.surfaceVariant, borderRadius: spec.cardRadius, padding: 16, border: "none", cursor: "pointer", textAlign: "left" as const }}
+            >
+              <Icon size={22} color={spec.primary} strokeWidth={2} />
+              <div style={{ height: 16 }} />
+              <p style={t.titleM()}>{f.labelEn}</p>
+              <p style={t.bodyS()}>{f.taglineEn}</p>
+            </motion.button>
+          );
+        })}
+      </motion.div>
+      <div style={{ height: 14 }} />
+      <p style={t.bodyS()}>Today's reminders</p>
+      <div style={{ height: 8 }} />
+      {CARE.slice(0, 3).map((c, i) => (
+        <motion.div key={c.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.06 }} style={{ ...ROW, gap: 10, padding: "8px 0" }}>
+          <span style={{ fontSize: 16 }}>{c.icon}</span>
+          <p style={{ ...t.bodyM(), flex: 1 }}>{c.title}</p>
+          <p style={{ ...t.bodyS(), opacity: 0.65 }}>{c.due}</p>
+        </motion.div>
+      ))}
     </Page>
   );
 }
 
 // 02 · Dark Luxury Gold
-function PetDarkLuxury() {
+function PetDarkLuxury({ onScan, onOpenPet }: Partial<LayoutProps> = {}) {
   const { spec } = useTheme();
   const t = text(spec);
   const gold = spec.primary;
+  const features = [PET_AI_FEATURES.chat, PET_AI_FEATURES.vets];
   return (
     <Page>
       <div style={ROW}>
@@ -838,38 +894,46 @@ function PetDarkLuxury() {
       <p style={t.displayS()}>For your</p>
       <p style={t.displayS(gold)}>finest companion.</p>
       <div style={{ height: 20 }} />
-      <div style={{ background: spec.surface, borderRadius: 20, padding: 18, border: `1px solid ${withA(gold, 0.31)}` }}>
-        <div style={{ ...ROW, gap: 16 }}>
-          <Avatar char={PET.emoji} size={64} bg={withA(gold, 0.16)} />
-          <div style={{ ...COL, flex: 1 }}>
-            <p style={t.labelS(gold)}>PEDIGREE</p>
-            <p style={t.headlineS()}>Maximilian III</p>
-            <p style={t.bodyS()}>{PET.breed} · Champion</p>
+      <motion.div variants={cardChildVariants.sharp} initial="hidden" animate="visible" onClick={onOpenPet} style={{ cursor: "pointer" }}>
+        <div style={{ background: spec.surface, borderRadius: 20, padding: 18, border: `1px solid ${withA(gold, 0.31)}` }}>
+          <div style={{ ...ROW, gap: 16 }}>
+            <Avatar char={PET.emoji} size={64} bg={withA(gold, 0.16)} photo />
+            <div style={{ ...COL, flex: 1 }}>
+              <p style={t.labelS(gold)}>YOUR COMPANION</p>
+              <p style={t.headlineS()}>{PET.name}</p>
+              <p style={t.bodyS()}>{PET.breed} · {PET.ageLabel}</p>
+            </div>
+          </div>
+          <div style={{ height: 1, background: withA(gold, 0.24), margin: "20px 0" }} />
+          <div style={ROW}>
+            <p style={t.labelM(gold)}>HEALTH SCORE</p>
+            <div style={{ flex: 1 }} />
+            <motion.p variants={scoreVariants} style={t.headlineM(gold)}>{PET.moodScore}</motion.p>
           </div>
         </div>
-        <div style={{ height: 1, background: withA(gold, 0.24), margin: "20px 0" }} />
-        <div style={ROW}>
-          <p style={t.labelM(gold)}>HEALTH SCORE</p>
-          <div style={{ flex: 1 }} />
-          <p style={t.headlineM(gold)}>98.4</p>
-        </div>
-      </div>
+      </motion.div>
       <div style={{ height: 16 }} />
       <p style={t.labelM(gold)}>PREMIUM SERVICES</p>
       <div style={{ height: 10 }} />
-      <div style={{ ...ROW, gap: 12, alignItems: "stretch" }}>
-        {[
-          { icon: "🏥", title: "Concierge vet", sub: "24/7 · in-home" },
-          { icon: "✂️", title: "Grooming", sub: "tomorrow 14:00" },
-        ].map((x) => (
-          <div key={x.title} style={{ ...COL, flex: 1, background: spec.surface, borderRadius: 14, padding: 14, border: `1px solid ${withA(gold, 0.2)}` }}>
-            <Emoji char={x.icon} size={22} />
-            <div style={{ height: 12 }} />
-            <p style={t.titleM()}>{x.title}</p>
-            <p style={t.bodyS(gold)}>{x.sub}</p>
-          </div>
-        ))}
-      </div>
+      <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ ...ROW, gap: 12, alignItems: "stretch" }}>
+        {features.map((f) => {
+          const Icon = f.icon;
+          return (
+            <motion.button
+              key={f.id}
+              variants={cardChildVariants.sharp}
+              {...interactiveTile}
+              onClick={onScan}
+              style={{ ...COL, flex: 1, background: spec.surface, borderRadius: 14, padding: 14, border: `1px solid ${withA(gold, 0.2)}`, cursor: "pointer", textAlign: "left" as const }}
+            >
+              <Icon size={22} color={gold} strokeWidth={1.5} />
+              <div style={{ height: 12 }} />
+              <p style={t.titleM()}>{f.labelEn}</p>
+              <p style={t.bodyS(gold)}>{f.taglineEn}</p>
+            </motion.button>
+          );
+        })}
+      </motion.div>
     </Page>
   );
 }
@@ -2094,9 +2158,15 @@ export function ThemedHome({
     onOpenPet,
   };
 
+  const flavor = animationFlavor(spec.id);
+
   return (
     <ThemeCtx.Provider value={ctxValue}>
-      <div
+      <motion.div
+        key={spec.id}
+        initial="hidden"
+        animate="visible"
+        variants={pageVariants[flavor]}
         style={{
           background: spec.bg,
           color: spec.textPrimary,
@@ -2106,7 +2176,7 @@ export function ThemedHome({
         }}
       >
         <Layout onScan={onScan} onOpenPet={onOpenPet} />
-      </div>
+      </motion.div>
     </ThemeCtx.Provider>
   );
 }

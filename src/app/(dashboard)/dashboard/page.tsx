@@ -45,6 +45,7 @@ export default function DashboardPage() {
   // future iterations should switch to a proper PetDataContext.
   useEffect(() => {
     setPetData({
+      id: activePet.id,
       name: activePet.name,
       breed: activePet.breed,
       ageLabel: `${activePet.age} ${activePet.age === 1 ? "year" : "years"}`,
