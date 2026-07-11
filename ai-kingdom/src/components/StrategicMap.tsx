@@ -76,6 +76,36 @@ export default function StrategicMap() {
           </div>
         )}
 
+        {s.phase === "playing" &&
+          s.speed === 0 &&
+          !firstBattle &&
+          s.units.some((u) => u.side === "player" && u.state === "moving") && (
+            <button className="paused-hint" onClick={() => g.setSpeed(1)}>
+              ⏸ Пауза — войска ждут. Нажмите, чтобы пустить время ▶
+            </button>
+          )}
+
+        {/* March routes: a flowing dashed line from each moving group to its
+            destination, so movement is legible even at low speed or on pause. */}
+        <svg className="move-routes" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {markers
+            .filter((m) => m.u.state === "moving" && m.u.moveDestId)
+            .map((m) => {
+              const dest = locById.get(m.u.moveDestId!);
+              if (!dest) return null;
+              return (
+                <line
+                  key={m.u.id}
+                  className={`route ${m.u.side}`}
+                  x1={m.x}
+                  y1={m.y + 5.5}
+                  x2={dest.x}
+                  y2={dest.y}
+                />
+              );
+            })}
+        </svg>
+
         {s.locations.map((loc) => {
           const ctrl = loc.controlledBy;
           return (
@@ -98,19 +128,23 @@ export default function StrategicMap() {
           );
         })}
 
-        {markers.map(({ u, x, y }) => (
-          <div
-            key={u.id}
-            className={`marker ${u.side} ${u.state} ${u.side === "enemy" && !u.revealed ? "hidden" : ""}`}
-            style={{ left: `${x}%`, top: `${y}%` }}
-          >
-            <span className="pip">{UNIT_GLYPH[u.type]}</span>
-            <span>{u.count}</span>
-            <span className="mor">
-              <span style={{ width: `${u.morale}%` }} />
-            </span>
-          </div>
-        ))}
+        {markers.map(({ u, x, y }) => {
+          const dest = u.state === "moving" && u.moveDestId ? locById.get(u.moveDestId) : null;
+          return (
+            <div
+              key={u.id}
+              className={`marker ${u.side} ${u.state} ${u.side === "enemy" && !u.revealed ? "hidden" : ""}`}
+              style={{ left: `${x}%`, top: `${y}%` }}
+            >
+              <span className="pip">{UNIT_GLYPH[u.type]}</span>
+              <span>{u.count}</span>
+              <span className="mor">
+                <span style={{ width: `${u.morale}%` }} />
+              </span>
+              {dest && u.side === "player" && <span className="marker-dest">→ {dest.name}</span>}
+            </div>
+          );
+        })}
 
         {hoverLoc && <MapTip loc={hoverLoc} units={s.units} />}
 
