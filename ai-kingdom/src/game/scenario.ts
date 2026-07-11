@@ -1,0 +1,344 @@
+/**
+ * Scenario configuration for "Ночь перед осадой" (The Night Before the Siege).
+ *
+ * All tunable numbers live here so new scenarios can be authored without
+ * touching the engine. The engine reads this config to build the initial
+ * GameState.
+ */
+
+import type { ScenarioConfig, Location, BalanceConfig } from "./types";
+
+const balance: BalanceConfig = {
+  attack: { spearmen: 1.0, archers: 1.25, cavalry: 1.7 },
+  defense: { spearmen: 1.5, archers: 0.7, cavalry: 1.0 },
+  // Travel-time multiplier applied to a road's distance. Lower = faster.
+  speed: { spearmen: 1.25, archers: 1.0, cavalry: 0.6 },
+  supplyDrain: 4, // supply points lost per group per game hour in the field
+  foodDrain: 2, // food per 100 soldiers per game hour
+  casualtyRate: 0.06,
+};
+
+const locations: Location[] = [
+  {
+    id: "castle",
+    name: "Королевский замок",
+    type: "castle",
+    x: 18,
+    y: 76,
+    description:
+      "Сердце королевства. Толстые стены и полный склад, но потеря замка означает конец обороны.",
+    controlledBy: "player",
+    foodStore: 100,
+    isObjective: true,
+    effects: {
+      defenseBonus: 1.8,
+      archerBonus: 1.2,
+      cavalryModifier: 0.6,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: true,
+      chokePoint: false,
+    },
+    roads: [
+      { to: "village", distance: 12 },
+      { to: "bridge", distance: 30 },
+      { to: "hills", distance: 40 },
+    ],
+  },
+  {
+    id: "village",
+    name: "Деревня Тихий Брод",
+    type: "village",
+    x: 32,
+    y: 58,
+    description:
+      "Здесь хранится продовольствие и живут крестьяне. Уязвима для набега, но её можно эвакуировать.",
+    controlledBy: "player",
+    foodStore: 60,
+    isObjective: false,
+    effects: {
+      defenseBonus: 1.0,
+      archerBonus: 1.0,
+      cavalryModifier: 1.0,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: false,
+      chokePoint: false,
+    },
+    roads: [
+      { to: "castle", distance: 12 },
+      { to: "bridge", distance: 22 },
+      { to: "forest", distance: 26 },
+    ],
+  },
+  {
+    id: "bridge",
+    name: "Каменный мост",
+    type: "bridge",
+    x: 50,
+    y: 60,
+    description:
+      "Единственная переправа через реку. Узкий проход даёт огромное оборонительное преимущество — горстка людей задержит армию.",
+    controlledBy: "neutral",
+    foodStore: 0,
+    isObjective: false,
+    effects: {
+      defenseBonus: 2.2,
+      archerBonus: 1.0,
+      cavalryModifier: 0.4,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: false,
+      chokePoint: true,
+    },
+    roads: [
+      { to: "castle", distance: 30 },
+      { to: "village", distance: 22 },
+      { to: "forest", distance: 24 },
+      { to: "hills", distance: 20 },
+      { to: "road", distance: 18 },
+    ],
+  },
+  {
+    id: "forest",
+    name: "Северный лес",
+    type: "forest",
+    x: 40,
+    y: 24,
+    description:
+      "Густой лес скрывает войска и подходит для засады и разведки, но замедляет передвижение.",
+    controlledBy: "neutral",
+    foodStore: 0,
+    isObjective: false,
+    effects: {
+      defenseBonus: 1.2,
+      archerBonus: 0.9,
+      cavalryModifier: 0.5,
+      speedModifier: 1.4,
+      hidesTroops: true,
+      grantsVision: false,
+      chokePoint: false,
+    },
+    roads: [
+      { to: "village", distance: 26 },
+      { to: "bridge", distance: 24 },
+      { to: "hills", distance: 30 },
+    ],
+  },
+  {
+    id: "hills",
+    name: "Восточные холмы",
+    type: "hills",
+    x: 64,
+    y: 30,
+    description:
+      "Возвышенность даёт обзор на округу и усиливает лучников, но открыта для конницы.",
+    controlledBy: "neutral",
+    foodStore: 0,
+    isObjective: false,
+    effects: {
+      defenseBonus: 1.3,
+      archerBonus: 1.6,
+      cavalryModifier: 0.8,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: true,
+      chokePoint: false,
+    },
+    roads: [
+      { to: "castle", distance: 40 },
+      { to: "bridge", distance: 20 },
+      { to: "forest", distance: 30 },
+      { to: "road", distance: 16 },
+    ],
+  },
+  {
+    id: "road",
+    name: "Восточная дорога",
+    type: "road",
+    x: 72,
+    y: 56,
+    description: "Главная дорога, по которой движется вражеская армия к столице.",
+    controlledBy: "neutral",
+    foodStore: 0,
+    isObjective: false,
+    effects: {
+      defenseBonus: 1.0,
+      archerBonus: 1.0,
+      cavalryModifier: 1.1,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: false,
+      chokePoint: false,
+    },
+    roads: [
+      { to: "bridge", distance: 18 },
+      { to: "hills", distance: 16 },
+      { to: "enemy_camp", distance: 26 },
+    ],
+  },
+  {
+    id: "enemy_camp",
+    name: "Лагерь врага",
+    type: "enemy_camp",
+    x: 88,
+    y: 44,
+    description:
+      "Источник наступающей армии. Точные силы врага скрыты, пока разведка не доложит подробности.",
+    controlledBy: "enemy",
+    foodStore: 0,
+    isObjective: false,
+    effects: {
+      defenseBonus: 1.4,
+      archerBonus: 1.0,
+      cavalryModifier: 1.0,
+      speedModifier: 1,
+      hidesTroops: false,
+      grantsVision: false,
+      chokePoint: false,
+    },
+    roads: [{ to: "road", distance: 26 }],
+  },
+];
+
+export const NIGHT_SIEGE: ScenarioConfig = {
+  id: "night-before-siege",
+  name: "Ночь перед осадой",
+  kingdomName: "Королевство Валемонт",
+  description:
+    "Молодой правитель должен подготовить оборону и пережить наступление врага до рассвета.",
+  intro:
+    "Ваше величество, разведчики заметили вражеские знамёна на восточной дороге. Основные силы будут у стен до рассвета.",
+  seed: 20260711,
+  durationMinutes: 300,
+  startResources: {
+    food: 100,
+    kingdomMorale: 68,
+    castleIntegrity: 100,
+    villageIntegrity: 100,
+  },
+  locations,
+  officers: [
+    {
+      id: "edward",
+      name: "Сэр Эдвард Вейл",
+      title: "Командующий пехотой",
+      role: "Пехота и оборона",
+      crestSeed: 11,
+      accentColor: "#c9a24a",
+      bio: "Тридцать лет службы. Ветеран трёх осад, ни одну из которых не сдал без приказа.",
+      character:
+        "Опытный, дисциплинированный, верный и осторожный. Ненавидит бессмысленные потери и говорит прямо.",
+      competencies: ["Оборона", "Удержание позиций", "Копейщики", "Сохранение морали"],
+      traits: {
+        loyalty: 82,
+        courage: 70,
+        caution: 78,
+        ambition: 30,
+        discipline: 88,
+        initiative: 40,
+        competence: 80,
+        stress: 20,
+        respectForPlayer: 60,
+        resentment: 5,
+        fatigue: 15,
+      },
+      speechStyle: "stoic",
+      startLocationId: "castle",
+      units: [{ type: "spearmen", count: 320, morale: 70 }],
+    },
+    {
+      id: "roland",
+      name: "Сэр Роланд Эшфорд",
+      title: "Командующий конницей",
+      role: "Кавалерия и атака",
+      crestSeed: 27,
+      accentColor: "#c0433a",
+      bio: "Младший сын знатного дома, жаждущий доказать, что достоин большего, чем его старшие братья.",
+      character:
+        "Молодой, смелый, амбициозный и самоуверенный. Жаждет славы и ревнует к чужим успехам.",
+      competencies: ["Атака", "Фланговый удар", "Быстрый манёвр", "Преследование"],
+      traits: {
+        loyalty: 62,
+        courage: 90,
+        caution: 25,
+        ambition: 85,
+        discipline: 45,
+        initiative: 80,
+        competence: 68,
+        stress: 25,
+        respectForPlayer: 55,
+        resentment: 10,
+        fatigue: 10,
+      },
+      speechStyle: "brash",
+      startLocationId: "castle",
+      units: [{ type: "cavalry", count: 90, morale: 78 }],
+    },
+    {
+      id: "mara",
+      name: "Мара Вельт",
+      title: "Советница по разведке",
+      role: "Разведка и снабжение",
+      crestSeed: 42,
+      accentColor: "#4a8fb0",
+      bio: "Выросла среди торговцев и караванов. Знает цену каждой телеге зерна и каждому часу до боя.",
+      character:
+        "Умная, спокойная и прагматичная. Ценит подготовку и не терпит необоснованных решений.",
+      competencies: ["Разведка", "Логистика", "Оценка риска", "Снабжение"],
+      traits: {
+        loyalty: 74,
+        courage: 55,
+        caution: 82,
+        ambition: 40,
+        discipline: 70,
+        initiative: 58,
+        competence: 84,
+        stress: 18,
+        respectForPlayer: 65,
+        resentment: 4,
+        fatigue: 12,
+      },
+      speechStyle: "analytic",
+      startLocationId: "castle",
+      units: [{ type: "archers", count: 220, morale: 66 }],
+    },
+  ],
+  enemy: {
+    commanderName: "Лорд Кассий Морн",
+    trueStrength: 1180,
+    approachRoute: ["enemy_camp", "road", "bridge", "castle"],
+    composition: { spearmen: 700, archers: 300, cavalry: 180 },
+  },
+  scriptedEvents: [
+    {
+      atTick: 40,
+      id: "scout_torches",
+      kind: "report",
+      severity: "notable",
+      title: "Огни на дороге",
+      message:
+        "Дозорные докладывают: вереница факелов растянулась по восточной дороге. Враг не скрывается.",
+      requiresPause: false,
+    },
+    {
+      atTick: 210,
+      id: "sky_lightens",
+      kind: "narrative",
+      severity: "info",
+      title: "Небо светлеет",
+      message:
+        "На востоке проступает первая серая полоса. До рассвета осталось немного — врагу нужно спешить.",
+      requiresPause: false,
+    },
+  ],
+  balance,
+};
+
+export const SCENARIOS: Record<string, ScenarioConfig> = {
+  [NIGHT_SIEGE.id]: NIGHT_SIEGE,
+};
+
+export function getScenario(id: string): ScenarioConfig {
+  return SCENARIOS[id] ?? NIGHT_SIEGE;
+}
