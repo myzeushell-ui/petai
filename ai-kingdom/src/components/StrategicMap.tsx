@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { useGame } from "../state/GameContext";
 import { LocationIcon, UNIT_GLYPH } from "./icons";
+import MapCanvas from "./MapCanvas";
 import { LOCATION_TYPE_LABELS, UNIT_LABELS } from "../game/constants";
+import { getScenario } from "../game/scenario";
 import type { Location, UnitGroup } from "../game/types";
 
 function lerp(a: number, b: number, t: number) {
@@ -14,29 +16,6 @@ export default function StrategicMap() {
   const [hover, setHover] = useState<string | null>(null);
 
   const locById = useMemo(() => new Map(s.locations.map((l) => [l.id, l])), [s.locations]);
-
-  // Deduplicated road segments; flag the ones on the enemy approach route.
-  const roads = useMemo(() => {
-    const seen = new Set<string>();
-    const segs: { a: Location; b: Location; enemy: boolean }[] = [];
-    const route = s.enemy.approachRoute;
-    const onRoute = (x: string, y: string) => {
-      for (let i = 0; i < route.length - 1; i++) {
-        if ((route[i] === x && route[i + 1] === y) || (route[i] === y && route[i + 1] === x)) return true;
-      }
-      return false;
-    };
-    for (const loc of s.locations) {
-      for (const road of loc.roads) {
-        const key = [loc.id, road.to].sort().join("-");
-        if (seen.has(key)) continue;
-        seen.add(key);
-        const b = locById.get(road.to);
-        if (b) segs.push({ a: loc, b, enemy: onRoute(loc.id, road.to) });
-      }
-    }
-    return segs;
-  }, [s.locations, s.enemy.approachRoute, locById]);
 
   // Marker screen position (interpolated for moving groups) + fan-out offsets.
   const markers = useMemo(() => {
@@ -61,22 +40,32 @@ export default function StrategicMap() {
   const activeBattles = new Set(s.battles.filter((b) => b.status === "active").map((b) => b.locationId));
   const hoverLoc = hover ? locById.get(hover) : null;
 
+  // Positions lit by our fires (torch glow on the drawn map).
+  const heldIds = useMemo(
+    () =>
+      [
+        ...new Set(
+          s.units
+            .filter((u) => u.side === "player" && u.count > 0 && u.state !== "moving")
+            .map((u) => u.locationId),
+        ),
+      ],
+    [s.units],
+  );
+  const durationMinutes = getScenario(s.scenarioId).durationMinutes;
+
   return (
     <div className="panel" style={{ padding: 0 }}>
       <div className="map-wrap">
-        <svg className="map-roads" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path className="river-line" d="M 62 4 Q 52 34 50 60 Q 48 82 40 98" fill="none" />
-          {roads.map((seg, i) => (
-            <line
-              key={i}
-              className={`road-line ${seg.enemy ? "enemy-path" : ""}`}
-              x1={seg.a.x}
-              y1={seg.a.y}
-              x2={seg.b.x}
-              y2={seg.b.y}
-            />
-          ))}
-        </svg>
+        <MapCanvas
+          locations={s.locations}
+          heldIds={heldIds}
+          battleIds={[...activeBattles]}
+          intelLevel={s.enemy.intelLevel}
+          timeUntilDawn={s.timeUntilDawn}
+          durationMinutes={durationMinutes}
+          villageRaided={Boolean(s.flags.villageRaided)}
+        />
 
         {s.locations.map((loc) => {
           const ctrl = loc.controlledBy;
