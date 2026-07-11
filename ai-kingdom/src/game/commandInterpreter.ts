@@ -206,11 +206,33 @@ function findUnitType(norm: string): UnitType | null {
   return null;
 }
 
+/** Interrogatives that mark free-form questions the advisor should field. */
+const INTERROGATIVES = [
+  "что", "как", "где", "когда", "сколько", "каков", "какая", "какие", "какое",
+  "почему", "зачем", "кто ", "чем", "куда", "откуда", "расскаж", "новост",
+  "есть ли", "можно ли", "стоит ли", "нужно ли", "успе", "хватит", "правда ли",
+];
+const ADVICE_HINTS = [
+  "что делать", "что мне делать", "стоит ли", "как быть", "как лучше",
+  "что предприн", "что скажешь", "как думаешь", "как поступ", "что посовет",
+];
+
+/**
+ * Fallback for text that matched no order verb: if it reads like a question,
+ * route it to the advisor as an information/advice request instead of a
+ * dead-end "not recognised".
+ */
+function fallbackQuery(norm: string): OrderAction | null {
+  const isQuestion = INTERROGATIVES.some((w) => norm.includes(w));
+  if (!isQuestion) return null;
+  return ADVICE_HINTS.some((w) => norm.includes(w)) ? "ASK_ADVICE" : "ASK_STATUS";
+}
+
 function findAction(norm: string): OrderAction {
   for (const { action, stems } of ACTION_KEYWORDS) {
     if (stems.some((s) => norm.includes(s))) return action;
   }
-  return "UNKNOWN";
+  return fallbackQuery(norm) ?? "UNKNOWN";
 }
 
 function findConditions(norm: string): OrderCondition[] {
@@ -403,7 +425,11 @@ export class LocalCommandInterpreter implements CommandInterpreter {
   ): MissingField[] {
     const missing: MissingField[] = [];
     if (action === "UNKNOWN") missing.push("action");
-    if (!officer && action !== "UNKNOWN" && action !== "SUMMON_OFFICER") missing.push("officer");
+    // Questions are fielded by the advisor, so they never require a named officer.
+    const isQuery = action === "ASK_STATUS" || action === "ASK_ADVICE";
+    if (!officer && action !== "UNKNOWN" && action !== "SUMMON_OFFICER" && !isQuery) {
+      missing.push("officer");
+    }
     if (!target && !NO_TARGET_ACTIONS.includes(action) && action !== "UNKNOWN") missing.push("target");
     if (
       COUNT_REQUIRED_ACTIONS.includes(action) &&

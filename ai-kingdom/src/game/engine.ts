@@ -23,7 +23,7 @@ import type {
 } from "./types";
 import { getScenario } from "./scenario";
 import { seedState } from "./rng";
-import { clamp, clampStat } from "./util";
+import { clamp, clampStat, formatMinutes, pluralSoldiers } from "./util";
 import { localInterpreter } from "./commandInterpreter";
 import { localDialogue } from "./dialogue";
 import { createMemoryEvent, applyMemoryToOfficer } from "./memory";
@@ -376,33 +376,40 @@ export function submitCommand(state: GameState, text: string): GameState {
     pending: s.pendingClarification,
   };
   const parsed = localInterpreter.parse(trimmed, ctx);
-  const officer = officerById(s, parsed.officerId);
+  const named = officerById(s, parsed.officerId);
+  const isQuery = parsed.action === "ASK_STATUS" || parsed.action === "ASK_ADVICE";
 
   pushDialogue(
     s,
     "player",
-    officer?.id ?? s.selectedOfficerId,
+    named?.id ?? s.selectedOfficerId,
     trimmed,
-    parsed.isQuestion ? "question" : "order",
+    parsed.isQuestion || isQuery ? "question" : "order",
   );
   s.pendingClarification = null;
 
+  // Never dead-end: an unrecognised line gets a helpful reply from the advisor,
+  // who reports what she knows and invites a clearer question or order.
   if (parsed.action === "UNKNOWN") {
-    pushDialogue(
-      s,
-      "narrator",
-      null,
-      "Приказ не разобран. Попробуйте иначе: назовите офицера, действие и цель.",
-      "system",
-    );
-    return s;
+    const advisor = named && named.alive ? named : adviser(s);
+    const reply = `Не вполне понял, милорд. ${buildSituationBrief(s)} Спросите об обстановке, враге, времени или запасах — или отдайте приказ офицеру.`;
+    pushDialogue(s, advisor.id, advisor.id, localDialogue.officerStatus({ officer: advisor, state: s, extra: { report: reply } }), "report");
+    return finishAction(s);
   }
+
+  // Questions are fielded by whoever was addressed, or by the advisor (Mara).
+  const officer = isQuery ? named ?? adviser(s) : named;
 
   if (!officer) {
     pushDialogue(s, "narrator", null, "К кому обращён приказ, милорд? Назовите офицера.", "system");
     return s;
   }
   if (!officer.alive) {
+    if (isQuery) {
+      const a = adviser(s);
+      pushDialogue(s, a.id, a.id, localDialogue.officerStatus({ officer: a, state: s, extra: { report: buildStatusReport(s, a, parsed.rawText) } }), "report");
+      return finishAction(s);
+    }
     pushDialogue(s, "narrator", null, `${officer.name} пал. Отдавать ему приказы больше некому, милорд.`, "system");
     return s;
   }
@@ -803,30 +810,177 @@ function doScouting(s: GameState, atLocationId: string): void {
 /* Status & advice reports                                             */
 /* ------------------------------------------------------------------ */
 
+/** The kingdom's intelligence & supply advisor (Mara), for general questions. */
+function adviser(s: GameState): Officer {
+  return (
+    s.officers.find((o) => o.id === "mara" && o.alive) ??
+    s.officers.find((o) => o.alive) ??
+    s.officers[0]
+  );
+}
+
+type ReportTopic = "situation" | "enemy" | "time" | "supply" | "losses" | "positions" | "orders" | "own";
+
+function detectTopic(low: string): ReportTopic {
+  // Specific topics first, so "что там с врагом" resolves to the enemy report
+  // rather than the generic "situation" catch-all.
+  if (/враг|неприятел|против|их сил|сколько их|наступ|осад|кто идет|конниц.*враг/.test(low)) return "enemy";
+  if (/рассвет|врем|сколько остал|успе|до утра|до зари/.test(low)) return "time";
+  if (/запас|продовольств|снабжен|провиант|ед[аыу]|голод|хватит/.test(low)) return "supply";
+  if (/потер|погиб|ранен|сколько.*люд/.test(low)) return "losses";
+  if (/приказ|задани|чем занят|что делают|что исполн/.test(low)) return "orders";
+  if (/где|позиц|расстанов|кто где|наши войск/.test(low)) return "positions";
+  if (/обстанов|что происход|что там|новост|доклад|сводк|как дела|положени|итог/.test(low)) return "situation";
+  return "own";
+}
+
+function playerTotals(s: GameState): { spearmen: number; archers: number; cavalry: number; total: number } {
+  const t = { spearmen: 0, archers: 0, cavalry: 0, total: 0 };
+  for (const u of s.units) {
+    if (u.side === "player" && u.count > 0) {
+      t[u.type] += u.count;
+      t.total += u.count;
+    }
+  }
+  return t;
+}
+
+function enemyIntel(s: GameState): string {
+  const e = s.enemy;
+  if (e.intelLevel < 0.3) {
+    return "О враге почти ничего не известно — нужна разведка (лес или холмы). Знамёна замечены на восточной дороге.";
+  }
+  const approx = e.estimatedStrength ?? Math.round(e.trueStrength * 0.85);
+  const revealed = s.units.filter((u) => u.side === "enemy" && u.count > 0 && u.revealed);
+  const where = revealed.length
+    ? "Замечены у " + [...new Set(revealed.map((u) => locById(s, u.locationId)?.name ?? "?"))].join(", ")
+    : "Идут по восточной дороге к мосту";
+  const cav = e.intelLevel > 0.6 ? " Среди них есть конница — она движется быстрее пехоты." : " Есть конница.";
+  return `У врага около ${approx} бойцов.${cav} ${where}.`;
+}
+
+function timeReport(s: GameState): string {
+  const t = formatMinutes(s.timeUntilDawn);
+  if (s.timeUntilDawn <= 0) return "Рассвет наступил.";
+  if (s.timeUntilDawn < 90) return `До рассвета ${t} — враг вот-вот будет у стен, времени почти нет.`;
+  if (s.timeUntilDawn < 180) return `До рассвета ${t}. Пора занимать позиции — враг на подходе.`;
+  return `До рассвета ${t}. Есть время подготовить оборону.`;
+}
+
+function supplyReport(s: GameState): string {
+  const village = s.locations.find((l) => l.type === "village");
+  const soldiers = playerTotals(s).total;
+  const hours = soldiers > 0 ? Math.floor(s.resources.food / ((soldiers / 100) * s.balance.foodDrain || 1)) : 99;
+  return `В замке ${Math.round(s.resources.food)} припасов${village && village.foodStore > 0 ? `, в деревне ещё ${village.foodStore}` : ""}. При нынешней армии этого хватит примерно на ${formatMinutes(hours * 60)} боёв. Мораль королевства — ${Math.round(s.resources.kingdomMorale)}/100.`;
+}
+
+function positionsReport(s: GameState): string {
+  const parts: string[] = [];
+  for (const o of s.officers.filter((of) => of.alive)) {
+    const groups = s.units.filter((u) => u.commanderId === o.id && u.count > 0);
+    if (groups.length === 0) {
+      parts.push(`${o.name.split(" ").slice(-1)[0]} — без войск`);
+      continue;
+    }
+    const g = groups[0];
+    const place = g.state === "moving" ? `в пути к ${locById(s, g.moveDestId ?? g.moveToId ?? "")?.name ?? "цели"}` : (locById(s, g.locationId)?.name ?? "—");
+    const troops = groups.map((gg) => `${gg.count} ${UNIT_LABELS_GENITIVE[gg.type]}`).join(", ");
+    parts.push(`${o.name.split(" ").slice(-1)[0]}: ${troops} — ${place}`);
+  }
+  return parts.join(". ") + ".";
+}
+
+function ordersReport(s: GameState): string {
+  const active = s.orders.filter(isActive);
+  if (active.length === 0) return "Действующих приказов нет — офицеры ждут ваших распоряжений.";
+  return active
+    .map((o) => {
+      const name = s.officers.find((of) => of.id === o.officerId)?.name.split(" ").slice(-1)[0] ?? "—";
+      const place = locById(s, o.targetLocationId)?.name;
+      return `${name}: ${describeTask(s, o).toLowerCase()}${place ? "" : ""}`;
+    })
+    .join("; ") + ".";
+}
+
+function lossesReport(s: GameState, officer: Officer): string {
+  const total = Number(s.flags.playerCasualtiesTotal ?? 0);
+  const wounded = s.officers.filter((o) => o.injury !== "none");
+  const mine = s.units.filter((u) => u.commanderId === officer.id && u.count > 0);
+  const minePart = mine.length ? ` Со мной осталось: ${mine.map((g) => `${g.count} ${UNIT_LABELS_GENITIVE[g.type]}`).join(", ")}.` : "";
+  const woundPart = wounded.length ? " Ранены: " + wounded.map((o) => o.name.split(" ").slice(-1)[0]).join(", ") + "." : "";
+  return `Потери армии на эту ночь — около ${pluralSoldiers(total)}.${minePart}${woundPart}`;
+}
+
+function situationReport(s: GameState): string {
+  const t = playerTotals(s);
+  const bridgeHeld = s.units.some((u) => u.side === "player" && u.count > 0 && u.locationId === "bridge" && (u.state === "holding" || u.state === "fighting"));
+  const castleGuarded = s.units.some((u) => u.side === "player" && u.count > 0 && u.locationId === "castle");
+  const fights = s.battles.filter((b) => b.status === "active").map((b) => locById(s, b.locationId)?.name).filter(Boolean);
+  const threats: string[] = [];
+  if (!bridgeHeld) threats.push("мост не занят");
+  if (!castleGuarded) threats.push("замок без гарнизона");
+  if (s.flags.villageRaided) threats.push("деревня разграблена");
+  if (s.resources.food < 50) threats.push("мало припасов");
+  const lines = [
+    timeReport(s),
+    enemyIntel(s),
+    `Наши силы: ${t.spearmen} копейщиков, ${t.archers} лучников, ${t.cavalry} всадников.`,
+    fights.length ? `Идёт бой у ${fights.join(", ")}.` : bridgeHeld ? "Мост под нашим контролем." : "",
+    threats.length ? `Слабые места: ${threats.join(", ")}.` : "",
+  ].filter(Boolean);
+  return lines.join(" ");
+}
+
+/** One-line summary used as a soft fallback for unrecognised input. */
+function buildSituationBrief(s: GameState): string {
+  const bridgeHeld = s.units.some((u) => u.side === "player" && u.count > 0 && u.locationId === "bridge" && (u.state === "holding" || u.state === "fighting"));
+  return `До рассвета ${formatMinutes(s.timeUntilDawn)}; ${s.enemy.intelLevel < 0.3 ? "силы врага ещё не разведаны" : `враг ≈ ${s.enemy.estimatedStrength ?? "?"} бойцов`}; мост ${bridgeHeld ? "под контролем" : "не занят"}.`;
+}
+
 function buildStatusReport(s: GameState, officer: Officer, rawText: string): string {
-  const low = rawText.toLowerCase();
-  if (/запас|продовольств|снабжен|ед[аы]|провиант/.test(low)) {
-    const village = s.locations.find((l) => l.type === "village");
-    return `В замке ${Math.round(s.resources.food)} припасов${village ? `, в деревне ещё ${village.foodStore}` : ""}. Мораль королевства — ${Math.round(s.resources.kingdomMorale)} из 100.`;
+  const topic = detectTopic(rawText.toLowerCase());
+  switch (topic) {
+    case "situation":
+      return situationReport(s);
+    case "enemy":
+      return enemyIntel(s);
+    case "time":
+      return timeReport(s);
+    case "supply":
+      return supplyReport(s);
+    case "losses":
+      return lossesReport(s, officer);
+    case "positions":
+      return positionsReport(s);
+    case "orders":
+      return ordersReport(s);
+    case "own":
+    default: {
+      const groups = s.units.filter((u) => u.commanderId === officer.id && u.count > 0);
+      if (groups.length === 0) {
+        // An officer with no troops (or the advisor) gives the wider picture.
+        return officer.id === adviser(s).id ? situationReport(s) : "Под моим началом сейчас нет войск, милорд.";
+      }
+      const parts = groups.map((g) => {
+        const loc = g.state === "moving" ? "в пути" : locById(s, g.locationId)?.name ?? "в пути";
+        return `${g.count} ${UNIT_LABELS_GENITIVE[g.type]} (мораль ${Math.round(g.morale)}) — ${loc}`;
+      });
+      return `${parts.join("; ")}.`;
+    }
   }
-  const groups = s.units.filter((u) => u.commanderId === officer.id && u.count > 0);
-  if (groups.length === 0) return "Под моим началом сейчас нет войск, милорд.";
-  const parts = groups.map((g) => {
-    const loc = locById(s, g.locationId)?.name ?? "в пути";
-    return `${g.count} ${UNIT_LABELS_GENITIVE[g.type]} (мораль ${Math.round(g.morale)}) — ${loc}`;
-  });
-  if (/потер|погиб|сколько.*людей/.test(low)) {
-    return `Со мной осталось: ${parts.join("; ")}.`;
-  }
-  return `${parts.join("; ")}.`;
 }
 
 function buildAdvice(s: GameState, officer: Officer): string {
   const bridgeHeld = s.units.some(
     (u) => u.side === "player" && u.count > 0 && u.locationId === "bridge" && (u.state === "holding" || u.state === "fighting"),
   );
+  const castleGuarded = s.units.some((u) => u.side === "player" && u.count > 0 && u.locationId === "castle");
   const scouted = s.enemy.intelLevel > 0.3;
-  if (!scouted && officer.id === "mara") {
+
+  if (!castleGuarded) {
+    return "Замок остался без гарнизона, милорд — это смертельно опасно. Оставьте кого-то у стен.";
+  }
+  if (!scouted && (officer.id === "mara" || officer.speechStyle === "analytic")) {
     return "Сначала пошлите разведку к лесу или холмам — мы почти вслепую, милорд.";
   }
   if (!bridgeHeld && officer.speechStyle !== "brash") {
@@ -838,7 +992,10 @@ function buildAdvice(s: GameState, officer: Officer): string {
   if (s.resources.food < 60) {
     return "Припасы тают, милорд. Стоит вывезти зерно из деревни, пока цела дорога.";
   }
-  return "Держите оборону плотно и не оставляйте замок без гарнизона.";
+  if (s.timeUntilDawn < 120) {
+    return "Времени в обрез, милорд. Расставьте войска сейчас — перестраиваться будет поздно.";
+  }
+  return "Держите оборону плотно у моста, лучников — на холмы, а замок — под охраной.";
 }
 
 /* ------------------------------------------------------------------ */

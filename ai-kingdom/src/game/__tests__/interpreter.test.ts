@@ -109,4 +109,24 @@ describe("command interpreter", () => {
     const p = localInterpreter.parse("Эдвард, измени приказ", ctx(base, { activeOfficerId: "edward" }));
     expect(p.action).toBe("CHANGE_ORDER");
   });
+
+  it("routes free-form questions to the advisor instead of dead-ending", () => {
+    const q1 = localInterpreter.parse("Какова обстановка?", ctx(base));
+    expect(q1.action).toBe("ASK_STATUS");
+    const q2 = localInterpreter.parse("Что там с врагом?", ctx(base));
+    expect(q2.action).toBe("ASK_STATUS");
+    const q3 = localInterpreter.parse("Что мне делать дальше?", ctx(base));
+    expect(q3.action).toBe("ASK_ADVICE");
+  });
+
+  it("does not require a named officer for a question", () => {
+    const p = localInterpreter.parse("Сколько у нас времени?", ctx(base));
+    expect(p.action).toBe("ASK_STATUS");
+    expect(p.missing).not.toContain("officer");
+  });
+
+  it("still flags genuine gibberish as unrecognised", () => {
+    const p = localInterpreter.parse("абырвалг бларбл", ctx(base));
+    expect(p.action).toBe("UNKNOWN");
+  });
 });
