@@ -22,7 +22,7 @@ export default function ReportBanner() {
               className="btn btn-ghost"
               onClick={() => {
                 g.resolveInitiative(officer!.id, false);
-                g.dismissEvents();
+                g.dismissEvents(ev.id);
               }}
             >
               Отказать
@@ -31,7 +31,7 @@ export default function ReportBanner() {
               className="btn btn-primary"
               onClick={() => {
                 g.resolveInitiative(officer!.id, true);
-                g.dismissEvents();
+                g.dismissEvents(ev.id);
               }}
             >
               Разрешить атаку
@@ -39,13 +39,13 @@ export default function ReportBanner() {
           </>
         ) : (
           <>
-            <button className="btn btn-ghost" onClick={g.dismissEvents}>
+            <button className="btn btn-ghost" onClick={() => g.dismissEvents(ev.id)}>
               Понятно
             </button>
             <button
               className="btn btn-gold"
               onClick={() => {
-                g.dismissEvents();
+                g.dismissEvents(ev.id);
                 g.setSpeed(1);
               }}
             >

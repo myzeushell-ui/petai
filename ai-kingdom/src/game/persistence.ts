@@ -7,7 +7,7 @@
 
 import type { GameState, GameSettings } from "./types";
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 export const SAVE_KEY = "ai-kingdom:save";
 export const SETTINGS_KEY = "ai-kingdom:settings";
 

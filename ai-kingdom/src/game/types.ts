@@ -562,6 +562,9 @@ export interface GameState {
    */
   pendingClarification: PendingClarification | null;
 
+  /** Text pre-loaded into the command box so the player can revise an order. */
+  pendingRevision: string | null;
+
   settings: GameSettings;
   tutorial: TutorialState;
 

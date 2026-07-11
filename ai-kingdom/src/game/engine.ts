@@ -54,7 +54,7 @@ import { UNIT_LABELS_GENITIVE } from "./constants";
 const STEP_CAP = 3; // max game minutes per internal sub-step
 const ROUND_INTERVAL = 6; // game minutes between battle rounds
 const ENEMY_START_DELAY = 20; // game minutes before the enemy breaks camp
-const RAID_TICK = 95; // when the enemy may split off a village raid
+const RAID_TICK = 34; // enemy splits off a village raid while cavalry is still en route
 const RAID_SIZE = 60; // cavalry in the raid detachment
 const DIALOGUE_CAP = 140;
 const LOG_CAP = 160;
@@ -223,7 +223,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
     .reduce((sum, u) => sum + u.count, 0);
 
   const state: GameState = {
-    version: 1,
+    version: 2,
     scenarioId: scenario.id,
     kingdomName: scenario.kingdomName,
     seed: scenario.seed,
@@ -263,6 +263,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
     selectedOfficerId: null,
     selectedLocationId: null,
     pendingClarification: null,
+    pendingRevision: null,
     settings: { voiceInput: false, voiceOutput: false, speechLang: "ru-RU" },
     tutorial: { active: true, step: 0, completed: false },
     flags: {
@@ -401,6 +402,10 @@ export function submitCommand(state: GameState, text: string): GameState {
     pushDialogue(s, "narrator", null, "К кому обращён приказ, милорд? Назовите офицера.", "system");
     return s;
   }
+  if (!officer.alive) {
+    pushDialogue(s, "narrator", null, `${officer.name} пал. Отдавать ему приказы больше некому, милорд.`, "system");
+    return s;
+  }
   s.selectedOfficerId = officer.id;
 
   // Information & meta actions — no confirmation.
@@ -420,6 +425,11 @@ export function submitCommand(state: GameState, text: string): GameState {
   }
   if (parsed.action === "CANCEL_ORDER") {
     return finishAction(cancelOfficerOrders(s, officer.id, true));
+  }
+  if (parsed.action === "CHANGE_ORDER") {
+    const cleared = cancelOfficerOrders(s, officer.id, false);
+    pushDialogue(cleared, officer.id, officer.id, "Отменяю прежний приказ. Какова новая задача, милорд?", "report");
+    return finishAction(cleared);
   }
 
   // Combat orders with no explicit place ("атакуй фланг врага") default to the
@@ -543,6 +553,22 @@ export function declineOrder(state: GameState, orderId: string): GameState {
     pushDialogue(s, officer.id, officer.id, "Как прикажете, милорд. Отменяю.", "report");
   }
   return finishAction(s);
+}
+
+/** Cancel an awaiting order and preload its text so the player can edit it. */
+export function reviseOrder(state: GameState, orderId: string): GameState {
+  const s = clone(state);
+  const order = s.orders.find((o) => o.id === orderId && o.status === "awaiting_confirmation");
+  if (!order) return s;
+  order.status = "cancelled";
+  if (order.officerId) s.selectedOfficerId = order.officerId;
+  s.pendingRevision = order.sourceText;
+  return s;
+}
+
+export function clearRevision(state: GameState): GameState {
+  if (state.pendingRevision == null) return state;
+  return { ...state, pendingRevision: null };
 }
 
 /** Cancel a specific active order (change/cancel from the orders panel). */
@@ -1043,6 +1069,12 @@ function runBattles(s: GameState, dt: number): void {
       battle.playerCasualties += outcome.playerCasualties;
       battle.enemyCasualties += outcome.enemyCasualties;
       s.flags.playerCasualtiesTotal = Number(s.flags.playerCasualtiesTotal ?? 0) + outcome.playerCasualties;
+      // An assault on the castle chips away at its integrity — worse when the
+      // defenders are losing the exchange.
+      if (battle.locationId === "castle") {
+        const damage = outcome.momentumDelta < 0 ? 3 : 1;
+        s.resources.castleIntegrity = clampStat(s.resources.castleIntegrity - damage);
+      }
       battle.rounds += 1;
       if (outcome.logLine) {
         battle.log.push({ tick: s.tick, text: outcome.logLine });
@@ -1203,10 +1235,13 @@ function finishBattle(s: GameState, battle: Battle, winner: "player" | "enemy"):
   const locName = loc?.name ?? "поле боя";
 
   if (winner === "player") {
-    // Surviving enemy participants rout and leave the field.
+    // Surviving enemy participants rout and leave the field; count them lost.
     for (const eid of battle.enemyGroupIds) {
       const idx = s.units.findIndex((u) => u.id === eid);
-      if (idx >= 0) s.units[idx] = { ...s.units[idx], count: 0, state: "routed" };
+      if (idx >= 0) {
+        battle.enemyCasualties += s.units[idx].count;
+        s.units[idx] = { ...s.units[idx], count: 0, state: "routed" };
+      }
     }
     // Player participants hold the ground.
     for (const pid of battle.playerGroupIds) {
@@ -1250,6 +1285,9 @@ function finishBattle(s: GameState, battle: Battle, winner: "player" | "enemy"):
           : { ...g, count: 0, state: "routed" };
         s.units[idx] = { ...s.units[idx], state: "moving" };
       } else if (battle.locationId === "castle") {
+        // The last defenders are wiped out at the walls — count them as losses.
+        s.flags.playerCasualtiesTotal = Number(s.flags.playerCasualtiesTotal ?? 0) + g.count;
+        battle.playerCasualties += g.count;
         s.units[idx] = { ...g, count: 0, state: "routed" };
       }
     }
@@ -1300,6 +1338,7 @@ function maybeWoundOfficers(s: GameState, battle: Battle, playerLost: boolean): 
       } else if (o.injury === "heavy" && playerLost && roll(0.25)) {
         o.injury = "dead";
         o.alive = false;
+        if (s.selectedOfficerId === o.id) s.selectedOfficerId = null;
       }
       if (o.injury === "heavy" && o.permanentInjury === "none" && roll(0.5)) {
         const perms = ["eye", "arm", "limp"] as const;
@@ -1340,7 +1379,7 @@ function checkEndConditions(s: GameState): void {
     .filter((u) => u.side === "enemy" && u.count > 0)
     .reduce((sum, u) => sum + u.count, 0);
 
-  if (enemyAtCastleWinning || enemyHoldsCastle) {
+  if (enemyAtCastleWinning || enemyHoldsCastle || s.resources.castleIntegrity <= 0) {
     endGame(s, "defeat_castle_lost");
     return;
   }
@@ -1521,6 +1560,13 @@ export function selectLocation(state: GameState, locationId: string | null): Gam
 }
 export function markEventsHandled(state: GameState): GameState {
   return { ...state, events: state.events.map((e) => ({ ...e, handled: true })) };
+}
+/** Mark a single event handled, so simultaneous pause-events aren't skipped. */
+export function markEventHandled(state: GameState, eventId: string): GameState {
+  return {
+    ...state,
+    events: state.events.map((e) => (e.id === eventId ? { ...e, handled: true } : e)),
+  };
 }
 export function advanceTutorial(state: GameState): GameState {
   const step = state.tutorial.step + 1;

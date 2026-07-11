@@ -39,6 +39,8 @@ export interface GameApi {
   submit: (text: string) => void;
   confirmOrder: (orderId: string) => void;
   declineOrder: (orderId: string) => void;
+  reviseOrder: (orderId: string) => void;
+  clearRevision: () => void;
   cancelOrder: (orderId: string) => void;
   resolveInitiative: (officerId: string, approve: boolean) => void;
   decidePrisoner: (decision: PrisonerDecision) => void;
@@ -50,7 +52,7 @@ export interface GameApi {
   advanceTutorial: () => void;
   skipTutorial: () => void;
   updateSettings: (patch: Partial<GameState["settings"]>) => void;
-  dismissEvents: () => void;
+  dismissEvents: (eventId?: string) => void;
   // debug
   debug: {
     addTroops: (officerId: string, amount: number) => void;
@@ -69,50 +71,88 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const stateRef = useRef<GameState | null>(null);
   stateRef.current = state;
 
-  /* ---- real-time tick loop ---- */
+  /* ---- real-time tick loop ----
+     Runs the simulation on a fixed ~10 Hz accumulator (not every frame) to
+     bound the per-frame structuredClone cost, and clamps dt so backgrounding
+     the tab can't dump a huge catch-up step. Reads phase/speed from a ref so a
+     long pause never accumulates a giant jump on resume. */
+  const SIM_STEP_MS = 100;
   useEffect(() => {
     let raf = 0;
     let last = performance.now();
+    let acc = 0;
     const loop = (now: number) => {
-      const dtMs = now - last;
+      const dtMs = Math.min(now - last, 250);
       last = now;
-      setState((prev) => {
-        if (!prev || prev.phase !== "playing" || prev.speed === 0) return prev;
-        const gameDt = (dtMs / 1000) * prev.speed * TIME_SCALE;
-        if (gameDt <= 0) return prev;
-        return engine.tickGame(prev, gameDt);
-      });
+      const st = stateRef.current;
+      const running = !!st && st.phase === "playing" && st.speed !== 0;
+      if (!running) {
+        acc = 0;
+      } else {
+        acc += dtMs;
+        if (acc >= SIM_STEP_MS) {
+          const chunk = acc;
+          acc = 0;
+          setState((prev) => {
+            if (!prev || prev.phase !== "playing" || prev.speed === 0) return prev;
+            const gameDt = (chunk / 1000) * prev.speed * TIME_SCALE;
+            return gameDt > 0 ? engine.tickGame(prev, gameDt) : prev;
+          });
+        }
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  /* ---- autosave ---- */
+  /* ---- autosave ----
+     Fixed interval reading the ref, so it fires even while state churns every
+     frame during active play (a per-state debounce would be reset every frame
+     and never fire). A finished game clears its save so it isn't offered as
+     "Continue". */
   useEffect(() => {
-    if (!state) return;
-    if (state.phase === "menu") return;
-    const t = setTimeout(() => {
-      saveGame({ ...state, lastUpdated: Date.now() });
-      setHasSavedGame(true);
+    const id = setInterval(() => {
+      const st = stateRef.current;
+      if (!st || st.phase === "menu") return;
+      if (st.phase === "ended") {
+        clearSave();
+        setHasSavedGame(false);
+        return;
+      }
+      saveGame({ ...st, lastUpdated: Date.now() });
     }, AUTOSAVE_MS);
-    return () => clearTimeout(t);
-  }, [state]);
+    return () => clearInterval(id);
+  }, []);
 
-  /* ---- voice output: speak the newest officer/narrator line ---- */
+  /* ---- voice output: speak every not-yet-spoken officer/narrator line, in
+     order. When voice is off we keep the marker at the latest line so enabling
+     it later doesn't replay the backlog. */
   const lastSpokenId = useRef<string | null>(null);
   useEffect(() => {
-    if (!state || !state.settings.voiceOutput) return;
-    const spoken = ["report", "advice", "order", "question", "briefing"];
-    for (let i = state.dialogue.length - 1; i >= 0; i--) {
-      const m = state.dialogue[i];
+    if (!state) return;
+    const msgs = state.dialogue;
+    if (!state.settings.voiceOutput) {
+      lastSpokenId.current = msgs.length ? msgs[msgs.length - 1].id : null;
+      return;
+    }
+    const spokenKinds = ["report", "advice", "order", "question", "briefing"];
+    let startIdx = 0;
+    if (lastSpokenId.current) {
+      const li = msgs.findIndex((m) => m.id === lastSpokenId.current);
+      if (li < 0) {
+        // Marker scrolled out of the capped buffer — resync without replaying.
+        lastSpokenId.current = msgs.length ? msgs[msgs.length - 1].id : null;
+        return;
+      }
+      startIdx = li + 1;
+    }
+    for (let i = startIdx; i < msgs.length; i++) {
+      const m = msgs[i];
       if (m.speaker === "player") continue;
-      if (spoken.includes(m.kind)) {
-        if (lastSpokenId.current !== m.id) {
-          lastSpokenId.current = m.id;
-          speechOutput.speak(m.text, state.settings.speechLang);
-        }
-        break;
+      if (spokenKinds.includes(m.kind)) {
+        speechOutput.speak(m.text, state.settings.speechLang);
+        lastSpokenId.current = m.id;
       }
     }
   }, [state]);
@@ -166,6 +206,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       submit: (text) => wrap((s) => engine.submitCommand(s, text)),
       confirmOrder: (id) => wrap((s) => engine.confirmOrder(s, id)),
       declineOrder: (id) => wrap((s) => engine.declineOrder(s, id)),
+      reviseOrder: (id) => wrap((s) => engine.reviseOrder(s, id)),
+      clearRevision: () => wrap(engine.clearRevision),
       cancelOrder: (id) => wrap((s) => engine.cancelOrder(s, id)),
       resolveInitiative: (id, approve) => wrap((s) => engine.resolveInitiative(s, id, approve)),
       decidePrisoner: (d) => wrap((s) => engine.decidePrisoner(s, d)),
@@ -181,7 +223,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
           return next;
         });
       },
-      dismissEvents: () => wrap(engine.markEventsHandled),
+      dismissEvents: (eventId) =>
+        wrap((s) => (eventId ? engine.markEventHandled(s, eventId) : engine.markEventsHandled(s))),
       debug: {
         addTroops: (officerId, amount) => wrap((s) => engine.debug.addTroops(s, officerId, amount)),
         setMorale: (value) => wrap((s) => engine.debug.setMorale(s, value)),

@@ -42,7 +42,11 @@ export default function OrderConfirmModal() {
         </div>
 
         <div className="modal-actions">
-          <button className="btn btn-ghost" onClick={() => g.declineOrder(order.id)}>
+          <button
+            className="btn btn-ghost"
+            title="Отменить и вернуть текст приказа в строку для правки"
+            onClick={() => g.reviseOrder(order.id)}
+          >
             Изменить
           </button>
           <button className="btn btn-danger" onClick={() => g.declineOrder(order.id)}>

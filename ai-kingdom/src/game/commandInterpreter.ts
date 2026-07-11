@@ -26,7 +26,11 @@ import type {
 /** Stemmed keyword groups per action, checked in priority order. */
 const ACTION_KEYWORDS: { action: OrderAction; stems: string[] }[] = [
   { action: "ASK_ADVICE", stems: ["посовет", "твой совет", "твоё мнение", "твое мнение", "что скажешь", "как думаешь", "что делать", "рекоменд", "стоит ли"] },
-  { action: "ASK_STATUS", stems: ["сколько", "каков", "запас", "доклад", "донесен", "статус", "потер", "обстанов", "как дела", "что происход", "доложи"] },
+  // Note: no bare "потер" stem here — it is a substring of the imperative
+  // "потеряй" and would hijack real orders like "держись, не потеряй позицию".
+  // "сколько" already covers "сколько людей ты потерял?".
+  { action: "ASK_STATUS", stems: ["сколько", "каков", "запас", "доклад", "донесен", "статус", "обстанов", "как дела", "что происход", "доложи", "потерял ли", "сколько потер"] },
+  { action: "CHANGE_ORDER", stems: ["измени приказ", "поменяй приказ", "переиграй приказ", "новый приказ вместо"] },
   { action: "CANCEL_ORDER", stems: ["отмени", "отменить", "отставить", "забудь приказ", "отмена"] },
   { action: "SUMMON_OFFICER", stems: ["позови", "вызови", "пригласи", "мне нужен", "мне нужна", "ко мне"] },
   { action: "SCOUT", stems: ["развед", "разузнай", "осмотр", "дозор", "выясни", "проверь", "разведай"] },
@@ -70,7 +74,16 @@ const CONDITION_KEYWORDS: { condition: OrderCondition; stems: string[] }[] = [
   { condition: "hold_position", stems: ["не покидай позиц", "держи позиц", "стой на месте"] },
 ];
 
-const ALL_WORDS = /\bвсе[хмйю]?\b|\bвсю\b|\bвсё\b|\bвесь\b|\bцелик/;
+/**
+ * "Take everything" detection. JavaScript's \b is ASCII-only and never matches
+ * a Cyrillic word boundary, so we tokenise instead of using a \b regex.
+ */
+const ALL_TOKENS = new Set([
+  "все", "всех", "всей", "всею", "всем", "всеми", "всю", "весь", "всего", "всё",
+]);
+function hasAllWord(norm: string): boolean {
+  return norm.split(" ").some((w) => ALL_TOKENS.has(w) || w.startsWith("целик"));
+}
 
 /* ------------------------------------------------------------------ */
 /* Text normalisation & number parsing                                 */
@@ -152,15 +165,38 @@ function findLocation(
   if (HERE_WORDS.some((w) => norm.includes(w)) && selectedLocationId) {
     return locations.find((l) => l.id === selectedLocationId) ?? null;
   }
-  let best: { loc: Location; idx: number } | null = null;
+  // Collect the first match per location, noting whether it is governed by a
+  // "to" preposition (к/до/на/в) or a "from" one (от/из/с) so that orders like
+  // "отступай от моста к замку" target the destination (замок), not the source.
+  interface Match {
+    loc: Location;
+    idx: number;
+    dest: boolean;
+    source: boolean;
+  }
+  const matches: Match[] = [];
   for (const loc of locations) {
     const syns = LOCATION_SYNONYMS[loc.type] ?? [loc.name.toLowerCase()];
     for (const syn of syns) {
       const idx = norm.indexOf(syn);
-      if (idx >= 0 && (!best || idx < best.idx)) best = { loc, idx };
+      if (idx >= 0) {
+        const before = norm.slice(Math.max(0, idx - 7), idx);
+        matches.push({
+          loc,
+          idx,
+          dest: /(?:^|\s)(к|ко|до|на|в)\s*$/.test(before),
+          source: /(?:^|\s)(от|из|с|со)\s*$/.test(before),
+        });
+        break;
+      }
     }
   }
-  return best?.loc ?? null;
+  if (matches.length === 0) return null;
+  const dests = matches.filter((m) => m.dest);
+  if (dests.length) return dests.sort((a, b) => b.idx - a.idx)[0].loc; // last destination
+  const neutral = matches.filter((m) => !m.source);
+  if (neutral.length) return neutral.sort((a, b) => a.idx - b.idx)[0].loc; // earliest non-source
+  return matches.sort((a, b) => a.idx - b.idx)[0].loc;
 }
 
 function findUnitType(norm: string): UnitType | null {
@@ -214,6 +250,13 @@ function assessRisk(action: OrderAction, conditions: OrderCondition[], target: L
     // Holding the chokepoint is dangerous but doable.
     risk = risk === "low" ? "medium" : risk;
   }
+  // Marching or moving up to the enemy's own ground is dangerous, not routine.
+  if (
+    (target?.type === "enemy_camp" || target?.controlledBy === "enemy") &&
+    (action === "MOVE" || action === "REINFORCE" || action === "PROTECT")
+  ) {
+    risk = risk === "extreme" ? "extreme" : "high";
+  }
   return risk;
 }
 
@@ -262,7 +305,7 @@ export class LocalCommandInterpreter implements CommandInterpreter {
       ? null
       : findLocation(norm, context.locations, context.selectedLocationId);
     let unitType = findUnitType(norm);
-    const takeAll = ALL_WORDS.test(norm);
+    const takeAll = hasAllWord(norm);
     let unitCount = parseCount(norm);
     const conditions = findConditions(norm);
 
@@ -311,7 +354,7 @@ export class LocalCommandInterpreter implements CommandInterpreter {
 
     let changed = false;
     if (pending.awaiting === "unitCount") {
-      const takeAll = ALL_WORDS.test(norm);
+      const takeAll = hasAllWord(norm);
       const count = parseCount(norm);
       const type = findUnitType(norm) ?? base.unitType;
       const group = officer ? officerPrimaryGroup(officer, context.units, type) : null;

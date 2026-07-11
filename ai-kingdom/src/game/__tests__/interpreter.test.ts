@@ -73,4 +73,40 @@ describe("command interpreter", () => {
     expect(p.action).toBe("ASK_STATUS");
     expect(p.isQuestion).toBe(true);
   });
+
+  it("does not let 'потеряй' hijack a HOLD order into a status query", () => {
+    const p = localInterpreter.parse("Эдвард, держись на мосту, не потеряй позицию", ctx(base, { activeOfficerId: "edward" }));
+    expect(p.action).toBe("HOLD");
+    expect(p.isQuestion).toBe(false);
+  });
+
+  it("still answers 'сколько людей ты потерял' as a status query", () => {
+    const p = localInterpreter.parse("Эдвард, сколько людей ты потерял?", ctx(base, { activeOfficerId: "edward" }));
+    expect(p.action).toBe("ASK_STATUS");
+  });
+
+  it("detects Cyrillic 'all troops' phrasing (takeAll) despite ASCII \\b", () => {
+    const p = localInterpreter.parse("Эдвард, веди все войска к мосту", ctx(base, { activeOfficerId: "edward" }));
+    expect(p.takeAll).toBe(true);
+    expect(p.missing).not.toContain("unitCount");
+    const p2 = localInterpreter.parse("Атакуй всеми силами", ctx(base, { activeOfficerId: "roland" }));
+    expect(p2.takeAll).toBe(true);
+  });
+
+  it("resolves 'от X к Y' to the destination, not the source", () => {
+    const p = localInterpreter.parse("Эдвард, отступай от моста к замку", ctx(base, { activeOfficerId: "edward" }));
+    expect(p.action).toBe("RETREAT");
+    expect(p.targetLocationId).toBe("castle");
+  });
+
+  it("treats a march onto the enemy camp as high risk", () => {
+    const p = localInterpreter.parse("Роланд, веди конницу к лагерю врага", ctx(base, { activeOfficerId: "roland" }));
+    expect(p.targetLocationId).toBe("enemy_camp");
+    expect(p.risk).toBe("high");
+  });
+
+  it("maps an explicit change-order phrase to CHANGE_ORDER", () => {
+    const p = localInterpreter.parse("Эдвард, измени приказ", ctx(base, { activeOfficerId: "edward" }));
+    expect(p.action).toBe("CHANGE_ORDER");
+  });
 });

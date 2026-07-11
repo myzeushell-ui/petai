@@ -33,6 +33,14 @@ export default function ConversationPanel() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [thread.length]);
 
+  // "Изменить" on the confirm card returns the order's text here for editing.
+  useEffect(() => {
+    if (s.pendingRevision) {
+      setText(s.pendingRevision);
+      g.clearRevision();
+    }
+  }, [s.pendingRevision, g]);
+
   const send = (raw?: string) => {
     const value = (raw ?? text).trim();
     if (!value) return;

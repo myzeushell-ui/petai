@@ -20,6 +20,16 @@ export default function MicButton({
 
   useEffect(() => () => speechInput.stop(), []);
 
+  // If voice input is switched off while listening, stop cleanly.
+  useEffect(() => {
+    if (!enabled && listeningRef.current) {
+      speechInput.stop();
+      listeningRef.current = false;
+      setMicState("idle");
+      setMsg("");
+    }
+  }, [enabled]);
+
   const toggle = () => {
     if (!speechInput.isSupported()) {
       setMicState("unsupported");

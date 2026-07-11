@@ -77,7 +77,8 @@ export function buildOrder(
     }
   }
 
-  const needsConfirm = DANGEROUS_ACTIONS.includes(parsed.action);
+  const needsConfirm =
+    DANGEROUS_ACTIONS.includes(parsed.action) || parsed.risk === "high" || parsed.risk === "extreme";
   const order: Order = {
     id,
     officerId: parsed.officerId ?? "",
