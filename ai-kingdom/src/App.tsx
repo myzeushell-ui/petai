@@ -14,6 +14,7 @@ import PrisonerScene from "./components/PrisonerScene";
 import EndReport from "./components/EndReport";
 import SettingsMenu from "./components/SettingsMenu";
 import DebugPanel from "./components/DebugPanel";
+import BattleScene from "./components/BattleScene";
 import "./styles/map.css";
 
 export default function App() {
@@ -72,6 +73,7 @@ export default function App() {
 
       <ReportBanner />
       <Tutorial />
+      {g.state.viewBattleId && <BattleScene />}
       <OrderConfirmModal />
       {phase === "briefing" && <Briefing />}
       {phase === "prisoner" && <PrisonerScene />}

@@ -807,6 +807,156 @@ button {
 .choice .ch { font-family: var(--font-head); font-size: 15px; color: var(--gold-bright); margin-bottom: 4px; }
 .choice .cd { font-size: 11.5px; color: var(--tx-2); line-height: 1.4; }
 
+/* ---------------- Battle scene ---------------- */
+.battle-overlay {
+  z-index: 44;
+}
+.battle-scene {
+  width: min(1040px, 97vw);
+  height: min(700px, 94vh);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--wood-2), var(--wood-1));
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  animation: modal-in 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.bs-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--wood-edge);
+  flex: none;
+}
+.bs-title {
+  font-family: var(--font-head);
+  font-size: 16px;
+  color: var(--gold-bright);
+  letter-spacing: 0.04em;
+}
+.bs-field {
+  position: relative;
+  flex: 1;
+  min-height: 260px;
+  border-bottom: 1px solid var(--wood-edge);
+  overflow: hidden;
+}
+.bs-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bs-result {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-head);
+  font-size: 26px;
+  padding: 8px 22px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gold);
+  background: rgba(6, 5, 3, 0.7);
+  animation: banner-in 0.4s ease both;
+}
+.bs-result.win { color: var(--gold-bright); }
+.bs-result.lose { color: var(--red-bright); border-color: var(--red-bright); }
+.bs-hud {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr;
+  gap: 10px;
+  padding: 10px 12px;
+  flex: none;
+}
+.bs-side {
+  border: 1px solid var(--wood-edge);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.bs-side.player { border-color: #3c5230; }
+.bs-side.enemy { border-color: #5a2820; }
+.bs-side-title {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.bs-side.player .bs-side-title { color: var(--ok); }
+.bs-side.enemy .bs-side-title { color: var(--red-bright); }
+.bs-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--tx-1);
+  padding: 1px 0;
+}
+.bs-row .bs-n { font-variant-numeric: tabular-nums; color: var(--tx-0); font-weight: 600; }
+.bs-row.bs-mor { color: var(--tx-2); }
+.bs-row.bs-cas .bs-n { color: var(--danger); }
+.bs-momentum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.bs-mom-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tx-mut); }
+.bs-mom-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #7a2b22, #3a3226, #3c5230);
+  border: 1px solid var(--wood-edge);
+}
+.bs-mom-bar > span {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--gold-bright);
+  transform: translateX(-50%);
+  transition: left 0.5s ease;
+  box-shadow: 0 0 6px var(--gold);
+}
+.bs-mom-sub { font-size: 11px; color: var(--tx-2); }
+.bs-note {
+  padding: 0 12px 10px;
+  font-size: 11px;
+  color: var(--tx-mut);
+  text-align: center;
+  flex: none;
+}
+
+/* map "watch battle" call-to-action */
+.watch-battle {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  animation: fade-in-up 0.3s ease both;
+}
+.watch-battle .btn {
+  background: linear-gradient(180deg, #7d2c22, var(--red));
+  border-color: #a5392c;
+  color: #fbeede;
+  box-shadow: 0 0 14px rgba(209, 80, 63, 0.4);
+  animation: watch-pulse 1.4s ease-in-out infinite;
+}
+@keyframes watch-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(209, 80, 63, 0.35); }
+  50% { box-shadow: 0 0 20px rgba(209, 80, 63, 0.6); }
+}
+
 /* ---------------- Debug ---------------- */
 .debug-panel {
   position: fixed;

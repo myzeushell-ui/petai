@@ -555,6 +555,8 @@ export interface GameState {
 
   selectedOfficerId: string | null;
   selectedLocationId: string | null;
+  /** Battle currently opened in the tactical scene view, if any. */
+  viewBattleId: string | null;
 
   /**
    * A partially parsed command waiting on clarification (e.g. the player said

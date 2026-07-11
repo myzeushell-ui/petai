@@ -48,6 +48,7 @@ export interface GameApi {
   setSpeed: (speed: GameSpeed) => void;
   selectOfficer: (officerId: string | null) => void;
   selectLocation: (locationId: string | null) => void;
+  viewBattle: (battleId: string | null) => void;
   // tutorial / settings
   advanceTutorial: () => void;
   skipTutorial: () => void;
@@ -214,6 +215,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setSpeed: (speed) => wrap((s) => engine.setSpeed(s, speed)),
       selectOfficer: (id) => wrap((s) => engine.selectOfficer(s, id)),
       selectLocation: (id) => wrap((s) => engine.selectLocation(s, id)),
+      viewBattle: (id) => wrap((s) => engine.viewBattle(s, id)),
       advanceTutorial: () => wrap(engine.advanceTutorial),
       skipTutorial: () => wrap(engine.skipTutorial),
       updateSettings: (patch) => {

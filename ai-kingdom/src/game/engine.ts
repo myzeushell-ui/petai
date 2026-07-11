@@ -262,6 +262,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
     balance: structuredClone(scenario.balance),
     selectedOfficerId: null,
     selectedLocationId: null,
+    viewBattleId: null,
     pendingClarification: null,
     pendingRevision: null,
     settings: { voiceInput: false, voiceOutput: false, speechLang: "ru-RU" },
@@ -1714,6 +1715,9 @@ export function selectOfficer(state: GameState, officerId: string | null): GameS
 }
 export function selectLocation(state: GameState, locationId: string | null): GameState {
   return { ...state, selectedLocationId: locationId };
+}
+export function viewBattle(state: GameState, battleId: string | null): GameState {
+  return { ...state, viewBattleId: battleId };
 }
 export function markEventsHandled(state: GameState): GameState {
   return { ...state, events: state.events.map((e) => ({ ...e, handled: true })) };

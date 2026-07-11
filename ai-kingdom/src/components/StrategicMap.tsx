@@ -38,6 +38,7 @@ export default function StrategicMap() {
   }, [s.units, locById]);
 
   const activeBattles = new Set(s.battles.filter((b) => b.status === "active").map((b) => b.locationId));
+  const firstBattle = s.battles.find((b) => b.status === "active");
   const hoverLoc = hover ? locById.get(hover) : null;
 
   // Positions lit by our fires (torch glow on the drawn map).
@@ -66,6 +67,14 @@ export default function StrategicMap() {
           durationMinutes={durationMinutes}
           villageRaided={Boolean(s.flags.villageRaided)}
         />
+
+        {firstBattle && !s.viewBattleId && (
+          <div className="watch-battle">
+            <button className="btn btn-sm" onClick={() => g.viewBattle(firstBattle.id)}>
+              ⚔ Смотреть бой у {locById.get(firstBattle.locationId)?.name}
+            </button>
+          </div>
+        )}
 
         {s.locations.map((loc) => {
           const ctrl = loc.controlledBy;

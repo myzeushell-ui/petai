@@ -39,6 +39,18 @@ export default function ReportBanner() {
           </>
         ) : (
           <>
+            {ev.kind === "battle" && ev.locationId && s.battles.some((b) => b.status === "active" && b.locationId === ev.locationId) && (
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  const b = s.battles.find((x) => x.status === "active" && x.locationId === ev.locationId);
+                  if (b) g.viewBattle(b.id);
+                  g.dismissEvents(ev.id);
+                }}
+              >
+                ⚔ Смотреть бой
+              </button>
+            )}
             <button className="btn btn-ghost" onClick={() => g.dismissEvents(ev.id)}>
               Понятно
             </button>
