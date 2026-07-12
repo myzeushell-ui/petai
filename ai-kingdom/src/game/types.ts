@@ -86,9 +86,101 @@ export type AcceptanceOutcome = "accept" | "warn" | "refuse";
 export type GamePhase =
   | "menu"
   | "briefing"
+  | "war_council"
   | "playing"
+  | "aftermath"
   | "prisoner"
   | "ended";
+
+/** The dramaturgical phase of the scenario, advanced by time and events. */
+export type ScenarioPhase =
+  | "war_council"
+  | "preparation"
+  | "enemy_probe"
+  | "main_assault"
+  | "crisis"
+  | "aftermath";
+
+export type MainPlan = "hold_bridge" | "preemptive_strike" | "fortify_lines";
+export type VillagePlan = "full_evac" | "partial_evac" | "stand";
+export type FortifyFocus = "bridge" | "hills" | "balanced";
+
+/** The player's choices at the war council; drives officers, prep and the enemy. */
+export interface CouncilDecisions {
+  plan: MainPlan;
+  village: VillagePlan;
+  /** Officer granted freedom to act on initiative, or null. */
+  autonomyOfficerId: string | null;
+  /** Officer entrusted with the reserve, or null. */
+  reserveOfficerId: string | null;
+  fortify: FortifyFocus;
+}
+
+/** Living state of the village and its people (Elyne's civil layer). */
+export interface VillageState {
+  civilians: number;
+  workers: number;
+  militia: number;
+  food: number;
+  carts: number;
+  morale: number;
+  /** 0..1 how far evacuation has progressed. */
+  evacuationProgress: number;
+  /** 0..100 damage taken. */
+  damage: number;
+  plan: VillagePlan | null;
+  /** Carts currently rolling to the castle (for the map). */
+  cartsRolling: number;
+}
+
+export type EnemyPlanId =
+  | "MASS_BRIDGE_ASSAULT"
+  | "BRIDGE_FEINT_FOREST_FLANK"
+  | "VILLAGE_SUPPLY_CUT";
+
+/** What the enemy commander actually knows (fog-bounded, no cheating). */
+export interface EnemyKnowledge {
+  knownPlayerLocations: string[];
+  estimatedStrength: number | null;
+  confidence: number;
+  barricadeSeen: boolean;
+  cavalrySeen: boolean;
+  villageState: string;
+}
+
+export interface EnemyPlanScore {
+  id: EnemyPlanId;
+  score: number;
+  probabilityOfSuccess: number;
+  expectedLosses: number;
+  timeToCastle: number;
+  supplyDamage: number;
+  surprise: number;
+}
+
+/** The enemy's committed plan, with an explainable rationale (debug-visible). */
+export interface EnemyPlanChoice {
+  id: EnemyPlanId;
+  reason: string;
+  scores: EnemyPlanScore[];
+  knowledge: EnemyKnowledge;
+  committedAtTick: number;
+}
+
+export type OfficerVerdict = "praise" | "forgive" | "blame" | "promote" | "dismiss";
+
+/** Post-battle judgement, carried into the campaign. */
+export interface AftermathState {
+  /** Officer named battle hero, if any. */
+  heroOfficerId: string | null;
+  /** Per-officer verdicts the ruler passed. */
+  verdicts: Record<string, OfficerVerdict>;
+  /** The official version of events the ruler endorsed. */
+  chronicleChoice: string | null;
+  /** Reputation shift accumulated in the aftermath. */
+  reputation: number;
+  resolved: boolean;
+}
 
 export type GameSpeed = 0 | 1 | 2 | 4;
 
@@ -549,6 +641,17 @@ export interface GameState {
   enemy: EnemyState;
   prisoner: PrisonerState | null;
   outcome: GameOutcome;
+
+  /** Dramaturgical phase (war council → preparation → … → aftermath). */
+  scenarioPhase: ScenarioPhase;
+  /** The player's war-council choices, once made. */
+  council: CouncilDecisions | null;
+  /** Living village / civilian state (Elyne's layer). */
+  village: VillageState;
+  /** The enemy's committed adaptive plan, once chosen. */
+  enemyPlan: EnemyPlanChoice | null;
+  /** Aftermath bookkeeping (hero, verdicts) once the battle ends. */
+  aftermath: AftermathState | null;
 
   /** Resolved balance numbers from the scenario, carried for the simulation. */
   balance: BalanceConfig;

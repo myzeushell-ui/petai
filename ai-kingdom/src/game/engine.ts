@@ -20,6 +20,8 @@ import type {
   OutcomeKind,
   SpeechStyle,
   Side,
+  CouncilDecisions,
+  OfficerVerdict,
 } from "./types";
 import { getScenario } from "./scenario";
 import { seedState } from "./rng";
@@ -45,6 +47,8 @@ import {
 import { resolveBattleRound, makeBattle } from "./battle";
 import { collectScriptedEvents, scoutingReport } from "./events";
 import { resolvePrisoner, computePrisonerRespect } from "./prisoner";
+import { councilEffects, PLAN_OPTIONS } from "./council";
+import { chooseEnemyPlan } from "./enemyPlanner";
 import { UNIT_LABELS_GENITIVE } from "./constants";
 
 /* ------------------------------------------------------------------ */
@@ -223,7 +227,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
     .reduce((sum, u) => sum + u.count, 0);
 
   const state: GameState = {
-    version: 2,
+    version: 3,
     scenarioId: scenario.id,
     kingdomName: scenario.kingdomName,
     seed: scenario.seed,
@@ -259,6 +263,22 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
       summary: "",
       highlights: [],
     },
+    scenarioPhase: "war_council",
+    council: null,
+    village: {
+      civilians: 140,
+      workers: 40,
+      militia: 0,
+      food: scenario.locations.find((l) => l.id === "village")?.foodStore ?? 60,
+      carts: 3,
+      morale: 62,
+      evacuationProgress: 0,
+      damage: 0,
+      plan: null,
+      cartsRolling: 0,
+    },
+    enemyPlan: null,
+    aftermath: null,
     balance: structuredClone(scenario.balance),
     selectedOfficerId: null,
     selectedLocationId: null,
@@ -300,6 +320,57 @@ export function beginPlay(state: GameState): GameState {
   s.selectedOfficerId = s.selectedOfficerId ?? "mara";
   syncCommanded(s);
   return s;
+}
+
+/* ------------------------------------------------------------------ */
+/* War council                                                         */
+/* ------------------------------------------------------------------ */
+
+/** Briefing → war council: convene the five officers before the fighting. */
+export function enterCouncil(state: GameState): GameState {
+  const s = clone(state);
+  s.phase = "war_council";
+  s.scenarioPhase = "war_council";
+  pushDialogue(
+    s,
+    "narrator",
+    null,
+    "Военный совет собрался у карты. Свечи горят низко — до рассвета одна ночь.",
+    "briefing",
+  );
+  return s;
+}
+
+/** Apply the player's council decisions, then begin play. */
+export function resolveCouncil(state: GameState, decisions: CouncilDecisions): GameState {
+  const s = clone(state);
+  s.council = decisions;
+  const eff = councilEffects(decisions);
+
+  for (const m of eff.memories) {
+    addMemory(s, m.officerId, m.type, { weightScale: m.weightScale, description: m.description });
+  }
+  s.resources.kingdomMorale = clampStat(s.resources.kingdomMorale + eff.moraleDelta);
+  Object.assign(s.flags, eff.flags);
+
+  s.village.plan = eff.villagePlan;
+  s.village.militia += eff.militiaDelta;
+  if (eff.villagePlan === "full_evac") s.village.evacuationProgress = 0.15;
+  // Mobilized militia reinforces Lady Elyne's levy so the choice is tangible.
+  if (eff.militiaDelta > 0) {
+    const levy = s.units.find((u) => u.commanderId === "elyne" && u.count > 0);
+    if (levy) levy.count += eff.militiaDelta;
+  }
+
+  const plan = PLAN_OPTIONS.find((p) => p.id === decisions.plan);
+  if (plan) {
+    pushDialogue(s, "narrator", null, `Решение принято: ${plan.label.toLowerCase()}. ${plan.blurb}`, "briefing");
+  }
+
+  // The enemy commander forms his first plan from what he can see tonight.
+  s.enemyPlan = chooseEnemyPlan(s);
+  s.scenarioPhase = "preparation";
+  return beginPlay(s);
 }
 
 function startEnemyAdvance(s: GameState): void {
@@ -1570,9 +1641,11 @@ function victoryTier(s: GameState): OutcomeKind {
 function endGame(s: GameState, kind: OutcomeKind): void {
   s.outcome = buildOutcome(s, kind);
   s.speed = 0;
-  const victorious = kind.startsWith("decisive") || kind.startsWith("tactical") || kind.startsWith("costly") || kind.startsWith("pyrrhic");
+  s.scenarioPhase = "aftermath";
+  const victorious =
+    kind.startsWith("decisive") || kind.startsWith("tactical") || kind.startsWith("costly") || kind.startsWith("pyrrhic");
   if (victorious) {
-    // Capture the enemy commander for the finale.
+    // Capture the enemy commander; his fate is decided after the aftermath.
     s.prisoner = {
       commanderName: s.enemy.commanderName,
       captured: true,
@@ -1581,7 +1654,6 @@ function endGame(s: GameState, kind: OutcomeKind): void {
       decision: null,
       recruitSucceeded: null,
     };
-    s.phase = "prisoner";
     pushEvent(s, {
       kind: "victory",
       severity: "critical",
@@ -1589,15 +1661,7 @@ function endGame(s: GameState, kind: OutcomeKind): void {
       message: `${s.outcome.summary} ${s.enemy.commanderName} захвачен в плен.`,
       requiresPause: true,
     });
-    pushDialogue(
-      s,
-      "narrator",
-      null,
-      `Битва выиграна. Перед вами — пленный ${s.enemy.commanderName}. Его судьба в ваших руках.`,
-      "briefing",
-    );
   } else {
-    s.phase = "ended";
     pushEvent(s, {
       kind: "defeat",
       severity: "critical",
@@ -1606,6 +1670,61 @@ function endGame(s: GameState, kind: OutcomeKind): void {
       requiresPause: true,
     });
   }
+  // Both victory and defeat pass through the aftermath (judge officers, chronicle).
+  s.aftermath = { heroOfficerId: null, verdicts: {}, chronicleChoice: null, reputation: 0, resolved: false };
+  s.phase = "aftermath";
+}
+
+/* ------------------------------------------------------------------ */
+/* Aftermath                                                           */
+/* ------------------------------------------------------------------ */
+
+const VERDICT_MEMORY: Record<OfficerVerdict, MemoryEventType> = {
+  praise: "PLAYER_REWARDED_ME",
+  forgive: "PLAYER_FORGAVE_DISOBEDIENCE",
+  blame: "PLAYER_BLAMED_ME_UNFAIRLY",
+  promote: "PLAYER_REWARDED_ME",
+  dismiss: "PLAYER_BLAMED_ME_UNFAIRLY",
+};
+
+export function setAftermathVerdict(state: GameState, officerId: string, verdict: OfficerVerdict): GameState {
+  const s = clone(state);
+  if (!s.aftermath || s.aftermath.resolved) return s;
+  s.aftermath.verdicts[officerId] = verdict;
+  return s;
+}
+
+export function nameHero(state: GameState, officerId: string | null): GameState {
+  const s = clone(state);
+  if (!s.aftermath || s.aftermath.resolved) return s;
+  s.aftermath.heroOfficerId = officerId;
+  return s;
+}
+
+/** Finalize the aftermath: apply verdicts + hero, then go to the prisoner or end. */
+export function concludeAftermath(state: GameState, chronicleChoice: string): GameState {
+  const s = clone(state);
+  if (!s.aftermath) {
+    s.phase = s.prisoner && !s.prisoner.decided ? "prisoner" : "ended";
+    return s;
+  }
+  s.aftermath.chronicleChoice = chronicleChoice;
+  let rep = 0;
+  for (const [officerId, verdict] of Object.entries(s.aftermath.verdicts)) {
+    const strong = verdict === "promote" || verdict === "dismiss";
+    addMemory(s, officerId, VERDICT_MEMORY[verdict], { weightScale: strong ? 1.2 : 1 });
+    rep += verdict === "praise" || verdict === "promote" ? 2 : verdict === "blame" || verdict === "dismiss" ? -1 : 1;
+  }
+  if (s.aftermath.heroOfficerId) {
+    addMemory(s, s.aftermath.heroOfficerId, "PLAYER_REWARDED_ME", { weightScale: 1.3 });
+    rep += 3;
+  }
+  s.aftermath.reputation = rep;
+  s.resources.kingdomMorale = clampStat(s.resources.kingdomMorale + Math.round(rep * 0.6));
+  s.aftermath.resolved = true;
+
+  s.phase = s.prisoner && !s.prisoner.decided ? "prisoner" : "ended";
+  return s;
 }
 
 function buildOutcome(s: GameState, kind: OutcomeKind): GameOutcome {

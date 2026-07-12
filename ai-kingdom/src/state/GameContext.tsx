@@ -17,7 +17,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { GameState, GameSpeed, PrisonerDecision } from "../game/types";
+import type {
+  GameState,
+  GameSpeed,
+  PrisonerDecision,
+  CouncilDecisions,
+  OfficerVerdict,
+} from "../game/types";
 import * as engine from "../game/engine";
 import { loadGame, saveGame, clearSave, hasSave, loadSettings, saveSettings } from "../game/persistence";
 import { speechOutput } from "../game/speech";
@@ -35,6 +41,12 @@ export interface GameApi {
   quitToMenu: () => void;
   resetSave: () => void;
   beginPlay: () => void;
+  enterCouncil: () => void;
+  resolveCouncil: (decisions: CouncilDecisions) => void;
+  // aftermath / campaign
+  setAftermathVerdict: (officerId: string, verdict: OfficerVerdict) => void;
+  nameHero: (officerId: string | null) => void;
+  concludeAftermath: (chronicleChoice: string) => void;
   // commands
   submit: (text: string) => void;
   confirmOrder: (orderId: string) => void;
@@ -204,6 +216,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
       quitToMenu,
       resetSave,
       beginPlay: () => wrap(engine.beginPlay),
+      enterCouncil: () => wrap(engine.enterCouncil),
+      resolveCouncil: (d) => wrap((s) => engine.resolveCouncil(s, d)),
+      setAftermathVerdict: (id, v) => wrap((s) => engine.setAftermathVerdict(s, id, v)),
+      nameHero: (id) => wrap((s) => engine.nameHero(s, id)),
+      concludeAftermath: (c) => wrap((s) => engine.concludeAftermath(s, c)),
       submit: (text) => wrap((s) => engine.submitCommand(s, text)),
       confirmOrder: (id) => wrap((s) => engine.confirmOrder(s, id)),
       declineOrder: (id) => wrap((s) => engine.declineOrder(s, id)),

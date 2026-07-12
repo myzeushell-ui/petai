@@ -7,6 +7,7 @@ import {
   cancelOrder,
   tickGame,
   decidePrisoner,
+  concludeAftermath,
 } from "../engine";
 import { buildOrder } from "../orders";
 import { pathfind, stepGroupMovement, beginMovement } from "../world";
@@ -159,6 +160,12 @@ describe("full playthrough", () => {
       }
       if (s.speed === 0) s = { ...s, speed: 4 };
       steps++;
+    }
+    // Terminal outcomes now pass through the aftermath scene first.
+    expect(["aftermath", "prisoner", "ended"]).toContain(s.phase);
+    if (s.phase === "aftermath") {
+      expect(s.aftermath).not.toBeNull();
+      s = concludeAftermath(s, "heroic");
     }
     expect(["prisoner", "ended"]).toContain(s.phase);
     if (s.phase === "prisoner") {

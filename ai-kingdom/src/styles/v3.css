@@ -115,3 +115,115 @@
 .lm-controls button:hover { color: var(--gold-bright); border-color: var(--gold); }
 .lm-legend { z-index: 5; }
 .lm-tip { z-index: 12; }
+
+/* ================= War Council ================= */
+.council {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-y: auto;
+  background: #0a0d14;
+}
+.council-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.council-bg-castle {
+  position: absolute; right: -6%; top: -8%; height: 120%; width: auto; max-width: none;
+  object-fit: contain; opacity: 0.18; filter: saturate(0.8) brightness(0.7) blur(1px);
+}
+.council-bg-grade {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(900px 600px at 50% 0%, rgba(203,162,74,0.10), transparent 60%),
+    linear-gradient(180deg, rgba(8,10,16,0.86), rgba(8,10,16,0.97));
+}
+.council-inner {
+  position: relative; z-index: 1;
+  max-width: 1120px; margin: 0 auto; padding: 26px 24px 40px;
+}
+.council-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; }
+.council-kicker { color: var(--gold); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+.council-head h1 { font-family: var(--font-head); font-size: 30px; color: var(--tx-0); margin-top: 4px; }
+.council-clock { text-align: right; }
+.council-clock b { display: block; font-size: 20px; color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+
+.council-table {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px;
+}
+.council-seat {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 8px; border-radius: 14px; cursor: pointer;
+  background: linear-gradient(180deg, rgba(26,22,16,0.6), rgba(14,11,8,0.6));
+  border: 1px solid var(--wood-edge); transition: all 0.15s ease; position: relative;
+}
+.council-seat:hover { transform: translateY(-3px); border-color: var(--gold); }
+.council-seat.active { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--gold), 0 10px 30px rgba(0,0,0,0.4); }
+.council-seat.mood-displeased { border-color: #7a3128; }
+.council-seat.mood-pleased { border-color: #4d6b3a; }
+.council-seat-name { font-family: var(--font-head); font-size: 14px; color: var(--tx-0); text-align: center; }
+.council-seat-role { font-size: 10.5px; color: var(--tx-2); text-align: center; }
+.council-mood { font-size: 9.5px; padding: 1px 7px; border-radius: 8px; margin-top: 2px; }
+.council-mood.pleased { background: rgba(77,107,58,0.4); color: #b6d99a; }
+.council-mood.displeased { background: rgba(122,49,40,0.4); color: #eab3a8; }
+
+.council-speech {
+  background: rgba(14,11,8,0.72); border: 1px solid var(--wood-edge); border-left: 3px solid var(--gold);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;
+}
+.council-speech-who { font-family: var(--font-head); color: var(--gold-bright); font-size: 14px; margin-bottom: 6px; }
+.council-speech-line { font-size: 15px; line-height: 1.5; color: var(--tx-0); font-style: italic; }
+.council-speech-concern { font-size: 12.5px; color: #d99c86; margin-top: 8px; }
+
+.council-decisions { display: flex; flex-direction: column; gap: 18px; }
+.choice-title { font-family: var(--font-head); font-size: 15px; color: var(--gold-bright); margin-bottom: 4px; }
+.choice-hint { font-size: 11.5px; margin-bottom: 8px; }
+.choice-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.choice-opt {
+  text-align: left; padding: 12px 14px; border-radius: 10px; cursor: pointer;
+  background: rgba(22,18,13,0.6); border: 1px solid var(--wood-edge); transition: all 0.13s ease;
+}
+.choice-opt:hover { border-color: var(--gold); transform: translateY(-2px); }
+.choice-opt.sel { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--gold), inset 0 0 20px rgba(203,162,74,0.08); }
+.choice-opt-label { font-weight: 700; color: var(--tx-0); font-size: 14px; margin-bottom: 3px; }
+.choice-opt-blurb { font-size: 11.5px; color: var(--tx-2); line-height: 1.4; }
+.choice-opt-backer { font-size: 10px; color: var(--gold); margin-top: 6px; }
+.council-assign { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.officer-pick-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  padding: 5px 11px; border-radius: 20px; font-size: 12px; cursor: pointer;
+  background: rgba(22,18,13,0.7); border: 1px solid var(--wood-edge); color: var(--tx-1); transition: all 0.12s ease;
+}
+.pill:hover { border-color: var(--gold); color: var(--gold-bright); }
+.pill.sel { background: var(--gold); color: #100a04; border-color: var(--gold-bright); font-weight: 700; }
+
+.council-foot {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--wood-edge); flex-wrap: wrap;
+}
+.btn-lg { padding: 12px 22px; font-size: 15px; }
+
+/* ================= Aftermath ================= */
+.aftermath { position: fixed; inset: 0; z-index: 40; overflow-y: auto; background: #0a0d14; }
+.aftermath-inner { max-width: 1000px; margin: 0 auto; padding: 30px 24px 44px; }
+.aftermath-head { text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--wood-edge); }
+.aftermath-head.win h1 { color: var(--gold-bright); }
+.aftermath-head.lose h1 { color: #d9705a; }
+.aftermath-kicker { color: var(--gold); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+.aftermath-head h1 { font-family: var(--font-head); font-size: 34px; margin: 6px 0; }
+.aftermath-summary { color: var(--tx-1); font-size: 15px; max-width: 640px; margin: 0 auto; line-height: 1.5; }
+.aftermath-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+.aftermath-stat { text-align: center; padding: 14px 8px; border-radius: 12px; background: rgba(22,18,13,0.6); border: 1px solid var(--wood-edge); }
+.aftermath-stat.ok { border-color: rgba(77,107,58,0.5); }
+.aftermath-stat.bad { border-color: rgba(122,49,40,0.5); }
+.aftermath-stat-v { font-size: 22px; font-family: var(--font-head); color: var(--tx-0); }
+.aftermath-stat.ok .aftermath-stat-v { color: #b6d99a; }
+.aftermath-stat.bad .aftermath-stat-v { color: #eab3a8; }
+.aftermath-stat-l { font-size: 11px; color: var(--tx-2); margin-top: 3px; }
+.aftermath-h2 { font-family: var(--font-head); font-size: 19px; color: var(--gold-bright); margin: 8px 0 4px; }
+.aftermath-sub { font-size: 12px; margin-bottom: 14px; }
+.aftermath-officers { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
+.aftermath-officer { padding: 12px 14px; border-radius: 12px; background: rgba(20,16,11,0.55); border: 1px solid var(--wood-edge); }
+.aftermath-officer.fallen { opacity: 0.7; }
+.aftermath-officer-top { display: flex; align-items: center; gap: 12px; }
+.aftermath-officer-id .name { font-family: var(--font-head); font-size: 15px; color: var(--tx-0); }
+.hero-star { color: var(--gold-bright); font-size: 12px; margin-left: 6px; }
+.aftermath-verdicts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.aftermath-chronicles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }

@@ -10,6 +10,8 @@ import OrderConfirmModal from "./components/OrderConfirmModal";
 import ReportBanner from "./components/ReportBanner";
 import Tutorial from "./components/Tutorial";
 import Briefing from "./components/Briefing";
+import WarCouncil from "./components/WarCouncil";
+import AftermathScene from "./components/AftermathScene";
 import PrisonerScene from "./components/PrisonerScene";
 import EndReport from "./components/EndReport";
 import SettingsMenu from "./components/SettingsMenu";
@@ -51,6 +53,8 @@ export default function App() {
   }, [g, playing]);
 
   if (!g.state) return <MainMenu />;
+  if (phase === "war_council") return <WarCouncil />;
+  if (phase === "aftermath") return <AftermathScene />;
 
   return (
     <>

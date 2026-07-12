@@ -47,7 +47,7 @@ export default function Briefing() {
         </p>
 
         <div className="modal-actions">
-          <button className="btn btn-primary" onClick={g.beginPlay}>
+          <button className="btn btn-primary" onClick={g.enterCouncil}>
             Принять командование
           </button>
         </div>
