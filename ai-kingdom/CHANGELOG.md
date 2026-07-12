@@ -6,6 +6,39 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Unreleased] — V3: The Living Realm (in progress)
+
+The V3 world & council foundation. See `GAME_DESIGN_V3.md` and
+`CHARACTER_BIBLE.md`. Remaining V3 items (PixiJS living map, squad-sim resolver,
+officer cognition, adaptive enemy, AI gateway, audio, campaign) are **planned** —
+tracked in `GAME_DESIGN_V3.md §5`.
+
+### Added
+
+- **World & lore** — renamed the realm to the **Kingdom of Valedorn**, the border
+  fortress to **Dawn's Edge (Рассветный Предел)**, and named the antagonist
+  **Cassian Rake**, field commander of the invading **Duke Corvin Morvane**.
+- **Two new officers** — **Alaric Thorn** (master of archers & siege prep, `gruff`)
+  and **Lady Elyne Arden** (court, people & levy, `courtly`), bringing the council
+  to five. Both are addressable by the existing parser with no parser change.
+- **Two new speech voices** (`gruff`, `courtly`) wired through every dialogue pool
+  (acknowledge / warn / question / report / status / advice / initiative) and the
+  prisoner-verdict reactions.
+- Docs: `CHARACTER_BIBLE.md`, `GAME_DESIGN_V3.md`.
+
+### Changed
+
+- Rebalanced starting forces for a five-officer council (Mara becomes a light scout
+  screen; Alaric fields the main bow corps; Elyne commands the village levy) against
+  a stronger enemy vanguard (true strength 1180 → 1320).
+
+### Tests
+
+- Added parser tests for Alaric and Lady Elyne, plus a V3 world-configuration test
+  (five officers, Valedorn / Dawn's Edge / Cassian Rake). Suite now 32 passing.
+
+---
+
 ## [Unreleased] — V2: Living War (in progress)
 
 Direction and design for the V2 upgrade. **These items are planned, not yet

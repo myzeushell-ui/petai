@@ -129,4 +129,34 @@ describe("command interpreter", () => {
     const p = localInterpreter.parse("абырвалг бларбл", ctx(base));
     expect(p.action).toBe("UNKNOWN");
   });
+
+  // --- V3 expanded roster --------------------------------------------------
+  it("recognises Alaric (master archer) by name and defaults to his archers", () => {
+    const p = localInterpreter.parse("Аларик, веди все войска на холмы", ctx(base, { activeOfficerId: "alaric" }));
+    expect(p.officerId).toBe("alaric");
+    expect(p.targetLocationId).toBe("hills");
+    expect(p.unitType).toBe("archers");
+  });
+
+  it("recognises Lady Elyne by name for a civil order (evacuate)", () => {
+    const p = localInterpreter.parse("Леди Элин, эвакуируй деревню", ctx(base));
+    expect(p.officerId).toBe("elyne");
+    expect(p.action).toBe("EVACUATE");
+  });
+});
+
+describe("V3 world configuration", () => {
+  const s = createInitialState();
+
+  it("fields the full five-officer council", () => {
+    const ids = s.officers.map((o) => o.id);
+    expect(ids).toEqual(expect.arrayContaining(["edward", "roland", "mara", "alaric", "elyne"]));
+    expect(s.officers.length).toBe(5);
+  });
+
+  it("names the kingdom Valedorn, the fortress Dawn's Edge and the foe Cassian Rake", () => {
+    expect(s.kingdomName).toContain("Валедорн");
+    expect(s.locations.find((l) => l.id === "castle")?.name).toBe("Рассветный Предел");
+    expect(s.enemy.commanderName).toBe("Кассиан Рейк");
+  });
 });

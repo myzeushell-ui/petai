@@ -78,7 +78,7 @@ export type UnitState =
 export type InjuryLevel = "none" | "light" | "heavy" | "dead";
 export type PermanentInjury = "none" | "eye" | "arm" | "limp";
 
-export type SpeechStyle = "stoic" | "brash" | "analytic";
+export type SpeechStyle = "stoic" | "brash" | "analytic" | "gruff" | "courtly";
 
 /** How an officer responds to a dangerous order. */
 export type AcceptanceOutcome = "accept" | "warn" | "refuse";
