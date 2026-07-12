@@ -2,6 +2,10 @@ import { useMemo, useState } from "react";
 import { useGame } from "../state/GameContext";
 import { LocationIcon, UNIT_GLYPH } from "./icons";
 import MapCanvas from "./MapCanvas";
+import LivingMap from "./LivingMap";
+
+/** V3 living colored map. Set false to fall back to the parchment map. */
+export const V3_LIVING_MAP = true;
 import { LOCATION_TYPE_LABELS, UNIT_LABELS } from "../game/constants";
 import { getScenario } from "../game/scenario";
 import type { Location, UnitGroup } from "../game/types";
@@ -54,6 +58,14 @@ export default function StrategicMap() {
     [s.units],
   );
   const durationMinutes = getScenario(s.scenarioId).durationMinutes;
+
+  if (V3_LIVING_MAP) {
+    return (
+      <div className="panel" style={{ padding: 0 }}>
+        <LivingMap />
+      </div>
+    );
+  }
 
   return (
     <div className="panel" style={{ padding: 0 }}>
