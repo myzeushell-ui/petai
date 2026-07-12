@@ -34,12 +34,33 @@ export default function DebugPanel({ open, onClose }: { open: boolean; onClose: 
       </div>
 
       <div className="debug-row" style={{ fontSize: 11, color: "var(--tx-2)", flexDirection: "column", gap: 2 }}>
-        <span>tick {Math.round(s.tick)} · враг intel {Math.round(s.enemy.intelLevel * 100)}%</span>
+        <span>фаза {s.scenarioPhase} · tick {Math.round(s.tick)} · враг intel {Math.round(s.enemy.intelLevel * 100)}%</span>
         <span>
           враг ≈ {s.enemy.estimatedStrength ?? "?"} / {s.enemy.trueStrength} · бои {s.battles.filter((b) => b.status === "active").length}
         </span>
-        <span>потери {Number(s.flags.playerCasualtiesTotal ?? 0)}</span>
+        <span>потери {Number(s.flags.playerCasualtiesTotal ?? 0)} · деревня dmg {Math.round(s.village.damage)} · эвак {Math.round(s.village.evacuationProgress * 100)}%</span>
       </div>
+
+      {s.enemyPlan && (
+        <div className="debug-plan">
+          <div style={{ color: "var(--gold-bright)", fontWeight: 700, marginBottom: 3 }}>
+            План врага: {s.enemyPlan.id}
+          </div>
+          <div style={{ color: "var(--tx-2)", marginBottom: 4 }}>{s.enemyPlan.reason}</div>
+          <div style={{ color: "var(--tx-2)", marginBottom: 4 }}>
+            знает позиции: {s.enemyPlan.knowledge.knownPlayerLocations.join(", ") || "—"} · увер.{" "}
+            {Math.round(s.enemyPlan.knowledge.confidence * 100)}% · баррикада{" "}
+            {s.enemyPlan.knowledge.barricadeSeen ? "да" : "нет"} · конница{" "}
+            {s.enemyPlan.knowledge.cavalrySeen ? "да" : "нет"}
+          </div>
+          {s.enemyPlan.scores.map((sc) => (
+            <div key={sc.id} style={{ display: "flex", justifyContent: "space-between", color: sc.id === s.enemyPlan!.id ? "var(--gold)" : "var(--tx-2)" }}>
+              <span>{sc.id}</span>
+              <span>{sc.score.toFixed(2)} (p{Math.round(sc.probabilityOfSuccess * 100)}/loss{Math.round(sc.expectedLosses * 100)})</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <button className="btn btn-ghost btn-sm" onClick={() => setShowMem((v) => !v)} style={{ width: "100%" }}>
         {showMem ? "Скрыть память" : "Память офицеров"}

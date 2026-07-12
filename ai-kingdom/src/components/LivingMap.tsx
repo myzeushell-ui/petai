@@ -38,6 +38,15 @@ function unitAssetId(u: UnitGroup): string {
   return (u.side === "player" ? PLAYER_UNIT : ENEMY_UNIT)[u.type];
 }
 
+const PHASE_LABELS: Record<string, string> = {
+  war_council: "Военный совет",
+  preparation: "Подготовка",
+  enemy_probe: "Разведка боем",
+  main_assault: "Штурм",
+  crisis: "Кризис!",
+  aftermath: "После битвы",
+};
+
 interface Cam {
   x: number;
   y: number;
@@ -202,6 +211,7 @@ export default function LivingMap() {
 
   return (
     <div className="livingmap-wrap" ref={wrapRef}>
+      <div className={`lm-phase phase-${s.scenarioPhase}`}>{PHASE_LABELS[s.scenarioPhase]}</div>
       <canvas
         ref={canvasRef}
         className="livingmap-canvas"
@@ -346,6 +356,21 @@ function render(
     if (u.side !== "enemy" || u.revealed || u.count <= 0 || u.state === "destroyed") continue;
     const pos = unitWorldPos(u, locById);
     items.push({ y: pos.y, z: 3, render: () => drawFogToken(ctx, pos.x, pos.y, W2S, p, time) });
+  }
+
+  // supply wagons rolling from the village to the castle (Elyne's evacuation)
+  if (s.village.cartsRolling > 0) {
+    const v = locById.get("village");
+    const c = locById.get("castle");
+    if (v && c) {
+      const n = Math.min(2, s.village.cartsRolling);
+      for (let i = 0; i < n; i++) {
+        const t = (time * 0.06 + i * 0.5) % 1;
+        const wx = v.x + (c.x - v.x) * t;
+        const wy = v.y + (c.y - v.y) * t;
+        items.push({ y: wy, z: 2, render: () => drawProp(ctx, "supply_wagon_valedorn", wx, wy, W2S, p) });
+      }
+    }
   }
 
   items.sort((a, b) => a.y - b.y || a.z - b.z);

@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { useGame } from "../state/GameContext";
 import { relationshipLabel } from "../game/officers";
 import { INJURY_LABELS } from "../game/constants";
+import CampaignScreen from "./CampaignScreen";
 
 export default function EndReport() {
   const g = useGame();
   const s = g.state!;
   const o = s.outcome;
   const win = o.kind.includes("victory");
+  const [showCampaign, setShowCampaign] = useState(false);
+
+  if (showCampaign) return <CampaignScreen onBack={() => setShowCampaign(false)} />;
 
   return (
     <div className="overlay">
@@ -46,6 +51,9 @@ export default function EndReport() {
         <div className="modal-actions">
           <button className="btn btn-ghost" onClick={g.quitToMenu}>
             В меню
+          </button>
+          <button className="btn btn-gold" onClick={() => setShowCampaign(true)}>
+            Хроника королевства →
           </button>
           <button className="btn btn-primary" onClick={g.newGame}>
             Новая партия

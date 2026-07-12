@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useGame } from "../state/GameContext";
 import { Crest } from "./Crest";
+import { audio } from "../game/audio";
 import { formatClock, formatMinutes } from "../game/util";
 import type { GameSpeed } from "../game/types";
 
@@ -16,6 +18,7 @@ export default function TopBar({
   const s = g.state!;
   const r = s.resources;
   const paused = s.speed === 0;
+  const [muted, setMuted] = useState(!audio.isEnabled());
   const dawnClass = s.timeUntilDawn < 60 ? "warn" : "dawn";
   const canControl = s.phase === "playing";
 
@@ -84,6 +87,18 @@ export default function TopBar({
           ))}
         </div>
 
+        <button
+          className="btn btn-ghost btn-icon"
+          onClick={() => {
+            const next = !muted;
+            setMuted(next);
+            audio.setEnabled(!next);
+          }}
+          title={muted ? "Включить звук" : "Выключить звук"}
+          aria-label="Звук"
+        >
+          {muted ? "🔇" : "🔊"}
+        </button>
         <button className="btn btn-ghost btn-icon" onClick={onOpenSettings} title="Настройки" aria-label="Настройки">
           ⚙
         </button>

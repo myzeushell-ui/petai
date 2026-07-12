@@ -27,6 +27,7 @@ import type {
 import * as engine from "../game/engine";
 import { loadGame, saveGame, clearSave, hasSave, loadSettings, saveSettings } from "../game/persistence";
 import { speechOutput } from "../game/speech";
+import { audio, installAudioUnlock } from "../game/audio";
 
 /** Game minutes elapsed per real second at speed x1. */
 const TIME_SCALE = 1.0;
@@ -83,6 +84,36 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [hasSavedGame, setHasSavedGame] = useState<boolean>(() => hasSave());
   const stateRef = useRef<GameState | null>(null);
   stateRef.current = state;
+
+  // Unlock audio on the first user gesture (autoplay policy).
+  useEffect(() => installAudioUnlock(), []);
+
+  /* ---- reactive audio cues ---- */
+  const audioPrev = useRef({ phase: "", battles: 0, crisis: false });
+  useEffect(() => {
+    if (!state) return;
+    const prev = audioPrev.current;
+    const battles = state.battles.filter((b) => b.status === "active").length;
+    const crisis = Boolean(state.flags.crisisActive);
+    if (state.phase !== prev.phase) {
+      if (state.phase === "war_council") {
+        audio.horn();
+        audio.startAmbience();
+      } else if (state.phase === "playing") {
+        audio.startAmbience();
+      } else if (state.phase === "ended") {
+        state.outcome.kind.includes("victory") ? audio.victory() : audio.defeat();
+        audio.stopAmbience();
+      } else if (state.phase === "aftermath") {
+        state.outcome.kind.includes("victory") ? audio.victory() : audio.defeat();
+      } else if (state.phase === "menu") {
+        audio.stopAmbience();
+      }
+    }
+    if (battles > prev.battles) audio.clash();
+    if (crisis && !prev.crisis) audio.crisis();
+    audioPrev.current = { phase: state.phase, battles, crisis };
+  }, [state]);
 
   /* ---- real-time tick loop ----
      Runs the simulation on a fixed ~10 Hz accumulator (not every frame) to
@@ -222,7 +253,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       nameHero: (id) => wrap((s) => engine.nameHero(s, id)),
       concludeAftermath: (c) => wrap((s) => engine.concludeAftermath(s, c)),
       submit: (text) => wrap((s) => engine.submitCommand(s, text)),
-      confirmOrder: (id) => wrap((s) => engine.confirmOrder(s, id)),
+      confirmOrder: (id) => {
+        audio.orderAccepted();
+        wrap((s) => engine.confirmOrder(s, id));
+      },
       declineOrder: (id) => wrap((s) => engine.declineOrder(s, id)),
       reviseOrder: (id) => wrap((s) => engine.reviseOrder(s, id)),
       clearRevision: () => wrap(engine.clearRevision),

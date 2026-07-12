@@ -60,6 +60,7 @@ const ROUND_INTERVAL = 6; // game minutes between battle rounds
 const ENEMY_START_DELAY = 20; // game minutes before the enemy breaks camp
 const RAID_TICK = 34; // enemy splits off a village raid while cavalry is still en route
 const RAID_SIZE = 60; // cavalry in the raid detachment
+const FLANK_SIZE = 70; // cavalry that slip through the forest in a feint-and-flank
 const DIALOGUE_CAP = 140;
 const LOG_CAP = 160;
 const EVENT_CAP = 60;
@@ -1088,9 +1089,12 @@ export function tickGame(state: GameState, dtMinutes: number): GameState {
 
     advanceMovement(s, step);
     runEnemyAI(s);
+    runVillage(s, step);
     applySupplyStep(s, step);
     detectBattles(s);
     runBattles(s, step);
+    updateScenarioPhase(s);
+    runCrisisDirector(s);
 
     const scripted = collectScriptedEvents(getScenario(s.scenarioId), prevTick, s.tick, s.idCounter);
     s.idCounter = scripted.next;
@@ -1157,23 +1161,31 @@ function runEnemyAI(s: GameState): void {
   if (s.flags.enemyAdvancing && !s.flags.enemyMarchStarted && s.tick >= ENEMY_START_DELAY) {
     startEnemyAdvance(s);
     s.flags.enemyMarchStarted = true;
+    // Cassian commits to a plan from what he has seen of the player's preparation.
+    s.enemyPlan = chooseEnemyPlan(s);
   }
 
-  // Dispatch a village raid once, if the village is still worth raiding.
+  const planId = s.enemyPlan?.id ?? "MASS_BRIDGE_ASSAULT";
+  // A mass frontal assault throws everything at the bridge — no raid detachment.
+  const wantsRaid = planId !== "MASS_BRIDGE_ASSAULT";
+  const raidSize = planId === "VILLAGE_SUPPLY_CUT" ? RAID_SIZE + 40 : RAID_SIZE;
+  const raidTick = planId === "VILLAGE_SUPPLY_CUT" ? RAID_TICK - 8 : RAID_TICK;
+
+  // Dispatch a village raid once, if the plan calls for it and it's still worth raiding.
   if (
     !s.enemy.raidDispatched &&
-    s.tick >= RAID_TICK &&
-    !s.flags.villageEvacuated &&
-    s.enemy.intelLevel >= 0 // always eligible; kept for future gating
+    wantsRaid &&
+    s.tick >= raidTick &&
+    !s.flags.villageEvacuated
   ) {
     const source = s.units.find(
-      (u) => u.side === "enemy" && u.type === "cavalry" && u.count > RAID_SIZE && u.state === "moving",
+      (u) => u.side === "enemy" && u.type === "cavalry" && u.count > raidSize && u.state === "moving",
     );
     const village = locById(s, "village");
     if (source && village) {
       const idx = s.units.findIndex((u) => u.id === source.id);
       const newId = allocId(s, "unit");
-      const { kept, detached } = splitGroup(source, RAID_SIZE, newId);
+      const { kept, detached } = splitGroup(source, raidSize, newId);
       s.units[idx] = kept;
       const route = pathfind(source.locationId, "village", s.locations);
       let raid: UnitGroup = { ...detached, revealed: true, state: "moving" };
@@ -1187,6 +1199,34 @@ function runEnemyAI(s: GameState): void {
         message: "Часть вражеской конницы свернула к деревне — похоже, идут за припасами.",
         locationId: "village",
         requiresPause: true,
+      });
+    }
+  }
+
+  // Feint-and-flank: slip a cavalry wing through the northern forest toward the castle.
+  if (planId === "BRIDGE_FEINT_FOREST_FLANK" && !s.flags.forestFlankSent && s.tick >= RAID_TICK + 6) {
+    const source = s.units.find(
+      (u) => u.side === "enemy" && u.type === "cavalry" && u.count > FLANK_SIZE && u.state === "moving",
+    );
+    const p1 = source ? pathfind(source.locationId, "forest", s.locations) : null;
+    const p2 = pathfind("forest", "castle", s.locations);
+    if (source && p1 && p2 && p1.path.length > 1) {
+      const idx = s.units.findIndex((u) => u.id === source.id);
+      const newId = allocId(s, "unit");
+      const { kept, detached } = splitGroup(source, FLANK_SIZE, newId);
+      s.units[idx] = kept;
+      const path = [...p1.path, ...p2.path.slice(1)];
+      let flank: UnitGroup = { ...detached, revealed: false, state: "moving" };
+      flank = beginMovement(flank, path);
+      s.units.push(flank);
+      s.flags.forestFlankSent = true;
+      pushEvent(s, {
+        kind: "enemy_move",
+        severity: "notable",
+        title: "Шум в лесу",
+        message: "Разъезды доносят: в северном лесу что-то движется. Возможно, враг ищет обход.",
+        locationId: "forest",
+        requiresPause: false,
       });
     }
   }
@@ -1214,6 +1254,149 @@ function runEnemyAI(s: GameState): void {
       locationId: "village",
       requiresPause: true,
     });
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Civilian layer (Elyne's village)                                    */
+/* ------------------------------------------------------------------ */
+
+function runVillage(s: GameState, dt: number): void {
+  const v = s.village;
+  if (s.flags.villageRaided) {
+    v.damage = Math.max(v.damage, 72);
+    v.cartsRolling = 0;
+    return;
+  }
+  if ((v.plan === "full_evac" || v.plan === "partial_evac") && !s.flags.villageEvacuated) {
+    const rate = v.plan === "full_evac" ? 0.011 : 0.0065;
+    v.evacuationProgress = Math.min(1, v.evacuationProgress + rate * dt);
+    v.cartsRolling = v.carts;
+    v.civilians = Math.max(0, Math.round(140 * (1 - v.evacuationProgress)));
+    const done = v.plan === "full_evac" ? 0.85 : 0.95;
+    if (v.evacuationProgress >= done) {
+      s.flags.villageEvacuated = true;
+      v.cartsRolling = 0;
+      const village = locById(s, "village");
+      const moved = village ? village.foodStore : 0;
+      if (village) village.foodStore = Math.round(village.foodStore * 0.3);
+      s.resources.food = clamp(s.resources.food + Math.round(moved * 0.6), 0, 999);
+      s.resources.kingdomMorale = clampStat(s.resources.kingdomMorale + 3);
+      pushEvent(s, {
+        kind: "report",
+        severity: "notable",
+        title: "Деревня эвакуирована",
+        message: "Обозы дошли до замка. Люди и часть припасов — в безопасности.",
+        locationId: "castle",
+        requiresPause: false,
+      });
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Scenario phase + crisis director                                    */
+/* ------------------------------------------------------------------ */
+
+function updateScenarioPhase(s: GameState): void {
+  if (s.scenarioPhase === "aftermath") return;
+  if (s.flags.crisisActive) {
+    // The crisis passes after its window; the assault resumes.
+    if (s.tick - Number(s.flags.crisisTick ?? 0) > 25) s.flags.crisisActive = false;
+    else {
+      s.scenarioPhase = "crisis";
+      return;
+    }
+  }
+  const anyBattle = s.battles.some((b) => b.status === "active");
+  if (anyBattle || s.flags.mainForceBeaten) s.scenarioPhase = "main_assault";
+  else if (s.enemy.raidDispatched || s.flags.forestFlankSent || s.tick >= RAID_TICK) s.scenarioPhase = "enemy_probe";
+  else s.scenarioPhase = "preparation";
+}
+
+interface Crisis {
+  id: string;
+  title: string;
+  message: string;
+  locationId?: string;
+  apply: (s: GameState) => void;
+}
+
+function pickCrisis(s: GameState): Crisis | null {
+  // Fire the first crisis whose preconditions the current state matches.
+  if (s.flags.bridgeFortified && !s.flags.crisisFireBarricade && bridgeIsContested(s)) {
+    return {
+      id: "FIRE_AT_BARRICADE",
+      title: "Пожар у баррикады",
+      message: "Враг закидал баррикаду факелами — колья горят. Оборона моста слабеет.",
+      locationId: "bridge",
+      apply: (st) => {
+        st.flags.bridgeFortified = false;
+        moraleAt(st, "bridge", -6);
+      },
+    };
+  }
+  if (s.village.cartsRolling > 0 && !s.flags.villageEvacuated) {
+    return {
+      id: "REFUGEES_BLOCK_ROAD",
+      title: "Беженцы на дороге",
+      message: "Поток беженцев запрудил дорогу к замку — подкрепления идут медленнее.",
+      locationId: "village",
+      apply: (st) => {
+        st.resources.kingdomMorale = clampStat(st.resources.kingdomMorale - 3);
+      },
+    };
+  }
+  const archers = s.units.find((u) => u.side === "player" && u.type === "archers" && u.count > 0 && u.state === "fighting");
+  if (archers) {
+    return {
+      id: "ARROWS_LOW",
+      title: "Стрелы на исходе",
+      message: "Лучники Аларика докладывают: колчаны пустеют. Нужно беречь залпы или подвезти стрелы.",
+      locationId: archers.locationId,
+      apply: (st) => {
+        for (const u of st.units) if (u.side === "player" && u.type === "archers") u.morale = clampStat(u.morale - 8);
+      },
+    };
+  }
+  return {
+    id: "LOST_MESSENGER",
+    title: "Пропал гонец",
+    message: "Гонец с донесением не вернулся. Разведданные о враге устарели.",
+    apply: (st) => {
+      st.enemy.intelLevel = Math.max(0, st.enemy.intelLevel - 0.2);
+    },
+  };
+}
+
+function runCrisisDirector(s: GameState): void {
+  if (s.flags.crisisFired) return;
+  const inAssault = s.battles.some((b) => b.status === "active");
+  if (!inAssault && s.tick < RAID_TICK + 40) return;
+  const crisis = pickCrisis(s);
+  if (!crisis) return;
+  s.flags.crisisFired = true;
+  s.flags.crisisActive = true;
+  s.flags.crisisTick = s.tick;
+  crisis.apply(s);
+  pushEvent(s, {
+    kind: "casualty",
+    severity: "critical",
+    title: `Кризис: ${crisis.title}`,
+    message: crisis.message,
+    locationId: crisis.locationId,
+    requiresPause: true,
+  });
+  pushDialogue(s, "mara", "mara", `Милорд, ${crisis.title.toLowerCase()}. Нужно решение — и быстро.`, "report");
+}
+
+function bridgeIsContested(s: GameState): boolean {
+  return s.battles.some((b) => b.status === "active" && b.locationId === "bridge");
+}
+
+function moraleAt(s: GameState, locationId: string, delta: number): void {
+  for (const u of s.units) {
+    if (u.side === "player" && u.locationId === locationId) u.morale = clampStat(u.morale + delta);
   }
 }
 
