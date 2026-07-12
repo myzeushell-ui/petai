@@ -10,9 +10,11 @@ const SPEEDS: GameSpeed[] = [1, 2, 4];
 export default function TopBar({
   onOpenSettings,
   onOpenDebug,
+  onOpenKingdom,
 }: {
   onOpenSettings: () => void;
   onOpenDebug: () => void;
+  onOpenKingdom: () => void;
 }) {
   const g = useGame();
   const s = g.state!;
@@ -98,6 +100,9 @@ export default function TopBar({
           aria-label="Звук"
         >
           {muted ? "🔇" : "🔊"}
+        </button>
+        <button className="btn btn-ghost btn-icon" onClick={onOpenKingdom} title="Королевство" aria-label="Королевство">
+          🏰
         </button>
         <button className="btn btn-ghost btn-icon" onClick={onOpenSettings} title="Настройки" aria-label="Настройки">
           ⚙

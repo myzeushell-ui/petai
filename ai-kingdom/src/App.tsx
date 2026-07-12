@@ -17,6 +17,7 @@ import EndReport from "./components/EndReport";
 import SettingsMenu from "./components/SettingsMenu";
 import DebugPanel from "./components/DebugPanel";
 import BattleScene from "./components/BattleScene";
+import KingdomView from "./components/KingdomView";
 import "./styles/map.css";
 import "./styles/v3.css";
 
@@ -24,6 +25,7 @@ export default function App() {
   const g = useGame();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
+  const [kingdomOpen, setKingdomOpen] = useState(false);
 
   const phase = g.state?.phase;
   const playing = phase === "playing";
@@ -60,7 +62,11 @@ export default function App() {
     <>
       <div className="shell">
         <div className="area-top">
-          <TopBar onOpenSettings={() => setSettingsOpen(true)} onOpenDebug={() => setDebugOpen(true)} />
+          <TopBar
+            onOpenSettings={() => setSettingsOpen(true)}
+            onOpenDebug={() => setDebugOpen(true)}
+            onOpenKingdom={() => setKingdomOpen(true)}
+          />
         </div>
         <div className="area-left">
           <OfficerPanel />
@@ -83,6 +89,7 @@ export default function App() {
       {phase === "briefing" && <Briefing />}
       {phase === "prisoner" && <PrisonerScene />}
       {phase === "ended" && <EndReport />}
+      {kingdomOpen && <KingdomView onClose={() => setKingdomOpen(false)} />}
       <SettingsMenu open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <DebugPanel open={debugOpen} onClose={() => setDebugOpen(false)} />
     </>

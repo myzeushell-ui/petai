@@ -24,6 +24,7 @@ import type {
   OfficerVerdict,
 } from "./types";
 import { getScenario } from "./scenario";
+import { createInitialKingdom, advanceKingdomDay } from "./kingdom";
 import { seedState } from "./rng";
 import { clamp, clampStat, formatMinutes, pluralSoldiers } from "./util";
 import { localInterpreter } from "./commandInterpreter";
@@ -228,7 +229,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
     .reduce((sum, u) => sum + u.count, 0);
 
   const state: GameState = {
-    version: 3,
+    version: 4,
     scenarioId: scenario.id,
     kingdomName: scenario.kingdomName,
     seed: scenario.seed,
@@ -264,6 +265,7 @@ export function createInitialState(scenarioId = "night-before-siege"): GameState
       summary: "",
       highlights: [],
     },
+    kingdom: createInitialKingdom(),
     scenarioPhase: "war_council",
     council: null,
     village: {
@@ -1904,10 +1906,37 @@ export function concludeAftermath(state: GameState, chronicleChoice: string): Ga
   }
   s.aftermath.reputation = rep;
   s.resources.kingdomMorale = clampStat(s.resources.kingdomMorale + Math.round(rep * 0.6));
+  s.kingdom.reputation = clampStat(s.kingdom.reputation + rep);
   s.aftermath.resolved = true;
+
+  // The tactical night ripples into the strategic realm, then weeks pass
+  // before the next chapter (Bible §7).
+  applyBattleAftermathToKingdom(s);
+  for (let d = 0; d < 14; d++) s.kingdom = advanceKingdomDay(s.kingdom);
 
   s.phase = s.prisoner && !s.prisoner.decided ? "prisoner" : "ended";
   return s;
+}
+
+/** Reflect the siege's outcome in the provinces (war weariness, loyalty, food). */
+function applyBattleAftermathToKingdom(s: GameState): void {
+  const won = s.outcome.kind.includes("victory");
+  const losses = Number(s.flags.playerCasualtiesTotal ?? 0);
+  for (const p of s.kingdom.provinces) {
+    if (p.owner !== "player") continue;
+    const ind = p.indicators;
+    // Everyone is wearier after a border war; the frontier most of all.
+    const frontier = p.specialty === "border_march" ? 1.6 : 1;
+    ind.warWeariness = clampStat(ind.warWeariness + Math.min(24, losses / 40) * frontier);
+    ind.happiness = clampStat(ind.happiness + (won ? 6 : -10));
+    ind.trustInCrown = clampStat(ind.trustInCrown + (won ? 4 : -6));
+    p.loyalty = clampStat(p.loyalty + (won ? 3 : -8));
+    // A raided grain valley loses food security and stores.
+    if (p.specialty === "grain_valley" && s.flags.villageRaided) {
+      ind.foodSecurity = clampStat(ind.foodSecurity - 22);
+      p.resources.food = Math.max(0, Math.round((p.resources.food ?? 0) * 0.5));
+    }
+  }
 }
 
 function buildOutcome(s: GameState, kind: OutcomeKind): GameOutcome {

@@ -6,8 +6,9 @@
  */
 
 import type { GameState, GameSettings } from "./types";
+import { createInitialKingdom } from "./kingdom";
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 export const SAVE_KEY = "ai-kingdom:save";
 export const SETTINGS_KEY = "ai-kingdom:settings";
 
@@ -58,13 +59,28 @@ export function loadGame(storage: StorageLike | null = defaultStorage()): GameSt
     const parsed = JSON.parse(raw) as Partial<GameState>;
     if (!isValidSave(parsed)) return null;
     if (parsed.version !== SAVE_VERSION) {
-      // No migrations yet — discard incompatible saves rather than crash.
-      return null;
+      return migrate(parsed);
     }
     return parsed as GameState;
   } catch {
     return null;
   }
+}
+
+/**
+ * Forward-migrate an older but structurally-valid save (Bible §49). We patch in
+ * any fields introduced since the save was written, then stamp the current
+ * version, rather than discarding the player's progress.
+ */
+function migrate(save: Partial<GameState>): GameState | null {
+  const v = typeof save.version === "number" ? save.version : 0;
+  // Saves older than the V3 systems layer lacked too many invariants to trust.
+  if (v < 3) return null;
+  const s = save as GameState;
+  // v3 → v4: introduce the strategic kingdom layer.
+  if (!s.kingdom) s.kingdom = createInitialKingdom();
+  s.version = SAVE_VERSION;
+  return s;
 }
 
 function isValidSave(data: unknown): data is GameState {

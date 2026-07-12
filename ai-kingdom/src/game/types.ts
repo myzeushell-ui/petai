@@ -7,6 +7,9 @@
  * are genuinely part of the data contract.
  */
 
+import type { KingdomState } from "./kingdom";
+export type { KingdomState } from "./kingdom";
+
 /* ------------------------------------------------------------------ */
 /* Primitive unions                                                    */
 /* ------------------------------------------------------------------ */
@@ -641,6 +644,9 @@ export interface GameState {
   enemy: EnemyState;
   prisoner: PrisonerState | null;
   outcome: GameOutcome;
+
+  /** Strategic layer: provinces, population, realm resources, season (Bible §9–11). */
+  kingdom: KingdomState;
 
   /** Dramaturgical phase (war council → preparation → … → aftermath). */
   scenarioPhase: ScenarioPhase;
