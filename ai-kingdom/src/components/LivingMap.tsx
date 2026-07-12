@@ -343,8 +343,11 @@ function render(
     const key = `${Math.round(pos.x)}_${Math.round(pos.y)}`;
     const idx = clusters[key] ?? 0;
     clusters[key] = idx + 1;
-    const ox = idx ? Math.cos(idx * 2.3) * 4.2 : 0;
-    const oy = idx ? Math.sin(idx * 2.3) * 2.4 : 0;
+    // Spiral the stacked groups outward so tokens and count plates don't overlap.
+    const ang = idx * 2.4;
+    const rad = idx ? 6 + idx * 1.7 : 0;
+    const ox = Math.cos(ang) * rad;
+    const oy = Math.sin(ang) * rad * 0.5;
     items.push({
       y: pos.y + oy + 2,
       z: 3,
