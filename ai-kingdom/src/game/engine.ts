@@ -1314,7 +1314,7 @@ function updateScenarioPhase(s: GameState): void {
   else s.scenarioPhase = "preparation";
 }
 
-interface Crisis {
+export interface Crisis {
   id: string;
   title: string;
   message: string;
@@ -1322,7 +1322,7 @@ interface Crisis {
   apply: (s: GameState) => void;
 }
 
-function pickCrisis(s: GameState): Crisis | null {
+export function pickCrisis(s: GameState): Crisis | null {
   // Fire the first crisis whose preconditions the current state matches.
   if (s.flags.bridgeFortified && !s.flags.crisisFireBarricade && bridgeIsContested(s)) {
     return {
