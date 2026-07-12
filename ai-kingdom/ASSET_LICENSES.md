@@ -1,9 +1,20 @@
 # AI Kingdom — Asset Licenses
 
-## Current status: no third-party assets
+## V3 status: one bundled image pack (see registry below)
 
-As of the V1 vertical slice **and** the in-progress V2 work, AI Kingdom uses
-**no external assets**. Every graphic is generated procedurally at runtime:
+As of the **V3 Candy Integration sprint**, AI Kingdom bundles the
+**AI Kingdom V3 Art Pack 01** — 24 images (6 character portraits, 6 strategic
+army tokens, and 12 landmark/building/prop pieces) supplied with the project.
+They are optimized (WebP with alpha for landmarks/tokens, JPEG for portraits;
+downscaled from ~1254 px originals to a ~1.9 MB web set) and stored in
+`src/assets/v3/`, loaded through Vite's asset pipeline (`AssetRegistry`) so the
+normal build hashes them and the single-file artifact inlines them as data URIs.
+**No asset is hotlinked**; the game stays offline/CSP-safe, and every renderer
+keeps a **procedural fallback** if an image fails to load.
+
+The pack owner must confirm the pack is cleared for redistribution in this repo
+and the built artifact; record the exact source/license in the registry table
+below. **Everything else remains procedurally generated at runtime:**
 
 - **Terrain, maps, and the tactical battlefield** — drawn in Canvas 2D
   (`MapCanvas.tsx`, `BattleScene.tsx`), including procedural parchment, age
@@ -50,11 +61,13 @@ If any external asset is ever introduced, it **must**:
 
 ## Third-party asset registry
 
-_None yet — the table is a template for future additions._
-
 | Asset | Source | License | URL |
 |---|---|---|---|
-| _(none)_ | — | — | — |
+| `src/assets/v3/**` — AI Kingdom V3 Art Pack 01 (24 images: 6 portraits, 6 army tokens, 12 landmarks/props) + `asset-manifest.json` | Supplied with the project by the pack owner (`AI_Kingdom_ArtPack_PART_1..3`) | **To be confirmed by the pack owner** — record the exact license here before public release | provided directly (not hotlinked) |
+
+> ⚠️ The license cell above must be filled in by the project owner. The images
+> were delivered as a project art pack; confirm redistribution rights before any
+> public/commercial release.
 
 <!--
 Example row for when an asset is added:

@@ -6,6 +6,48 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Unreleased] — V3 Candy Integration Sprint
+
+Turned the technical prototype into a visually cohesive, atmospheric game by
+integrating the **AI Kingdom V3 Art Pack** and building the systems around it.
+See `TEST_REPORT.md`, `CHARACTER_BIBLE.md`, `ASSET_LICENSES.md`, `AUDIO_LICENSES.md`.
+
+### Added
+- **Art Pack integration** — 24 images optimized to ~1.9 MB (WebP/JPEG),
+  `AssetRegistry` (typed, preload+progress, cache, fallback, DPR), through Vite's
+  pipeline so the single-file artifact inlines them.
+- **Cinematic portraits** — framed `Portrait` component (face crop, faction
+  frame, vignette, mood color-grading) in officer cards, conversation header,
+  war council, aftermath, campaign, and a cinematic main menu.
+- **Living colored map** — full-canvas renderer replacing the parchment
+  schematic: grass diorama, river, roads, depth-sorted landmark PNGs (castle,
+  bridge, forest, hills, village + watermill, watchtower, enemy camp), army
+  token PNGs (faction ring + count + morale), fog "?" for unscouted enemies,
+  pan/zoom/hover/select, routes, battle glow, night→dawn, torch glow, phase chip,
+  rolling supply wagons. Feature-flagged (`V3_LIVING_MAP`), default on.
+- **War Council** phase — five portraits with conflicting recommendations and
+  live mood; decisions (plan / village / fortify / autonomy / reserve) that shift
+  traits, memory, morale, militia and prep.
+- **Adaptive enemy** — explainable, fog-bounded planner picks one of three plans
+  (mass bridge assault / feint + forest flank / village supply cut) that branch
+  actual conduct; debug shows knowledge + scores + rationale.
+- **Civilian layer** — village state, evacuation over time, wagons to the castle,
+  raid damage, mobilized militia into Elyne's levy.
+- **Scenario phases + crisis director** — preparation → enemy_probe →
+  main_assault → crisis; one state-appropriate crisis with real effects.
+- **Aftermath** scene — losses, castle/village, officer fates, name-a-hero +
+  verdicts + chronicle, carried into memory and reputation.
+- **Campaign** — persisted chapter summary; screen with four chapters
+  (I done, II–IV locked) and carried consequences.
+- **Audio** — self-contained WebAudio synth (buses, unlock-on-gesture, ambience,
+  horn/clash/arrows/crisis/victory/defeat), reactive cues, mute toggle.
+
+### Tests
+- +11 tests (registry, portraits, enemy plans, council/civilian, crisis,
+  aftermath, campaign). **43 passing.** `SAVE_VERSION` → 3.
+
+---
+
 ## [Unreleased] — V3: The Living Realm (in progress)
 
 The V3 world & council foundation. See `GAME_DESIGN_V3.md` and
