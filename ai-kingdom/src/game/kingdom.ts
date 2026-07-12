@@ -8,6 +8,9 @@
  * lives alongside them under `GameState.kingdom`.
  */
 
+import type { Good } from "./economy";
+import { stepEconomy } from "./economy";
+
 export type Season = "spring" | "summer" | "autumn" | "winter";
 
 export const SEASON_ORDER: Season[] = ["spring", "summer", "autumn", "winter"];
@@ -137,6 +140,8 @@ export interface Province {
   infrastructure: number;
   /** Natural richness / local reserve of strategic resources. */
   resources: Partial<Record<StrategicResource, number>>;
+  /** Intermediate production goods held locally (Economy phase). */
+  goods?: Partial<Record<Good, number>>;
   buildings: string[];
   /** Ties this province to a tactical map location, if any. */
   anchorLocationId?: string;
@@ -357,6 +362,9 @@ function clamp01to100(n: number): number {
  * living-foundation loop.)
  */
 export function advanceKingdomDay(k: KingdomState): KingdomState {
+  // Run one day of production + logistics first (Phase 2).
+  k = stepEconomy(k).kingdom;
+
   let day = k.day + 1;
   let year = k.year;
   let season = k.season;

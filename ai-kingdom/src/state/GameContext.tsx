@@ -48,6 +48,8 @@ export interface GameApi {
   setAftermathVerdict: (officerId: string, verdict: OfficerVerdict) => void;
   nameHero: (officerId: string | null) => void;
   concludeAftermath: (chronicleChoice: string) => void;
+  // strategic layer
+  advanceDay: () => void;
   // commands
   submit: (text: string) => void;
   confirmOrder: (orderId: string) => void;
@@ -252,6 +254,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setAftermathVerdict: (id, v) => wrap((s) => engine.setAftermathVerdict(s, id, v)),
       nameHero: (id) => wrap((s) => engine.nameHero(s, id)),
       concludeAftermath: (c) => wrap((s) => engine.concludeAftermath(s, c)),
+      advanceDay: () => wrap(engine.advanceStrategicDay),
       submit: (text) => wrap((s) => engine.submitCommand(s, text)),
       confirmOrder: (id) => {
         audio.orderAccepted();

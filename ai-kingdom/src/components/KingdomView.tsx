@@ -1,5 +1,7 @@
+import { useMemo } from "react";
 import { useGame } from "../state/GameContext";
 import Portrait from "./Portrait";
+import { stepEconomy, GOOD_LABELS, type Good } from "../game/economy";
 import {
   SEASON_LABELS,
   SPECIALTY_LABELS,
@@ -40,6 +42,8 @@ export default function KingdomView({ onClose }: { onClose: () => void }) {
   const s = g.state!;
   const k = s.kingdom;
   const totals = kingdomTotals(k);
+  // A pure preview of one day's production + bottlenecks (does not mutate state).
+  const econ = useMemo(() => stepEconomy(k), [k]);
 
   return (
     <div className="kingdom-view">
@@ -52,9 +56,14 @@ export default function KingdomView({ onClose }: { onClose: () => void }) {
               {SEASON_LABELS[k.season]}, день {k.day} · год {k.year} · репутация двора {Math.round(k.reputation)}
             </p>
           </div>
-          <button className="btn btn-ghost" onClick={onClose}>
-            ✕ Закрыть
-          </button>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="btn btn-gold" onClick={g.advanceDay} title="Прожить один стратегический день">
+              Прожить день ▶
+            </button>
+            <button className="btn btn-ghost" onClick={onClose}>
+              ✕ Закрыть
+            </button>
+          </div>
         </header>
 
         {/* Realm stockpile */}
@@ -74,10 +83,28 @@ export default function KingdomView({ onClose }: { onClose: () => void }) {
           Средн. счастье <b>{totals.avgHappiness}</b> · лояльность <b>{totals.avgLoyalty}</b>
         </div>
 
+        <div className="kingdom-econ">
+          <span className="kingdom-econ-title">Экономика (в сутки)</span>
+          {econ.shortages.length === 0 ? (
+            <span className="kingdom-econ-ok">✔ Цепочки снабжения работают без узких мест.</span>
+          ) : (
+            <ul className="kingdom-econ-short">
+              {econ.shortages.map((sh, i) => (
+                <li key={i}>⚠ {sh}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <h2 className="aftermath-h2">Провинции</h2>
         <div className="kingdom-provinces">
           {k.provinces.map((p) => (
-            <ProvinceCard key={p.id} p={p} governor={s.officers.find((o) => o.id === p.governorId) ?? null} />
+            <ProvinceCard
+              key={p.id}
+              p={p}
+              governor={s.officers.find((o) => o.id === p.governorId) ?? null}
+              produced={econ.produced[p.id] ?? {}}
+            />
           ))}
         </div>
       </div>
@@ -88,12 +115,15 @@ export default function KingdomView({ onClose }: { onClose: () => void }) {
 function ProvinceCard({
   p,
   governor,
+  produced,
 }: {
   p: Province;
   governor: { id: string; name: string; crestSeed: number; accentColor: string } | null;
+  produced: Partial<Record<Good, number>>;
 }) {
   const pool = provinceManpowerPool(p);
   const localRes = STRATEGIC_RESOURCES.filter((r) => (p.resources[r] ?? 0) > 0);
+  const outputs = (Object.entries(produced) as [Good, number][]).filter(([, v]) => v > 0);
   return (
     <div className={`province-card owner-${p.owner}`}>
       <div className="province-head">
@@ -148,6 +178,17 @@ function ProvinceCard({
           {localRes.map((r) => (
             <span key={r} className="prov-res-chip">
               {RESOURCE_LABELS[r]} {Math.round(p.resources[r] ?? 0)}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {outputs.length > 0 && (
+        <div className="province-prod">
+          <span className="muted">Производит:</span>
+          {outputs.map(([gd, v]) => (
+            <span key={gd} className="prov-prod-chip">
+              +{v} {GOOD_LABELS[gd].toLowerCase()}/сут
             </span>
           ))}
         </div>

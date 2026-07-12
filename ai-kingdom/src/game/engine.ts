@@ -1918,6 +1918,13 @@ export function concludeAftermath(state: GameState, chronicleChoice: string): Ga
   return s;
 }
 
+/** Live one strategic day: production, logistics, population drift, season roll. */
+export function advanceStrategicDay(state: GameState): GameState {
+  const s = clone(state);
+  s.kingdom = advanceKingdomDay(s.kingdom);
+  return s;
+}
+
 /** Reflect the siege's outcome in the provinces (war weariness, loyalty, food). */
 function applyBattleAftermathToKingdom(s: GameState): void {
   const won = s.outcome.kind.includes("victory");
