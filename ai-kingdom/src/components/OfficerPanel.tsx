@@ -1,5 +1,6 @@
 import { useGame } from "../state/GameContext";
-import { Crest } from "./Crest";
+import Portrait from "./Portrait";
+import { stateFromOfficer } from "../assets/portraits";
 import { UnitIcon } from "./icons";
 import { relationshipLabel } from "../game/officers";
 import { officerMoodLine } from "../game/dialogue";
@@ -37,7 +38,16 @@ export default function OfficerPanel() {
               onClick={() => o.alive && g.selectOfficer(o.id)}
             >
               <div className="officer-top">
-                <Crest seed={o.crestSeed} accent={o.accentColor} size={42} />
+                <Portrait
+                  characterKey={o.id}
+                  state={stateFromOfficer(o)}
+                  size={54}
+                  shape="card"
+                  crestSeed={o.crestSeed}
+                  accent={o.accentColor}
+                  dim={!o.alive}
+                  ring={selected}
+                />
                 <div className="officer-id">
                   <div className="name">{o.name}</div>
                   <div className="role">{o.title}</div>

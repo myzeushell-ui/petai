@@ -1,0 +1,387 @@
+{
+  "pack": "AI Kingdom V3 Art Pack 01",
+  "version": 1,
+  "basePath": "/assets/v3/",
+  "notes": [
+    "Групповые армии — стратегические токены, не sprite sheets.",
+    "Портреты используются в совете и диалогах.",
+    "Изометрические ассеты очищены от checkerboard-фона."
+  ],
+  "assets": [
+    {
+      "id": "castle_dawns_edge",
+      "path": "/assets/v3/buildings/castle_dawns_edge.webp",
+      "category": "building",
+      "usage": "Главный замок Рассветный Предел",
+      "recommendedScale": 0.45,
+      "anchor": [
+        0.5,
+        0.88
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековая_крепость_на_скале.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "stone_bridge_river",
+      "path": "/assets/v3/terrain/stone_bridge_river.webp",
+      "category": "terrain_landmark",
+      "usage": "Каменный мост и река",
+      "recommendedScale": 0.42,
+      "anchor": [
+        0.5,
+        0.62
+      ],
+      "width": 820,
+      "height": 820,
+      "hasAlpha": true,
+      "originalSourceFile": "каменный_мост_через_реку.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "village_cottage_blue",
+      "path": "/assets/v3/buildings/village_cottage_blue.webp",
+      "category": "building",
+      "usage": "Дом деревни",
+      "recommendedScale": 0.3,
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековый_коттедж_с_приусадебным_участком.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "forest_cluster_dense",
+      "path": "/assets/v3/terrain/forest_cluster_dense.webp",
+      "category": "terrain_landmark",
+      "usage": "Северный лес",
+      "recommendedScale": 0.36,
+      "anchor": [
+        0.5,
+        0.78
+      ],
+      "width": 820,
+      "height": 820,
+      "hasAlpha": true,
+      "originalSourceFile": "лесная_поляна_с_камнями_и_растительностью.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "rocky_hill_east",
+      "path": "/assets/v3/terrain/rocky_hill_east.webp",
+      "category": "terrain_landmark",
+      "usage": "Восточные холмы",
+      "recommendedScale": 0.34,
+      "anchor": [
+        0.5,
+        0.78
+      ],
+      "width": 820,
+      "height": 820,
+      "hasAlpha": true,
+      "originalSourceFile": "скалистый_холм_с_травами_и_деревьями.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "enemy_camp_morvein",
+      "path": "/assets/v3/buildings/enemy_camp_morvein.webp",
+      "category": "building",
+      "usage": "Лагерь армии Морвейна",
+      "recommendedScale": 0.38,
+      "anchor": [
+        0.5,
+        0.8
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "вид_изометрического_лагеря_орков.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "watchtower_valedorn",
+      "path": "/assets/v3/buildings/watchtower_valedorn.webp",
+      "category": "building",
+      "usage": "Сторожевая башня",
+      "recommendedScale": 0.28,
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековая_сторожевая_башня.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "road_barricade_valedorn",
+      "path": "/assets/v3/buildings/road_barricade_valedorn.webp",
+      "category": "building",
+      "usage": "Баррикада на дороге или мосту",
+      "recommendedScale": 0.3,
+      "anchor": [
+        0.5,
+        0.72
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "изометричный_ваяж_на_укреплённом_посту.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "supply_wagon_valedorn",
+      "path": "/assets/v3/buildings/supply_wagon_valedorn.webp",
+      "category": "prop",
+      "usage": "Обоз снабжения",
+      "recommendedScale": 0.22,
+      "anchor": [
+        0.5,
+        0.78
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековая_телега_с_грузом.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "watermill_valedorn",
+      "path": "/assets/v3/buildings/watermill_valedorn.webp",
+      "category": "building",
+      "usage": "Мельница деревни",
+      "recommendedScale": 0.3,
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "width": 760,
+      "height": 760,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековая_мельница_в_сельской_местности.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "valedorn_spearmen_squad",
+      "path": "/assets/v3/units/valedorn_spearmen_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Стратегический токен копейщиков",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "средневековые_солдаты_в_строю.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "valedorn_archers_squad",
+      "path": "/assets/v3/units/valedorn_archers_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Стратегический токен лучников",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "армия_лучников_с_гербом.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "valedorn_cavalry_squad",
+      "path": "/assets/v3/units/valedorn_cavalry_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Стратегический токен конницы",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "рыцарский_бросок_с_знаменем.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "morvein_heavy_infantry_squad",
+      "path": "/assets/v3/units/morvein_heavy_infantry_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Тяжёлая пехота Морвейна",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "темные_рыцари_с_изорванным_знаменем.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "morvein_archers_squad",
+      "path": "/assets/v3/units/morvein_archers_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Лучники Морвейна",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "отряд_лукастых_стражей_на_посту.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "morvein_cavalry_squad",
+      "path": "/assets/v3/units/morvein_cavalry_squad.webp",
+      "category": "strategic_unit",
+      "usage": "Конница Морвейна",
+      "recommendedScale": 0.18,
+      "anchor": [
+        0.5,
+        0.86
+      ],
+      "width": 460,
+      "height": 460,
+      "hasAlpha": true,
+      "originalSourceFile": "темные_рыцари_в_боевом_строю.png",
+      "origWidth": 1254,
+      "origHeight": 1254
+    },
+    {
+      "id": "edward_vale_neutral",
+      "path": "/assets/v3/portraits/edward_vale_neutral.jpg",
+      "category": "portrait",
+      "usage": "Сэр Эдвард Вейл",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "героический_портрет_рыцаря_в_броне.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    },
+    {
+      "id": "roland_ashford_neutral",
+      "path": "/assets/v3/portraits/roland_ashford_neutral.jpg",
+      "category": "portrait",
+      "usage": "Сэр Роланд Эшфорд",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "рыцарь_в_средневековом_замке.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    },
+    {
+      "id": "mara_velt_neutral",
+      "path": "/assets/v3/portraits/mara_velt_neutral.jpg",
+      "category": "portrait",
+      "usage": "Мара Вельт",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "портрет_в_замковом_интерьере.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    },
+    {
+      "id": "alaric_thorn_neutral",
+      "path": "/assets/v3/portraits/alaric_thorn_neutral.jpg",
+      "category": "portrait",
+      "usage": "Аларик Торн",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "мастер_ремесленник_в_огненной_мастерской.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    },
+    {
+      "id": "elyne_arden_neutral",
+      "path": "/assets/v3/portraits/elyne_arden_neutral.jpg",
+      "category": "portrait",
+      "usage": "Леди Элин Арден",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "портрет_аристократки_в_средневековом_зале.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    },
+    {
+      "id": "cassian_reik_neutral",
+      "path": "/assets/v3/portraits/cassian_reik_neutral.jpg",
+      "category": "portrait",
+      "usage": "Лорд Кассиан Рейк",
+      "recommendedScale": 1,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "width": 672,
+      "height": 840,
+      "hasAlpha": false,
+      "originalSourceFile": "мрачный_портрет_средневекового_воина.png",
+      "origWidth": 1122,
+      "origHeight": 1402
+    }
+  ],
+  "optimized": true
+}

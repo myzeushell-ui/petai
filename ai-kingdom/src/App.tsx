@@ -16,6 +16,7 @@ import SettingsMenu from "./components/SettingsMenu";
 import DebugPanel from "./components/DebugPanel";
 import BattleScene from "./components/BattleScene";
 import "./styles/map.css";
+import "./styles/v3.css";
 
 export default function App() {
   const g = useGame();

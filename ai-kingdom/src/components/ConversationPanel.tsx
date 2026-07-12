@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../state/GameContext";
-import { Crest } from "./Crest";
+import Portrait from "./Portrait";
+import { stateFromOfficer } from "../assets/portraits";
 import MicButton from "./MicButton";
 import type { DialogueMessage } from "../game/types";
 
@@ -64,7 +65,14 @@ export default function ConversationPanel() {
         <div className="convo-head">
           {officer ? (
             <>
-              <Crest seed={officer.crestSeed} accent={officer.accentColor} size={34} />
+              <Portrait
+                characterKey={officer.id}
+                state={stateFromOfficer(officer)}
+                size={40}
+                shape="card"
+                crestSeed={officer.crestSeed}
+                accent={officer.accentColor}
+              />
               <div style={{ minWidth: 0 }}>
                 <div className="name">{officer.name}</div>
                 <div className="role">{officer.title}</div>

@@ -1,0 +1,63 @@
+/* ================= AI Kingdom V3 — art-integrated UI ================= */
+
+/* ---- Cinematic main menu ---- */
+.menu-cinematic { position: relative; overflow: hidden; }
+.menu-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.menu-bg-castle {
+  position: absolute;
+  right: -2%;
+  bottom: -4%;
+  height: 104%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0.55;
+  filter: saturate(0.92) brightness(0.72) drop-shadow(0 30px 40px rgba(0,0,0,0.6));
+  animation: menu-float 12s ease-in-out infinite;
+}
+@keyframes menu-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.menu-bg-grade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1100px 640px at 32% 34%, rgba(12,16,26,0.5), rgba(6,8,12,0.9) 74%),
+    linear-gradient(180deg, rgba(6,8,12,0.72), rgba(6,8,12,0.96));
+}
+.menu-card-hero {
+  position: relative;
+  z-index: 1;
+  background: rgba(12,10,8,0.5);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--wood-edge);
+  border-radius: 18px;
+  padding: 30px 34px 26px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,240,210,0.05);
+  max-width: 640px;
+}
+.menu .title {
+  text-shadow: 0 4px 24px rgba(0,0,0,0.7), 0 0 40px rgba(203,162,74,0.25);
+}
+.menu-council {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.menu-council-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--tx-2);
+  transition: transform 0.15s ease;
+}
+.menu-council-face:hover { transform: translateY(-3px); color: var(--gold-bright); }
+
+/* ---- Portrait base ---- */
+.portrait { user-select: none; }
+.portrait img { -webkit-user-drag: none; }
