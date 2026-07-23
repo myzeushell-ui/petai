@@ -6,10 +6,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(dateString: string): string {
+  // timeZone: "UTC" prevents hydration mismatch — server (UTC) and client (any
+  // local timezone) both format identically. Without it, dates near midnight
+  // UTC can render as different days on server vs client.
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 

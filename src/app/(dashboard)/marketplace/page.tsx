@@ -34,7 +34,9 @@ function ListingCard({ listing, index }: { listing: MarketplaceListing; index: n
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white text-sm leading-snug">{listing.title}</h3>
                 <p className="text-sm font-bold text-green-600 whitespace-nowrap flex-shrink-0">
-                  {listing.price.toLocaleString()} {listing.currency}
+                  {/* Explicit locale prevents hydration mismatch — Node (server)
+                      and browser default to different number separators. */}
+                  {listing.price.toLocaleString("en-US")} {listing.currency}
                 </p>
               </div>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{listing.description}</p>

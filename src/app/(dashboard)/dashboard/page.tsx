@@ -64,7 +64,7 @@ export default function DashboardPage() {
           r.type === "grooming" ? "✂️" : "📌";
         return {
           title: r.title.length > 40 ? r.title.slice(0, 38) + "…" : r.title,
-          due: new Date(r.dueDate).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US", { month: "short", day: "numeric" }),
+          due: new Date(r.dueDate).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US", { month: "short", day: "numeric", timeZone: "UTC" }),
           icon,
           done: r.completed,
         };

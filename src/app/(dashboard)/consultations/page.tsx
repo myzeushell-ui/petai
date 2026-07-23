@@ -112,7 +112,7 @@ export default function ConsultationsPage() {
                               <p className="text-xs text-gray-500 truncate">{c.title}</p>
                             </div>
                             <Badge variant="success" className="flex-shrink-0">
-                              {c.price.toLocaleString()} {c.currency}
+                              {c.price.toLocaleString("en-US")} {c.currency}
                             </Badge>
                           </div>
                           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
@@ -177,7 +177,7 @@ export default function ConsultationsPage() {
                 <div className="mt-6 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3">
                     <p className="text-xs text-gray-400">Price</p>
-                    <p className="text-base font-bold text-gray-900 dark:text-white">{selected.price.toLocaleString()} {selected.currency}</p>
+                    <p className="text-base font-bold text-gray-900 dark:text-white">{selected.price.toLocaleString("en-US")} {selected.currency}</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3">
                     <p className="text-xs text-gray-400">Duration</p>
@@ -225,7 +225,7 @@ export default function ConsultationsPage() {
                   <div className="border-t border-gray-200 dark:border-gray-700 my-3" />
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-gray-900 dark:text-white">Due</span>
-                    <span className="text-2xl font-black text-gray-900 dark:text-white">{selected.price.toLocaleString()} {selected.currency}</span>
+                    <span className="text-2xl font-black text-gray-900 dark:text-white">{selected.price.toLocaleString("en-US")} {selected.currency}</span>
                   </div>
                 </div>
 
@@ -267,15 +267,15 @@ export default function ConsultationsPage() {
                 </div>
 
                 <div className="mt-6 rounded-2xl bg-gray-50 dark:bg-gray-800 p-4 space-y-1.5 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-500">{selected.name}</span><span className="font-medium">{selected.price.toLocaleString()} {selected.currency}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">{selected.name}</span><span className="font-medium">{selected.price.toLocaleString("en-US")} {selected.currency}</span></div>
                   <div className="flex justify-between"><span className="text-gray-500">Time</span><span className="font-medium">tomorrow, {time}</span></div>
                   <div className="flex justify-between"><span className="text-gray-500">Pet</span><span className="font-medium">Luna</span></div>
                   <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
-                  <div className="flex justify-between text-base"><span className="font-semibold">Total</span><span className="font-black">{selected.price.toLocaleString()} {selected.currency}</span></div>
+                  <div className="flex justify-between text-base"><span className="font-semibold">Total</span><span className="font-black">{selected.price.toLocaleString("en-US")} {selected.currency}</span></div>
                 </div>
 
                 <Button size="lg" disabled={paying} className="mt-6 w-full" onClick={startPay}>
-                  {paying ? (<><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Processing...</>) : (<><Shield className="h-4 w-4" /> Pay {selected.price.toLocaleString()} {selected.currency}</>)}
+                  {paying ? (<><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Processing...</>) : (<><Shield className="h-4 w-4" /> Pay {selected.price.toLocaleString("en-US")} {selected.currency}</>)}
                 </Button>
               </CardContent>
             </Card>

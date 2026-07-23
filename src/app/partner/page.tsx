@@ -323,7 +323,8 @@ export default function PartnerLandingPage() {
       </main>
 
       <footer className="border-t border-gray-100 px-4 py-8 text-center text-xs text-gray-400">
-        PetAI · {locale === "ru" ? "Платформа здоровья питомцев на AI" : "AI Health Platform for Pets"} · {new Date().getFullYear()}
+        {/* Year hardcoded to avoid hydration mismatch — bump manually per year. */}
+        PetAI · {locale === "ru" ? "Платформа здоровья питомцев на AI" : "AI Health Platform for Pets"} · 2026
       </footer>
     </div>
   );
